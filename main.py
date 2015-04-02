@@ -142,13 +142,28 @@ class BORIS(App):
 
                 adapter = ListAdapter( data = [r.replace('\t','   ') for r in fileContent], cls = ListItemLabel)
 
+                vlayout = BoxLayout(orientation = 'vertical')
+
                 list_view = ListView(adapter = adapter)
+                vlayout.add_widget(list_view)
 
-                screen.add_widget(list_view)
+                btn = Button( text='Back', size_hint_y=0.1 )
+                btn.bind(on_release=go_obs_list)
+                vlayout.add_widget(btn)
 
+
+                screen.add_widget(vlayout)
                 self.sm.add_widget(screen)
 
                 self.sm.current = 'view_observation'
+
+
+        def go_obs_list(obj):
+            self.sm.current = 'observations_list'
+
+
+        def go_home(obj):
+            self.sm.current = 'home'
 
 
         def btn_exit_released(obj):
@@ -226,15 +241,15 @@ class BORIS(App):
 
         # choose ethogram
         screen = Screen(name='ethogram')
-        layout = BoxLayout(orientation = 'horizontal')
+        layout = BoxLayout(orientation = 'vertical')
 
         fc = FileChooserListView(path='.',filters=['*.boris_ethogram'])
-
-        btn = Button( text='Select ethogram' )
-        btn.bind(on_release=btn_select_ethogram)
-
-        layout.add_widget(btn)
         layout.add_widget(fc)
+
+        btn = Button( text='Select ethogram', size_hint_y=0.1 )
+        btn.bind(on_release=btn_select_ethogram)
+        layout.add_widget(btn)
+
 
         screen.add_widget(layout)
         self.sm.add_widget(screen)
@@ -246,10 +261,16 @@ class BORIS(App):
 
         fc = FileChooserListView(path='.',filters=['*.boris_observation.tsv'])
 
+        vlayout = BoxLayout(orientation = 'vertical')
+
         btn = Button( text='View observation' )
         btn.bind(on_release=btn_view_observation)
+        vlayout.add_widget(btn)
+        btn = Button( text='Back' )
+        btn.bind(on_release=go_home)
+        vlayout.add_widget(btn)
 
-        layout.add_widget(btn)
+        layout.add_widget(vlayout)
         layout.add_widget(fc)
 
         screen.add_widget(layout)
