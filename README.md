@@ -1,1 +1,0 @@
-# BORIS-kivy-app

@@ -1,0 +1,5 @@
+= BORIS-kivy-app
+
+Application for recording behavioral observations compatible with BORIS
+
+Require Kivy
