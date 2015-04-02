@@ -1,5 +1,5 @@
 = BORIS-kivy-app
 
-Application for recording behavioral observations compatible with BORIS
+Application for recording behavioral observations compatible with BORIS (http://penelope.unito.it/boris)
 
 Require Kivy
