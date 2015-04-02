@@ -24,6 +24,8 @@ from kivy.uix.filechooser import FileChooserListView
 import json
 from time import strftime
 
+NO_FOCAL_SUBJECT = 'No focal subject'
+
 class BORIS(App):
 
     t0 = 0
@@ -33,7 +35,7 @@ class BORIS(App):
     fileName = ''
     behaviors = {}
     subjects = {}
-    focal_subject = 'No focal subject'
+    focal_subject = NO_FOCAL_SUBJECT
 
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
@@ -196,11 +198,12 @@ class BORIS(App):
             self.sm.current = 'behaviors'
 
         def select_focal_subject(obj):
-            self.sm.current = 'subjects_list'
+            if self.focal_subject != NO_FOCAL_SUBJECT:
+                self.sm.current = 'subjects_list'
 
         def subjects_layout(subjects):
             layout = GridLayout(cols= int((len(subjects)+1)**0.5) , size_hint=(1,1), spacing=5)
-            btn = Button(text = 'No focal subject', size_hint_x = 1, font_size = 24)
+            btn = Button(text = NO_FOCAL_SUBJECT, size_hint_x = 1, font_size = 24)
             btn.bind(on_release = btn_subject)
             for subject in subjects:
                 btn = Button(text = subject, size_hint_x = 1, font_size = 24)
@@ -234,6 +237,11 @@ class BORIS(App):
             return layout
 
         def btn_select_subjects(obj):
+            if not self.behaviors:
+                popup = Popup(title='Error', content=Label(text='You must choose an ethogram'),   size_hint=(None, None), size=(400, 200))
+                popup.open()
+                return
+
             self.sm.current = 'select_subjects'
 
 
