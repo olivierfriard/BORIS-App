@@ -1,14 +1,35 @@
 #!python2
 
+'''
+BORIS Kivy app
+
+Behavioral Observation Research Interactive Software (BORIS) 
+Copyright 2015 Olivier Friard
+This file is part of BORIS.
+  BORIS is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  any later version.
+  
+  BORIS is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License
+  along with this program; if not see <http://www.gnu.org/licenses/>.
+
+'''
+
 import sys
+import time
+import json
 
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.gridlayout import GridLayout
-#from kivy.graphics import Color, Ellipse, Line
-import time
 from kivy.base import EventLoop
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
@@ -16,13 +37,8 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import ListItemLabel,ListView
-
 from kivy.adapters.listadapter import ListAdapter
-
 from kivy.uix.filechooser import FileChooserListView
-
-import json
-from time import strftime
 
 NO_FOCAL_SUBJECT = 'No focal subject'
 
@@ -87,7 +103,12 @@ class BORIS(App):
 
 
         def btn_new_obs_released(obj):
+            '''
+            show ethogram screen
+            the ethogram screen allow the user to select an ethogram file
+            '''
             self.sm.current = 'ethogram'
+
 
         def btn_view_obs_released(obj):
             self.sm.current = 'observations_list'
@@ -128,7 +149,7 @@ class BORIS(App):
 
                 layout = behaviors_layout(self.behaviors)
 
-                screen = Screen(name='behaviors')
+                screen = Screen(name = 'behaviors')
                 screen.add_widget(layout)
                 self.sm.add_widget(screen)
 
@@ -215,6 +236,10 @@ class BORIS(App):
 
 
         def behaviors_layout( behaviors ):
+            '''
+            create the grid with all behaviors
+            returns layout
+            '''
             layout = GridLayout(cols= int((len(behaviors)+1)**0.5) , size_hint=(1,1), spacing=5)
 
             for b in behaviors:
@@ -237,6 +262,9 @@ class BORIS(App):
             return layout
 
         def btn_select_subjects(obj):
+            '''
+            show select_subjects screen
+            '''
             if not self.behaviors:
                 popup = Popup(title='Error', content=Label(text='You must choose an ethogram'),   size_hint=(None, None), size=(400, 200))
                 popup.open()
@@ -271,7 +299,7 @@ class BORIS(App):
 
         btn = Button(text='New observation',size_hint_x=1, font_size=32)
         btn.background_color = [ 1,0,0,1 ]
-        btn.bind(on_release=btn_new_obs_released)
+        btn.bind(on_release = btn_new_obs_released)
         hlayout.add_widget(btn)
 
         btn = Button(text='View observation',size_hint_x=1, font_size=32)
@@ -290,7 +318,7 @@ class BORIS(App):
         self.sm.add_widget(screen)
 
 
-        # choose ethogram
+        # ethogram screen (allow user to select an ethogram file)
         screen = Screen(name='ethogram')
         layout = BoxLayout(orientation = 'vertical')
 
@@ -298,11 +326,11 @@ class BORIS(App):
         layout.add_widget(fc1)
 
         btn = Button( text='Select ethogram', size_hint_y=0.1 )
-        btn.bind(on_release=btn_select_ethogram)
+        btn.bind(on_release = btn_select_ethogram)
         layout.add_widget(btn)
 
-        btn = Button( text='Next', size_hint_y=0.1 )
-        btn.bind(on_release=btn_select_subjects)
+        btn = Button( text = 'Next', size_hint_y = 0.1 )
+        btn.bind(on_release = btn_select_subjects)
         layout.add_widget(btn)
 
 
@@ -323,7 +351,7 @@ class BORIS(App):
         layout.add_widget(btn)
 
         btn = Button( text='Next', size_hint_y=0.1 )
-        btn.bind(on_release=go_new_obs)
+        btn.bind(on_release = go_new_obs)
 
         layout.add_widget(btn)
 
@@ -378,11 +406,10 @@ class BORIS(App):
         screenSubjects = Screen(name='subjects_list')
         self.sm.add_widget(screenSubjects)
 
+
         # observation info
         screen = Screen(name='new_observation')
-        
         layout = BoxLayout(orientation = 'vertical')
-        
         hlayout1 = BoxLayout(orientation = 'horizontal')
         hlayout1.add_widget(Label(text='Observation id', font_size=24))
         self.obsId = TextInput(multiline=False, font_size=24)
@@ -391,7 +418,7 @@ class BORIS(App):
 
         hlayout2 = BoxLayout(orientation = 'horizontal', spacing=10)
         hlayout2.add_widget(Label(text='Observation date', font_size=24))
-        self.obsDate = TextInput(text=strftime('%Y-%m-%d %H:%M:%S'),multiline=False, font_size=24)
+        self.obsDate = TextInput(text=time.strftime('%Y-%m-%d %H:%M:%S'),multiline=False, font_size=24)
         hlayout2.add_widget(self.obsDate)
         layout.add_widget( hlayout2 )
 
@@ -405,7 +432,7 @@ class BORIS(App):
 
         btn = Button(text='Start', font_size=32)
         btn.background_color = [ 1,0,0,1 ]
-        btn.bind(on_release=btn_start_released)
+        btn.bind(on_release = btn_start_released)
         hlayout3.add_widget(btn)
 
         layout.add_widget( hlayout3 )
