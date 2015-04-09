@@ -162,7 +162,6 @@ class BORIS(App):
             view observation
             '''
 
-            print(fc2.selection)
             if fc2.selection:
 
                 screen = Screen(name='view_observation')
@@ -325,16 +324,19 @@ class BORIS(App):
         fc1 = FileChooserListView(path='.',filters=['*.boris_ethogram'])
         layout.add_widget(fc1)
 
-        btn = Button( text='Select ethogram', size_hint_y=0.1 )
+        hlayout = BoxLayout(orientation = 'horizontal',size_hint_y=None, height="40dp")
+        btn = Button( text='Select ethogram' )
         btn.bind(on_release = btn_select_ethogram)
-        layout.add_widget(btn)
+        hlayout.add_widget(btn)
 
-        btn = Button( text = 'Next', size_hint_y = 0.1 )
+        btn = Button( text = 'Next')
         btn.bind(on_release = btn_select_subjects)
-        layout.add_widget(btn)
+        hlayout.add_widget(btn)
 
+        layout.add_widget(hlayout)
 
         screen.add_widget(layout)
+
         self.sm.add_widget(screen)
 
 
@@ -346,36 +348,40 @@ class BORIS(App):
         fc3 = FileChooserListView(path='.',filters=['*.boris_subjects'])
         layout.add_widget(fc3)
 
-        btn = Button( text='Select subjects', size_hint_y=0.1 )
+        hlayout = BoxLayout(orientation = 'horizontal',size_hint_y=None, height="40dp")
+        btn = Button( text='Select subjects' )
         btn.bind(on_release=load_subjects)
-        layout.add_widget(btn)
+        hlayout.add_widget(btn)
 
-        btn = Button( text='Next', size_hint_y=0.1 )
+        btn = Button( text='Next' )
         btn.bind(on_release = go_new_obs)
+        hlayout.add_widget(btn)
 
-        layout.add_widget(btn)
+        layout.add_widget(hlayout)
 
         screen.add_widget(layout)
+
         self.sm.add_widget(screen)
 
 
         # observations list
         screen = Screen(name='observations_list')
-        layout = BoxLayout(orientation = 'horizontal')
+        layout = BoxLayout(orientation = 'vertical')
 
         fc2 = FileChooserListView(path='.',filters=['*.boris_observation.tsv'])
+        layout.add_widget(fc2)
 
-        vlayout = BoxLayout(orientation = 'vertical')
+        hlayout = BoxLayout(orientation = 'horizontal',size_hint_y=None, height="40dp")
 
         btn = Button( text='View observation' )
         btn.bind(on_release=btn_view_observation)
-        vlayout.add_widget(btn)
+        hlayout.add_widget(btn)
         btn = Button( text='Back' )
         btn.bind(on_release=go_home)
-        vlayout.add_widget(btn)
+        hlayout.add_widget(btn)
 
-        layout.add_widget(vlayout)
-        layout.add_widget(fc2)
+
+        layout.add_widget(hlayout)
 
         screen.add_widget(layout)
         self.sm.add_widget(screen)
@@ -387,7 +393,7 @@ class BORIS(App):
 
         layout.add_widget(Label(text='Are you sure you want to stop the current observation?'))
 
-        hlayout1 = BoxLayout(orientation = 'horizontal', size_hint_y=0.2)
+        hlayout1 = BoxLayout(orientation = 'horizontal', size_hint_y=None,height="40dp")
         btn = Button( text='Yes' )
         btn.bind(on_release=btn_confirm)
         hlayout1.add_widget(btn)

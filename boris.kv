@@ -1,0 +1,76 @@
+#: import main main
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+
+
+BorisRoot:
+
+<BorisRoot>:
+    StartPageForm
+
+<StartPageForm>:
+    orientation: "vertical"
+    Image:
+        source: "logo_boris_500px.png"
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Button:
+            text: "New observation"
+            size_hint_x: 0.4
+            on_press: root.show_SelectSubjectsForm()
+        Button:
+            text: "View observation"
+            size_hint_x: 0.4
+            on_press: root.show_ViewObservationForm()
+        Button:
+            text: "Exit"
+            size_hint_x: 0.2
+            on_press: root.exit()
+
+<ViewObservationForm>
+    Label:
+        text: "View"
+
+<SelectSubjectsForm>
+    orientation: "vertical"
+    FileChooserListView:
+        id: subjectsfilechooser
+        path: "."
+        filters: ["*.boris_subjects"]
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+        Button:
+            text: "Load subjects"
+            size_hint_x: 0.8
+            on_press: root.load_subjects(subjectsfilechooser.path, subjectsfilechooser.selection)
+        Button:
+            text: "Next"
+            size_hint_x: 0.8
+            on_press: root.next()
+
+<SelectEthogramForm>
+    orientation: "vertical"
+    FileChooserListView:
+        id: ethogramfilechooser
+        path: "."
+        filters: ["*.boris_ethogram"]
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+        Button:
+            text: "Load ethogram"
+            size_hint_x: 0.8
+            on_press: root.load_ethogram(ethogramfilechooser.path, ethogramfilechooser.selection)
+        Button:
+            text: "Next"
+            size_hint_x: 0.8
+            #on_press: root.next()
