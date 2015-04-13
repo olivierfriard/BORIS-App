@@ -21,15 +21,42 @@ BorisRoot:
         Button:
             text: "View observation"
             size_hint_x: 0.4
-            on_press: root.show_ViewObservationForm()
+            on_press: root.show_SelectObservationForm()
         Button:
             text: "Exit"
             size_hint_x: 0.2
             on_press: root.exit()
 
+<SelectObservationForm>
+    orientation: "vertical"
+    FileChooserListView:
+        id: observationfilechooser
+        path: "."
+        filters: ["*.boris_observation.tsv"]
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+        Button:
+            text: "View events"
+            size_hint_x: 0.8
+            on_press: root.view_events( observationfilechooser.selection)
+
 <ViewObservationForm>
+    orientation: "vertical"
+    viewobs2_list: viewobs_list
     Label:
-        text: "View"
+        height: "40dp"
+        size_hint_y: None
+        text: "View observation events"
+    ListView:
+        id: viewobs_list
+        #item_strings: []
+        item_strings: [str(index) for index in range(100)]
+
 
 <SelectSubjectsForm>
     orientation: "vertical"
@@ -78,6 +105,8 @@ BorisRoot:
 
 <StartObservationForm>
     orientation: "vertical"
+    obsid_input: obsid
+    obsdate_input: obsdate
     BoxLayout:
         height: "40dp"
         size_hint_y: None
