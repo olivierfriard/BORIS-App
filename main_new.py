@@ -17,6 +17,7 @@ class StartPageForm(BoxLayout):
 class ViewObservationForm(BoxLayout):
     pass
 
+
 class SelectSubjectsForm(BoxLayout):
 
     def cancel(self):
@@ -30,6 +31,7 @@ class SelectSubjectsForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(SelectEthogramForm())
 
+
 class SelectEthogramForm(BoxLayout):
 
     def cancel(self):
@@ -40,7 +42,19 @@ class SelectEthogramForm(BoxLayout):
         print path, selection
 
     def next(self):
-        pass
+        self.clear_widgets()
+        self.add_widget(StartObservationForm())
+
+
+class StartObservationForm(BoxLayout):
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+    def next(self):
+        print(obsid)
+
+
 
 
 

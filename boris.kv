@@ -73,4 +73,33 @@ BorisRoot:
         Button:
             text: "Next"
             size_hint_x: 0.8
-            #on_press: root.next()
+            on_press: root.next()
+
+
+<StartObservationForm>
+    orientation: "vertical"
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Label:
+            text: "Observation id"
+        TextInput:
+            id: obsid
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Label:
+            text: "Observation date"
+        TextInput:
+            id: obsdate
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+        Button:
+            text: "Start observation"
+            size_hint_x: 0.8
+            on_press: root.next()
