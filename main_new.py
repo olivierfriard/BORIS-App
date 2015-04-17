@@ -11,6 +11,7 @@ import sys
 import json
 import time
 import codecs
+import datetime
 
 NO_FOCAL_SUBJECT = 'No focal subject'
 
@@ -134,21 +135,10 @@ class SelectEthogramForm(BoxLayout):
             return
 
         self.clear_widgets()
-        self.add_widget(StartObservationForm())
-        #StartObservationForm().obsdate.text='ciao'
 
-    '''
-    def next(self):
-
-        if BorisApp.behaviors:
-            self.clear_widgets()
-            self.add_widget(StartObservationForm())
-        else:
-            print 'No behaviors'
-            popup = Popup(title='Error', content=Label(text='You must choose an ethogram'),   size_hint=(None, None), size=(400, 200))
-            popup.open()
-    '''
-
+        a = StartObservationForm()
+        a.obsdate_input.text = '{:%Y-%m-%d %H:%M}'.format(datetime.datetime.now())
+        self.add_widget(a)
 
 
 
@@ -164,11 +154,6 @@ class StartObservationForm(BoxLayout):
     btnSubjectsList = {}
     behaviorsLayout = ''
     subjectsLayout = ''
-
-    '''
-    def __init__(self):
-        print 'init'
-    '''
 
     def cancel(self):
         self.clear_widgets()
@@ -376,6 +361,12 @@ class DatePicker(BoxLayout):
         self.date = date(self.date.year, self.date.month, kwargs['day'])
         self.populate_body()
         self.populate_header()
+
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+        print self.date
+
 
 
 
