@@ -18,10 +18,12 @@ NO_FOCAL_SUBJECT = 'No focal subject'
 class StartPageForm(BoxLayout):
 
     def exit(self):
+        '''
         self.clear_widgets()
         self.add_widget(DatePicker())
+        '''
 
-        '''sys.exit()'''
+        sys.exit()
 
     def show_SelectSubjectsForm(self):
         self.clear_widgets()
