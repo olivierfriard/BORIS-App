@@ -15,9 +15,9 @@ BorisRoot:
         height: "40dp"
         size_hint_y: None
         Button:
-            text: "New observation"
+            text: "Load project"
             size_hint_x: 0.4
-            on_press: root.show_SelectSubjectsForm()
+            on_press: root.show_SelectProjectForm()
         Button:
             text: "View observation"
             size_hint_x: 0.4
@@ -58,16 +58,16 @@ BorisRoot:
         item_strings: [str(index) for index in range(100)]
 
 
-<SelectSubjectsForm>
+<SelectProjectForm>
     orientation: "vertical"
     Label:
         height: "40dp"
         size_hint_y: None
-        text: "Select a subjects file and then press \"Load subjects\" or \"Next\" button"
+        text: "Select a BORIS project file and then press \"Load project\" button"
     FileChooserListView:
-        id: subjectsfilechooser
+        id: projectfilechooser
         path: "."
-        filters: ["*.boris_subjects"]
+        filters: ["*.boris"]
     BoxLayout:
         height: "40dp"
         size_hint_y: None
@@ -76,35 +76,9 @@ BorisRoot:
             size_hint_x: 0.2
             on_press: root.cancel()
         Button:
-            text: "Load subjects"
+            text: "Load project"
             size_hint_x: 0.8
-            on_press: root.load_subjects(subjectsfilechooser.path, subjectsfilechooser.selection)
-        Button:
-            text: "Next"
-            size_hint_x: 0.8
-            on_press: root.next()
-
-<SelectEthogramForm>
-    orientation: "vertical"
-    Label:
-        height: "40dp"
-        size_hint_y: None
-        text: "Select an ethogram file and then press \"Load ethogram\" button"
-    FileChooserListView:
-        id: ethogramfilechooser
-        path: "."
-        filters: ["*.boris_ethogram"]
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-        Button:
-            text: "Cancel"
-            size_hint_x: 0.2
-            on_press: root.cancel()
-        Button:
-            text: "Load ethogram"
-            size_hint_x: 0.8
-            on_press: root.load_ethogram(ethogramfilechooser.path, ethogramfilechooser.selection)
+            on_press: root.load_project(projectfilechooser.path, projectfilechooser.selection)
 
 <StartObservationForm>
     orientation: "vertical"

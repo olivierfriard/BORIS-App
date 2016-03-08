@@ -23,9 +23,9 @@ class StartPageForm(BoxLayout):
     def exit(self):
         sys.exit()
 
-    def show_SelectSubjectsForm(self):
+    def show_SelectProjectForm(self):
         self.clear_widgets()
-        self.add_widget(SelectSubjectsForm())
+        self.add_widget(SelectProjectForm())
 
     def show_SelectObservationForm(self):
         self.clear_widgets()
@@ -41,7 +41,7 @@ class SelectObservationForm(BoxLayout):
         print( selection[0])
 
         try:
-            events = open( selection[0],'rb').readlines()
+            events = open( selection[0], "r").readlines()
             print( 'events:', events)
         except:
             popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS observation file!'),   size_hint=(None, None), size=(400, 200))
@@ -88,6 +88,7 @@ class ViewObservationForm(BoxLayout):
     '''
 """
 
+'''
 class SelectSubjectsForm(BoxLayout):
 
     def cancel(self):
@@ -95,62 +96,73 @@ class SelectSubjectsForm(BoxLayout):
         self.add_widget(StartPageForm())
 
     def load_subjects(self, path, selection):
-        '''load subjects from file'''
+        """load subjects from file"""
         try:
-            BorisApp.subjects = json.loads(open( selection[0], "r").read() )
-            print( 'subjects:', BorisApp.subjects)
+            BorisProject = json.loads(open(selection[0], "r").read())
+            BorisApp.subjects = BorisProject["subjects_conf"]
+            print("subjects:", BorisApp.subjects)
         except:
-            popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS subjects file!'),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title='Error', content=Label(text="The selected file is not a BORIS project!"),   size_hint=(None, None), size=(400, 200))
             popup.open()
             return
         self.next()
 
     def next(self):
-        '''show select ethogram form'''
+        """show select ethogram form"""
         self.clear_widgets()
         self.add_widget(SelectEthogramForm())
+'''
 
-
-class SelectEthogramForm(BoxLayout):
+class SelectProjectForm(BoxLayout):
 
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
-    def load_ethogram(self, path, selection):
-        '''load ethogram from selected file'''
+    def load_project(self, path, selection):
+        """load project from selected file"""
+
         if not selection:
-            popup = Popup(title='Error', content=Label(text='No file selected!'),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200))
             popup.open()
             return
         try:
-            BorisApp.behaviors = json.loads(open( selection[0], "r").read() )
-            print( 'behaviors:', BorisApp.behaviors)
+            #BorisApp.behaviors = json.loads(open( selection[0], "r").read() )
+            BorisProject = json.loads(open(selection[0], "r").read())
+            BorisApp.subjects = BorisProject["subjects_conf"]
+            BorisApp.behaviors = BorisProject["behaviors_conf"]
+
         except:
-            popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS behaviors file!'),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="The selected file is not a BORIS behaviors file!"),   size_hint=(None, None), size=(400, 200))
             popup.open()
             return
 
         self.clear_widgets()
 
         a = StartObservationForm()
-        a.obsdate_input.text = '{:%Y-%m-%d %H:%M}'.format(datetime.datetime.now())
+        a.obsdate_input.text = "{:%Y-%m-%d %H:%M}".format(datetime.datetime.now())
         self.add_widget(a)
 
 
+def behaviorType(ethogram, behavior):
+    return [ ethogram[k]["type"] for k in ethogram.keys() if ethogram[k]["code"] == behavior][0]
+
+def behaviorExcluded(ethogram, behavior):
+    return [ ethogram[k]["excluded"] for k in ethogram.keys() if ethogram[k]["code"] == behavior][0].split(",")
+
 
 class StartObservationForm(BoxLayout):
-    obsid_input = ObjectProperty()
-    obsdate_input = ObjectProperty()
+    #obsid_input = ObjectProperty()
+    #obsdate_input = ObjectProperty()
 
     t0 = 0 # initial time
-    fileName = ''
+    fileName = ""
     currentStates = []
-    focal_subject = ''
+    focal_subject = ""
     btnList = {}
     btnSubjectsList = {}
-    behaviorsLayout = ''
-    subjectsLayout = ''
+    behaviorsLayout = ""
+    subjectsLayout = ""
 
     def cancel(self):
         self.clear_widgets()
@@ -159,42 +171,47 @@ class StartObservationForm(BoxLayout):
     def start(self):
 
         def btnBehaviorPressed(obj):
-            '''
+            """
             behavior button pressed
-            '''
+            """
             t = time.time()
             out = ''
             newState = obj.text
 
             # state event
-            if BorisApp.behaviors[ newState ]['type'] == 'state':
+            #if BorisApp.behaviors[ newState ]['type'] == 'state':
+            if "State" in behaviorType(BorisApp.behaviors, newState):
                 if newState in self.currentStates:
-                    out += u'{time}\t{subject}\t{state}\tSTOP\n'.format(time=round(t - self.t0, 3), subject=self.focal_subject, state=newState)
-                    obj.background_color = [1,1,1,1]
+                    out += "{time}\t{subject}\t{state}\tSTOP\n".format(time=round(t - self.t0, 3), subject=self.focal_subject, state=newState)
+                    obj.background_color = [1, 1, 1, 1]
                     self.currentStates.remove(newState)
                 else:
                     # test if state is exclusive
-                    if BorisApp.behaviors[ newState ]['exclude']:
+                    #if BorisApp.behaviors[ newState ]['exclude']:
+
+                    if behaviorExcluded(BorisApp.behaviors, newState) != [""]:
                         statesToStop = []
 
                         for cs in self.currentStates:
-                            if cs in BorisApp.behaviors[ newState ]['exclude']:
-                                out += u'{time}\t{subject}\t{state}\tSTOP\n'.format(time=round(t - self.t0, 3), state=cs, subject=self.focal_subject)
+                            if cs in behaviorExcluded(BorisApp.behaviors, newState):
+                                out += "{time}\t{subject}\t{state}\tSTOP\n".format(time=round(t - self.t0, 3), state=cs, subject=self.focal_subject)
                                 statesToStop.append(cs)
                                 self.btnList[cs].background_color = [1,1,1,1]
 
                         for s in statesToStop:
                             self.currentStates.remove(s)
 
-                    out += u'{time}\t{subject}\t{state}\tSTART\n'.format(time=round(t - self.t0, 3), state=newState, subject= self.focal_subject)
+                    out += "{time}\t{subject}\t{state}\tSTART\n".format(time=round(t - self.t0, 3), state=newState, subject= self.focal_subject)
                     obj.background_color = [5,1,1,1]
                     self.currentStates.append(newState)
 
             # point event
-            if BorisApp.behaviors[ newState ]['type'] == 'point':
-                out = u'{time}\t{subject}\t{state}\n'.format( time=round(t - self.t0, 3), state=newState, subject= self.focal_subject )
+            #if BorisApp.behaviors[newState]['type'] == 'point':
+            if "Point" in behaviorType(BorisApp.behaviors, newState):
+                out = "{time}\t{subject}\t{state}\n".format( time=round(t - self.t0, 3), state=newState, subject= self.focal_subject )
 
-            with codecs.open(self.fileName, "a") as f:
+            #with codecs.open(self.fileName, "a") as f:
+            with open(self.fileName, "a") as f:
                 f.write(out)
 
 
@@ -218,16 +235,18 @@ class StartObservationForm(BoxLayout):
             self.clear_widgets()
             self.add_widget(self.behaviorsLayout)
 
+
         def btnStopPressed(obj):
 
             def my_callback(instance):
-                if instance.title == 'y':
+                if instance.title == "y":
                     self.clear_widgets()
                     self.add_widget(StartPageForm())
 
             pop = ConfirmStopPopup()
-            pop.bind( on_dismiss=my_callback )
+            pop.bind(on_dismiss=my_callback)
             pop.open()
+
 
         def view_subjects_layout(obj):
             self.clear_widgets()
@@ -236,46 +255,50 @@ class StartObservationForm(BoxLayout):
         # create file for observations
 
         if not self.obsid_input.text:
-            p = Popup(title='Error', content=Label(text='The observation id is empty'), size_hint=(None, None), size=(400, 200))
+            p = Popup(title="Error", content=Label(text="The observation id is empty"), size_hint=(None, None), size=(400, 200))
             p.open()
             return
 
-        self.fileName = self.obsid_input.text.replace(' ','_').replace('/','_').replace('(','_').replace(')','_')+'.boris_observation.tsv'
-        print( type( self.obsid_input.text  ))
-        id_ = "observation_id:{0}\n".format( self.obsid_input.text)
-        with codecs.open(self.fileName, "w") as f:
-            f.write( id_ )
-            f.write( u'date:{0}\n'.format( self.obsdate_input.text ) )
+        self.fileName = self.obsid_input.text.replace(' ', '_').replace('/', '_').replace('(', '_').replace(')', '_') + '.boris_observation.tsv'
+
+        with open(self.fileName, "w") as f:
+            f.write("observation_id: {0}\n".format(self.obsid_input.text))
+            f.write("date: {0}\n".format( self.obsdate_input.text ) )
 
         # create layout with subject buttons
         if BorisApp.subjects:
-            self.subjectsLayout = GridLayout(cols= int((len(BorisApp.subjects['subjects'])+1)**0.5) , size_hint=(1,1), spacing=5)
-            btn = Button(text = NO_FOCAL_SUBJECT, size_hint_x = 1, font_size = 24)
+
+            subjectsList = sorted([ BorisApp.subjects[k]['name']  for k in BorisApp.subjects.keys()])
+
+            self.subjectsLayout = GridLayout(cols= int((len(subjectsList) + 1)**0.5) , size_hint=(1, 1), spacing=5)
+            btn = Button(text=NO_FOCAL_SUBJECT, size_hint_x=1, font_size=24)
             btn.bind(on_release = btnSubjectPressed)
-            for subject in BorisApp.subjects['subjects']:
-                btn = Button(text = subject, size_hint_x = 1, font_size = 24)
-                btn.background_color = [ 1,1,1,1 ]
+            for subject in subjectsList:
+                btn = Button(text=subject, size_hint_x=1, font_size=24)
+                btn.background_color = [1, 1, 1, 1]
                 btn.bind(on_release = btnSubjectPressed)
-                self.btnSubjectsList[ subject ] = btn
+                self.btnSubjectsList[subject] = btn
                 self.subjectsLayout.add_widget(btn)
 
 
         # create layout with behavior buttons
         self.behaviorsLayout = GridLayout(cols= int((len(BorisApp.behaviors)+1)**0.5) , size_hint=(1,1), spacing=5)
 
-        for b in BorisApp.behaviors:
-            btn = Button(text = b, size_hint_x = 1, font_size = 24)
-            btn.background_color = [ 1,1,1,1 ]
+        behaviorsList = sorted([BorisApp.behaviors[k]["code"] for k in BorisApp.behaviors.keys()])
+
+        for behavior in behaviorsList:
+            btn = Button(text=behavior, size_hint_x=1, font_size=24)
+            btn.background_color = [1, 1, 1, 1]
             btn.bind(on_release = btnBehaviorPressed)
-            self.btnList[ b ] = btn
+            self.btnList[behavior] = btn
             self.behaviorsLayout.add_widget(btn)
 
-        btn = Button(text = 'Select subject', size_hint_x = 1, font_size = 24)
+        btn = Button(text = "Select subject", size_hint_x = 1, font_size = 24)
         btn.background_color = [ 0,1,0,1 ]
         btn.bind(on_release = view_subjects_layout)
         self.behaviorsLayout.add_widget(btn)
 
-        btn = Button(text = 'Stop obs', size_hint_x = 1, font_size = 24)
+        btn = Button(text = "Stop obs", size_hint_x = 1, font_size = 24)
         btn.background_color = [ 1,0,0,1 ]
         btn.bind(on_release = btnStopPressed)
         self.behaviorsLayout.add_widget(btn)
@@ -288,20 +311,16 @@ class StartObservationForm(BoxLayout):
 
 class ConfirmStopPopup(Popup):
     def yes(self):
-        self.title = 'y'
+        self.title = "y"
         self.dismiss()
 
     def no(self):
-        self.title = 'n'
+        self.title = "n"
         self.dismiss()
-
-
-
 
 
 class BorisRoot(BoxLayout):
     pass
-
 
 class BorisApp(App):
     subjects = {}
