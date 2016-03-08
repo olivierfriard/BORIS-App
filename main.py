@@ -8,6 +8,7 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
+from kivy.clock import Clock
 
 import sys
 import json
@@ -235,6 +236,8 @@ class StartObservationForm(BoxLayout):
             self.clear_widgets()
             self.add_widget(self.subjectsLayout)
 
+        def clock_callback(dt):
+            print('clock')
         # create file for observations
 
         if not self.obsid_input.text:
@@ -287,6 +290,8 @@ class StartObservationForm(BoxLayout):
         self.add_widget(self.behaviorsLayout)
 
         self.t0 = time.time()
+
+        Clock.schedule_interval(clock_callback, 60)
 
 
 class ConfirmStopPopup(Popup):
