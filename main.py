@@ -1,474 +1,312 @@
-#!python2
 
-'''
-BORIS Kivy app
-
-Behavioral Observation Research Interactive Software (BORIS) 
-Copyright 2015 Olivier Friard
-This file is part of BORIS.
-  BORIS is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 3 of the License, or
-  any later version.
-  
-  BORIS is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-  
-  You should have received a copy of the GNU General Public License
-  along with this program; if not see <http://www.gnu.org/licenses/>.
-
-'''
-
-import sys
-import time
-import json
 
 from kivy.app import App
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.image import Image
-from kivy.uix.gridlayout import GridLayout
-from kivy.base import EventLoop
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.listview import ListItemLabel,ListView
-from kivy.adapters.listadapter import ListAdapter
-from kivy.uix.filechooser import FileChooserListView
+from kivy.properties import ObjectProperty
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.modalview import ModalView
+
+import sys
+import json
+import time
+import codecs
+import datetime
 
 NO_FOCAL_SUBJECT = 'No focal subject'
 
-class BORIS(App):
 
-    t0 = 0
-    currentStates = []
-    btnList = {}
-    obsId = ''
+class StartPageForm(BoxLayout):
+
+    def exit(self):
+        sys.exit()
+
+    def show_SelectSubjectsForm(self):
+        self.clear_widgets()
+        self.add_widget(SelectSubjectsForm())
+
+    def show_SelectObservationForm(self):
+        self.clear_widgets()
+        self.add_widget(SelectObservationForm())
+
+
+class SelectObservationForm(BoxLayout):
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+    def view_events(self, selection):
+        print( selection[0])
+
+        try:
+            events = open( selection[0],'rb').readlines()
+            print( 'events:', events)
+        except:
+            popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS observation file!'),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+            return
+
+        view_obs = ViewObservationForm()
+        self.add_widget(view_obs)
+
+        ViewObservationForm.viewobs2_list.item_strings = events
+
+        """
+        #ViewObservationForm().view( events )
+        self.clear_widgets()
+        self.add_widget(ViewObservationForm(events))
+        """
+
+class ViewObservationForm(BoxLayout):
+    viewobs2_list = ObjectProperty()
+    def __init__(self, **kwargs):
+        print( kwargs)
+        super(ViewObservationForm, self).__init__(**kwargs)
+
+        self.viewobs2_list.item_strings = ['a','b','c']
+
+"""
+class ViewObservationForm(BoxLayout):
+    viewobs_list = ObjectProperty()
+    #print  viewobs_list
+
+    def __init__(self,events):
+        print 'init events', events
+
+    '''
+    def view(self,events):
+        print events
+        print type(events)
+        print self.viewobs_list.item_strings
+        print type(self.viewobs_list)
+        self.viewobs_list.item_strings = events
+        #print '---',events
+        print self.viewobs_list.item_strings
+    pass
+    '''
+"""
+
+class SelectSubjectsForm(BoxLayout):
+
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+    def load_subjects(self, path, selection):
+        '''load subjects from file'''
+        try:
+            BorisApp.subjects = json.loads(open( selection[0], "r").read() )
+            print( 'subjects:', BorisApp.subjects)
+        except:
+            popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS subjects file!'),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+            return
+        self.next()
+
+    def next(self):
+        '''show select ethogram form'''
+        self.clear_widgets()
+        self.add_widget(SelectEthogramForm())
+
+
+class SelectEthogramForm(BoxLayout):
+
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+    def load_ethogram(self, path, selection):
+        '''load ethogram from selected file'''
+        if not selection:
+            popup = Popup(title='Error', content=Label(text='No file selected!'),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+            return
+        try:
+            BorisApp.behaviors = json.loads(open( selection[0], "r").read() )
+            print( 'behaviors:', BorisApp.behaviors)
+        except:
+            popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS behaviors file!'),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+            return
+
+        self.clear_widgets()
+
+        a = StartObservationForm()
+        a.obsdate_input.text = '{:%Y-%m-%d %H:%M}'.format(datetime.datetime.now())
+        self.add_widget(a)
+
+
+
+class StartObservationForm(BoxLayout):
+    obsid_input = ObjectProperty()
+    obsdate_input = ObjectProperty()
+
+    t0 = 0 # initial time
     fileName = ''
-    behaviors = {}
-    subjects = {}
-    focal_subject = NO_FOCAL_SUBJECT
+    currentStates = []
+    focal_subject = ''
+    btnList = {}
+    btnSubjectsList = {}
+    behaviorsLayout = ''
+    subjectsLayout = ''
 
-    def hook_keyboard(self, window, key, *largs):
-        if key == 27:
-            self.sm.current='home'
-            return True 
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
 
-    sm = ScreenManager()
+    def start(self):
 
-    def build(self):
-
-        EventLoop.window.bind(on_keyboard=self.hook_keyboard)
-
-        def btn_released(obj):
+        def btnBehaviorPressed(obj):
+            '''
+            behavior button pressed
+            '''
             t = time.time()
             out = ''
             newState = obj.text
 
             # state event
-            if self.behaviors[ newState ]['type'] == 'state':
+            if BorisApp.behaviors[ newState ]['type'] == 'state':
                 if newState in self.currentStates:
-                    out += '{time}\t{subject}\t{state}\tSTOP\n'.format(time=round(t - self.t0, 3), subject=self.focal_subject, state=newState)
+                    out += u'{time}\t{subject}\t{state}\tSTOP\n'.format(time=round(t - self.t0, 3), subject=self.focal_subject, state=newState)
                     obj.background_color = [1,1,1,1]
                     self.currentStates.remove(newState)
                 else:
                     # test if state is exclusive
-                    if self.behaviors[ newState ]['exclude']:
+                    if BorisApp.behaviors[ newState ]['exclude']:
                         statesToStop = []
 
                         for cs in self.currentStates:
-                            if cs in self.behaviors[ newState ]['exclude']:
-                                out += '{time}\t{subject}\t{state}\tSTOP\n'.format(time=round(t - self.t0, 3), state=cs, subject=self.focal_subject)
+                            if cs in BorisApp.behaviors[ newState ]['exclude']:
+                                out += u'{time}\t{subject}\t{state}\tSTOP\n'.format(time=round(t - self.t0, 3), state=cs, subject=self.focal_subject)
                                 statesToStop.append(cs)
                                 self.btnList[cs].background_color = [1,1,1,1]
 
                         for s in statesToStop:
                             self.currentStates.remove(s)
 
-                    out += '{time}\t{subject}\t{state}\tSTART\n'.format(time=round(t - self.t0, 3), state=newState, subject= self.focal_subject)
+                    out += u'{time}\t{subject}\t{state}\tSTART\n'.format(time=round(t - self.t0, 3), state=newState, subject= self.focal_subject)
                     obj.background_color = [5,1,1,1]
                     self.currentStates.append(newState)
 
             # point event
-            if self.behaviors[ newState ]['type'] == 'point':
-                out = '{time}\t{subject}\t{state}\n'.format( time=round(t - self.t0, 3), state=newState, subject= self.focal_subject )
+            if BorisApp.behaviors[ newState ]['type'] == 'point':
+                out = u'{time}\t{subject}\t{state}\n'.format( time=round(t - self.t0, 3), state=newState, subject= self.focal_subject )
 
-
-            with open(self.fileName,'a') as f:
+            with codecs.open(self.fileName, "a") as f:
                 f.write(out)
 
 
-        def btn_new_obs_released(obj):
+        def btnSubjectPressed(obj):
             '''
-            show ethogram screen
-            the ethogram screen allow the user to select an ethogram file
+            subject button pressed
             '''
-            self.sm.current = 'ethogram'
+            # set focal subject
+            if self.focal_subject and self.focal_subject != NO_FOCAL_SUBJECT:
+                self.btnSubjectsList[ self.focal_subject ].background_color = [1,1,1,1]
 
+            if obj.text == self.focal_subject:
+                # set focal subject to NO_FOCAL_SUBJECT
+                self.focal_subject == NO_FOCAL_SUBJECT
+            else:
+                self.focal_subject = obj.text
+                obj.background_color = [5,1,1,1]
 
-        def btn_view_obs_released(obj):
-            self.sm.current = 'observations_list'
+            print( 'focal subject:', self.focal_subject )
+            # show behaviors
+            self.clear_widgets()
+            self.add_widget(self.behaviorsLayout)
 
+        def btnStopPressed(obj):
 
-        def btn_start_released(obj):
-            '''
-            start a new observaiton
-            '''
-            if not self.obsId.text: 
-                popup = Popup(title='Please note',  content=Label(text='You must choose an id for the new observation'),   size_hint=(None, None), size=(400, 200))
-                popup.open()
-                return
+            def my_callback(instance):
+                if instance.title == 'y':
+                    self.clear_widgets()
+                    self.add_widget(StartPageForm())
 
-            self.t0 = time.time()
-            self.fileName = self.obsId.text.replace(' ','_').replace('/','_').replace('(','_').replace(')','_')+'.boris_observation.tsv'
-            open(self.fileName, 'w')
-            self.sm.current = 'behaviors'
+            pop = ConfirmStopPopup()
+            pop.bind( on_dismiss=my_callback )
+            pop.open()
 
+        def view_subjects_layout(obj):
+            self.clear_widgets()
+            self.add_widget(self.subjectsLayout)
 
-        def btn_stop_released(obj):
+        # create file for observations
 
-            self.sm.current = 'confirm_exit'
+        if not self.obsid_input.text:
+            p = Popup(title='Error', content=Label(text='The observation id is empty'), size_hint=(None, None), size=(400, 200))
+            p.open()
+            return
 
+        self.fileName = self.obsid_input.text.replace(' ','_').replace('/','_').replace('(','_').replace(')','_')+'.boris_observation.tsv'
+        print( type( self.obsid_input.text  ))
+        id_ = "observation_id:{0}\n".format( self.obsid_input.text)
+        with codecs.open(self.fileName, "w") as f:
+            f.write( id_ )
+            f.write( u'date:{0}\n'.format( self.obsdate_input.text ) )
 
-        def btn_select_ethogram(obj):
-            '''
-            load ethogram in JSON format
-            '''
-
-            if fc1.selection:
-                try:
-                    self.behaviors = json.loads(open(fc1.selection[0]).read())
-                except:
-                    popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS ethogram!'),   size_hint=(None, None), size=(400, 200))
-                    popup.open()
-                    return
-
-                layout = behaviors_layout(self.behaviors)
-
-                screen = Screen(name = 'behaviors')
-                screen.add_widget(layout)
-                self.sm.add_widget(screen)
-
-
-
-
-
-        def btn_view_observation(obj):
-            '''
-            view observation
-            '''
-
-            if fc2.selection:
-
-                screen = Screen(name='view_observation')
-                fileContent = open(fc2.selection[0]).readlines()
-
-                adapter = ListAdapter( data = [r.replace('\t','   ') for r in fileContent], cls = ListItemLabel)
-
-                vlayout = BoxLayout(orientation = 'vertical')
-
-                list_view = ListView(adapter = adapter)
-                vlayout.add_widget(list_view)
-
-                btn = Button( text='Back', size_hint_y=0.1 )
-                btn.bind(on_release=go_obs_list)
-                vlayout.add_widget(btn)
-
-
-                screen.add_widget(vlayout)
-                self.sm.add_widget(screen)
-
-                self.sm.current = 'view_observation'
-
-
-        def go_obs_list(obj):
-            self.sm.current = 'observations_list'
-
-
-        def go_home(obj):
-            self.sm.current = 'home'
-
-        def go_new_obs(obj):
-            self.sm.current = 'new_observation'
-
-
-        def btn_exit_released(obj):
-
-            if self.fileName: 
-                popup = Popup(title='Please note', content=Label(text='A current observation is running'),   size_hint=(None, None), size=(400, 200))
-                popup.open()
-
-            sys.exit()
-
-        def btn_confirm(obj):
-
-            if obj.text == 'Yes':
-                self.fileName = ''
-                self.sm.current = 'home'
-            if obj.text == 'No':
-                self.sm.current = 'behaviors'
-
-        def btn_subject(obj):
-            print 'focal subject  is ',obj.text
-            self.focal_subject = obj.text
-            self.sm.current = 'behaviors'
-
-        def select_focal_subject(obj):
-            if self.focal_subject != NO_FOCAL_SUBJECT:
-                self.sm.current = 'subjects_list'
-
-        def subjects_layout(subjects):
-            layout = GridLayout(cols= int((len(subjects)+1)**0.5) , size_hint=(1,1), spacing=5)
+        # create layout with subject buttons
+        if BorisApp.subjects:
+            self.subjectsLayout = GridLayout(cols= int((len(BorisApp.subjects['subjects'])+1)**0.5) , size_hint=(1,1), spacing=5)
             btn = Button(text = NO_FOCAL_SUBJECT, size_hint_x = 1, font_size = 24)
-            btn.bind(on_release = btn_subject)
-            for subject in subjects:
+            btn.bind(on_release = btnSubjectPressed)
+            for subject in BorisApp.subjects['subjects']:
                 btn = Button(text = subject, size_hint_x = 1, font_size = 24)
                 btn.background_color = [ 1,1,1,1 ]
-                btn.bind(on_release = btn_subject)
-                #self.btnSubjectsList[ subject ] = btn
-                layout.add_widget(btn)
-            return layout
+                btn.bind(on_release = btnSubjectPressed)
+                self.btnSubjectsList[ subject ] = btn
+                self.subjectsLayout.add_widget(btn)
 
 
-        def behaviors_layout( behaviors ):
-            '''
-            create the grid with all behaviors
-            returns layout
-            '''
-            layout = GridLayout(cols= int((len(behaviors)+1)**0.5) , size_hint=(1,1), spacing=5)
+        # create layout with behavior buttons
+        self.behaviorsLayout = GridLayout(cols= int((len(BorisApp.behaviors)+1)**0.5) , size_hint=(1,1), spacing=5)
 
-            for b in behaviors:
-                btn = Button(text = b, size_hint_x = 1, font_size = 24)
-                btn.background_color = [ 1,1,1,1 ]
-                btn.bind(on_release = btn_released)
-                self.btnList[ b ] = btn
-                layout.add_widget(btn)
+        for b in BorisApp.behaviors:
+            btn = Button(text = b, size_hint_x = 1, font_size = 24)
+            btn.background_color = [ 1,1,1,1 ]
+            btn.bind(on_release = btnBehaviorPressed)
+            self.btnList[ b ] = btn
+            self.behaviorsLayout.add_widget(btn)
 
-            btn = Button(text = 'Select subject', size_hint_x=1)
-            btn.background_color = [ 0,1,0,1 ]
-            btn.bind(on_release = select_focal_subject)
-            layout.add_widget(btn)
+        btn = Button(text = 'Select subject', size_hint_x = 1, font_size = 24)
+        btn.background_color = [ 0,1,0,1 ]
+        btn.bind(on_release = view_subjects_layout)
+        self.behaviorsLayout.add_widget(btn)
 
-            btn = Button(text = 'Stop obs', size_hint_x=1)
-            btn.background_color = [ 1,0,0,1 ]
-            btn.bind(on_release = btn_stop_released)
-            layout.add_widget(btn)
-
-            return layout
-
-        def btn_select_subjects(obj):
-            '''
-            show select_subjects screen
-            '''
-            if not self.behaviors:
-                popup = Popup(title='Error', content=Label(text='You must choose an ethogram'),   size_hint=(None, None), size=(400, 200))
-                popup.open()
-                return
-
-            self.sm.current = 'select_subjects'
-
-
-        def load_subjects(obj):
-            if fc3.selection:
-                try:
-                    self.subjects = json.loads(open(fc3.selection[0]).read())
-                except:
-                    popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS subjects!'),   size_hint=(None, None), size=(400, 200))
-                    popup.open()
-                    return
-
-            print self.subjects['subjects']
-            layout2 = subjects_layout(self.subjects['subjects'])
-            self.sm.get_screen('subjects_list').add_widget(layout2)
-
-
-
-        # home screen
-        screen = Screen(name='home')
-        layout = BoxLayout(orientation = 'vertical',size_hint_y=1)
-
-        logo = Image(source='logo_boris_500px.png')
-        layout.add_widget(logo)
-
-        hlayout = BoxLayout(orientation = 'horizontal', spacing=10, size_hint_y=0.3)
-
-        btn = Button(text='New observation',size_hint_x=1, font_size=32)
+        btn = Button(text = 'Stop obs', size_hint_x = 1, font_size = 24)
         btn.background_color = [ 1,0,0,1 ]
-        btn.bind(on_release = btn_new_obs_released)
-        hlayout.add_widget(btn)
+        btn.bind(on_release = btnStopPressed)
+        self.behaviorsLayout.add_widget(btn)
 
-        btn = Button(text='View observation',size_hint_x=1, font_size=32)
-        btn.background_color = [ 1,0,0,1 ]
-        btn.bind(on_release=btn_view_obs_released)
-        hlayout.add_widget(btn)
+        self.clear_widgets()
+        self.add_widget(self.behaviorsLayout)
 
-        btn = Button(text='Exit',size_hint_x=1, font_size=32)
-        btn.background_color = [ 1,0,0,1 ]
-        btn.bind(on_release=btn_exit_released)
-        hlayout.add_widget(btn)
-
-        layout.add_widget(hlayout)
-
-        screen.add_widget(layout)
-        self.sm.add_widget(screen)
+        self.t0 = time.time()
 
 
-        # ethogram screen (allow user to select an ethogram file)
-        screen = Screen(name='ethogram')
-        layout = BoxLayout(orientation = 'vertical')
+class ConfirmStopPopup(Popup):
+    def yes(self):
+        self.title = 'y'
+        self.dismiss()
 
-        fc1 = FileChooserListView(path='.',filters=['*.boris_ethogram'])
-        layout.add_widget(fc1)
-
-        hlayout = BoxLayout(orientation = 'horizontal',size_hint_y=None, height="40dp")
-        btn = Button( text='Select ethogram' )
-        btn.bind(on_release = btn_select_ethogram)
-        hlayout.add_widget(btn)
-
-        btn = Button( text = 'Next')
-        btn.bind(on_release = btn_select_subjects)
-        hlayout.add_widget(btn)
-
-        layout.add_widget(hlayout)
-
-        screen.add_widget(layout)
-
-        self.sm.add_widget(screen)
+    def no(self):
+        self.title = 'n'
+        self.dismiss()
 
 
 
-        # select subjects
-        screen = Screen(name='select_subjects')
-        layout = BoxLayout(orientation = 'vertical')
-
-        fc3 = FileChooserListView(path='.',filters=['*.boris_subjects'])
-        layout.add_widget(fc3)
-
-        hlayout = BoxLayout(orientation = 'horizontal',size_hint_y=None, height="40dp")
-        btn = Button( text='Select subjects' )
-        btn.bind(on_release=load_subjects)
-        hlayout.add_widget(btn)
-
-        btn = Button( text='Next' )
-        btn.bind(on_release = go_new_obs)
-        hlayout.add_widget(btn)
-
-        layout.add_widget(hlayout)
-
-        screen.add_widget(layout)
-
-        self.sm.add_widget(screen)
 
 
-        # observations list
-        screen = Screen(name='observations_list')
-        layout = BoxLayout(orientation = 'vertical')
-
-        fc2 = FileChooserListView(path='.',filters=['*.boris_observation.tsv'])
-        layout.add_widget(fc2)
-
-        hlayout = BoxLayout(orientation = 'horizontal',size_hint_y=None, height="40dp")
-
-        btn = Button( text='View observation' )
-        btn.bind(on_release=btn_view_observation)
-        hlayout.add_widget(btn)
-        btn = Button( text='Back' )
-        btn.bind(on_release=go_home)
-        hlayout.add_widget(btn)
+class BorisRoot(BoxLayout):
+    pass
 
 
-        layout.add_widget(hlayout)
-
-        screen.add_widget(layout)
-        self.sm.add_widget(screen)
-
-
-        # confirm exit
-        screen = Screen(name='confirm_exit')
-        layout = BoxLayout(orientation = 'vertical')
-
-        layout.add_widget(Label(text='Are you sure you want to stop the current observation?'))
-
-        hlayout1 = BoxLayout(orientation = 'horizontal', size_hint_y=None,height="40dp")
-        btn = Button( text='Yes' )
-        btn.bind(on_release=btn_confirm)
-        hlayout1.add_widget(btn)
-
-        btn = Button( text='No' )
-        btn.bind(on_release=btn_confirm)
-        hlayout1.add_widget(btn)
-
-        layout.add_widget(hlayout1)
-
-        screen.add_widget(layout)
-        self.sm.add_widget(screen)
-
-
-        # select_focal_subject
-        screenSubjects = Screen(name='subjects_list')
-        self.sm.add_widget(screenSubjects)
-
-
-        # observation info
-        screen = Screen(name='new_observation')
-        layout = BoxLayout(orientation = 'vertical')
-        hlayout1 = BoxLayout(orientation = 'horizontal')
-        hlayout1.add_widget(Label(text='Observation id', font_size=24))
-        self.obsId = TextInput(multiline=False, font_size=24)
-        hlayout1.add_widget(self.obsId)
-        layout.add_widget( hlayout1 )
-
-        hlayout2 = BoxLayout(orientation = 'horizontal', spacing=10)
-        hlayout2.add_widget(Label(text='Observation date', font_size=24))
-        self.obsDate = TextInput(text=time.strftime('%Y-%m-%d %H:%M:%S'),multiline=False, font_size=24)
-        hlayout2.add_widget(self.obsDate)
-        layout.add_widget( hlayout2 )
-
-
-        hlayout3 = BoxLayout(orientation = 'horizontal', spacing=10,size_hint_y=0.2)
-
-        btn2 = Button(text='Back', font_size=32)
-        btn2.background_color = [ 1,0,0,1 ]
-        btn2.bind(on_release=go_home)
-        hlayout3.add_widget(btn2)
-
-        btn = Button(text='Start', font_size=32)
-        btn.background_color = [ 1,0,0,1 ]
-        btn.bind(on_release = btn_start_released)
-        hlayout3.add_widget(btn)
-
-        layout.add_widget( hlayout3 )
-
-
-        screen.add_widget(layout)
-        self.sm.add_widget(screen)
-
-        # behaviors screen
-        '''
-        screen = Screen(name='behaviors')
-
-        #layout = behaviors_layout({'grooming':{'type':'state','exclude':['eat','sleep']},'eat':{'type':'state','exclude':['sleep']},'sleep':{'type':'state','exclude':['eat']},'jump':{'type':'point','exclude':[]}})
-        #screen.add_widget(layout)
-
-        self.sm.add_widget(screen)
-        '''
-
-        # view observation
-        '''
-        screen = Screen(name='view_observation')
-        lw = ListView( item_strings = ["Palo Alto, MX", "Palo Alto, US"] )
-        screen.add_widget( lw )
-        self.sm.add_widget(screen)
-        '''
-
-
-        return self.sm
-
+class BorisApp(App):
+    subjects = {}
+    behaviors = {}
+    pass
 
 if __name__ == '__main__':
-    BORIS().run()
-
+    BorisApp().run()
