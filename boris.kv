@@ -15,24 +15,33 @@ BorisRoot:
         height: "40dp"
         size_hint_y: None
         Button:
+            text: "Download project"
+            size_hint_x: 0.4
+            on_press: root.show_DownloadProject()
+
+        Button:
             text: "Load project"
             size_hint_x: 0.4
             on_press: root.show_SelectProjectForm()
         Button:
-            text: "View observation"
+            text: "View project"
             size_hint_x: 0.4
-            on_press: root.show_SelectObservationForm()
+            on_press: root.show_SelectProjectView()
         Button:
             text: "Exit"
             size_hint_x: 0.2
             on_press: root.exit()
 
-<SelectObservationForm>
+<DownloadProjectForm>
     orientation: "vertical"
-    FileChooserListView:
-        id: observationfilechooser
-        path: "."
-        filters: ["*.boris_observation.tsv"]
+    url_input: url
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Label:
+            text: "URL"
+        TextInput:
+            id: url
     BoxLayout:
         height: "40dp"
         size_hint_y: None
@@ -41,21 +50,38 @@ BorisRoot:
             size_hint_x: 0.2
             on_press: root.cancel()
         Button:
-            text: "View events"
+            text: "Download project"
             size_hint_x: 0.8
-            on_press: root.view_events( observationfilechooser.selection)
+            on_press: root.download_project()
 
-<ViewObservationForm>
+
+<SelectProjectView>
     orientation: "vertical"
-    viewobs2_list: viewobs_list
-    Label:
+    FileChooserListView:
+        id: filechooser
+        path: "."
+        filters: ["*.boris"]
+    BoxLayout:
         height: "40dp"
         size_hint_y: None
-        text: "View observation events"
-    ListView:
-        id: viewobs_list
-        #item_strings: []
-        item_strings: [str(index) for index in range(100)]
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+        Button:
+            text: "View project"
+            size_hint_x: 0.8
+            on_press: root.view_project(filechooser.selection)
+
+#<ViewProject>
+#    orientation: "vertical"
+#    Label:
+#        height: "40dp"
+#        size_hint_y: None
+#        text: "View project"
+#    ListView:
+#        id: viewobs_list
+#        item_strings: [str(index) for index in range(100)]
 
 
 <SelectProjectForm>

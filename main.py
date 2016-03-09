@@ -9,12 +9,14 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
+from kivy.uix.listview import ListView
 
 import sys
 import json
 import time
 import codecs
 import datetime
+import urllib.request
 
 NO_FOCAL_SUBJECT = 'No focal subject'
 
@@ -28,66 +30,95 @@ class StartPageForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
 
-    def show_SelectObservationForm(self):
+    def show_SelectProjectView(self):
         self.clear_widgets()
-        self.add_widget(SelectObservationForm())
+        self.add_widget(SelectProjectView())
+
+    def show_DownloadProject(self):
+        self.clear_widgets()
+        self.add_widget(DownloadProjectForm())
 
 
-class SelectObservationForm(BoxLayout):
+class DownloadProjectForm(BoxLayout):
+
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
-    def view_events(self, selection):
+    def download_project(self):
+        print(self.url_input.text)
+        url = "http://penelope.unito.it/archive/boris/files/Lemur_catta_ethogram.boris"
+        response = urllib.request.urlopen(url)
+        print(response.code)
+        if response.code == 200:
+            txt = response.read()
+            print(txt)
+            filename = url.rsplit("/", 1)[-1]
+            try:
+                with open(filename, "wb") as f:
+                    f.write(txt)
+                popup = Popup(title='OK', content=Label(text='Project downloaded and saved'),   size_hint=(None, None), size=(400, 200))
+                popup.open()
+            except:
+                popup = Popup(title='Error', content=Label(text='Project not saved!'),   size_hint=(None, None), size=(400, 200))
+                popup.open()
+        else:
+            popup = Popup(title='Error', content=Label(text='Project file can not be downloaded!'),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+
+
+
+
+
+
+class SelectProjectView(BoxLayout):
+
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+    def view_project(self, selection):
         print( selection[0])
 
         try:
-            events = open( selection[0], "r").readlines()
-            print( 'events:', events)
+            fileName = selection[0]
+
+            project = json.loads(open(selection[0], "r").read())
+            #rows = open( selection[0], "r").readlines()
+            #print( 'project:', project)
         except:
             popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS observation file!'),   size_hint=(None, None), size=(400, 200))
             popup.open()
             return
 
-        view_obs = ViewObservationForm()
-        self.add_widget(view_obs)
-
-        ViewObservationForm.viewobs2_list.item_strings = events
-
-        """
-        #ViewObservationForm().view( events )
         self.clear_widgets()
-        self.add_widget(ViewObservationForm(events))
-        """
+        view_project_form = ViewProject()
 
-class ViewObservationForm(BoxLayout):
-    viewobs2_list = ObjectProperty()
-    def __init__(self, **kwargs):
-        print( kwargs)
-        super(ViewObservationForm, self).__init__(**kwargs)
+        view_project_form.view(fileName, project)
+        self.add_widget(view_project_form)
 
-        self.viewobs2_list.item_strings = ['a','b','c']
+class ViewProject(BoxLayout):
 
-"""
-class ViewObservationForm(BoxLayout):
-    viewobs_list = ObjectProperty()
-    #print  viewobs_list
+    def view(self, fileName, project):
 
-    def __init__(self,events):
-        print 'init events', events
+        layout = BoxLayout(orientation='vertical')
+        lb = Label(text="project file name: {}".format(fileName), size_hint_y= 0.1)
+        layout.add_widget(lb)
 
-    '''
-    def view(self,events):
-        print events
-        print type(events)
-        print self.viewobs_list.item_strings
-        print type(self.viewobs_list)
-        self.viewobs_list.item_strings = events
-        #print '---',events
-        print self.viewobs_list.item_strings
-    pass
-    '''
-"""
+        rows =  []
+        rows.append("project name: {}".format(project["project_name"]))
+        rows.append("project date: {}".format(project["project_date"]))
+
+        lv = ListView(item_strings=rows)
+        layout.add_widget(lv)
+        self.clear_widgets()
+        self.add_widget(layout)
+
+
 
 class SelectProjectForm(BoxLayout):
 
@@ -103,6 +134,7 @@ class SelectProjectForm(BoxLayout):
             popup.open()
             return
         try:
+            BorisApp.projectFileName = selection[0]
             BorisApp.project = json.loads(open(selection[0], "r").read())
         except:
             popup = Popup(title="Error", content=Label(text="The selected file is not a BORIS behaviors file!"),   size_hint=(None, None), size=(400, 200))
@@ -151,7 +183,6 @@ class StartObservationForm(BoxLayout):
             newState = obj.text
 
             # state event
-            #if BorisApp.behaviors[ newState ]['type'] == 'state':
             if "State" in behaviorType(BorisApp.project["behaviors_conf"], newState):
                 if newState in self.currentStates:
                     #out += "{time}\t{subject}\t{state}\tSTOP\n".format(time=round(t - self.t0, 3), subject=self.focal_subject, state=newState)
@@ -251,7 +282,7 @@ class StartObservationForm(BoxLayout):
         # create layout with subject buttons
         if BorisApp.project["subjects_conf"]:
 
-            subjectsList = sorted([ BorisApp.project["subjects_conf"][k]['name']  for k in BorisApp.project["subjects_conf"].keys()])
+            subjectsList = sorted([ BorisApp.project["subjects_conf"][k]["name"]  for k in BorisApp.project["subjects_conf"].keys()])
 
             self.subjectsLayout = GridLayout(cols= int((len(subjectsList) + 1)**0.5) , size_hint=(1, 1), spacing=5)
             btn = Button(text=NO_FOCAL_SUBJECT, size_hint_x=1, font_size=24)
@@ -291,6 +322,7 @@ class StartObservationForm(BoxLayout):
 
         self.t0 = time.time()
 
+        # start timer
         Clock.schedule_interval(clock_callback, 60)
 
 
@@ -309,7 +341,8 @@ class BorisRoot(BoxLayout):
 
 class BorisApp(App):
     project = {}
+    projectFileName = ""
     pass
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BorisApp().run()
