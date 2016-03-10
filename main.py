@@ -57,21 +57,17 @@ class DownloadProjectForm(BoxLayout):
             try:
                 with open(filename, "wb") as f:
                     f.write(txt)
-                popup = Popup(title='OK', content=Label(text='Project downloaded and saved'),   size_hint=(None, None), size=(400, 200))
+                popup = Popup(title="OK", content=Label(text="Project downloaded and saved"),   size_hint=(None, None), size=(400, 200))
                 popup.open()
             except:
-                popup = Popup(title='Error', content=Label(text='Project not saved!'),   size_hint=(None, None), size=(400, 200))
+                popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
                 popup.open()
         else:
-            popup = Popup(title='Error', content=Label(text='Project file can not be downloaded!'),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="Project file can not be downloaded!"),   size_hint=(None, None), size=(400, 200))
             popup.open()
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
-
-
-
-
 
 
 
