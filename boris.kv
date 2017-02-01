@@ -20,7 +20,7 @@ BorisRoot:
             on_press: root.show_DownloadProject()
 
         Button:
-            text: "Load project"
+            text: "Open project"
             size_hint_x: 0.4
             on_press: root.show_SelectProjectForm()
         Button:
@@ -54,7 +54,6 @@ BorisRoot:
             size_hint_x: 0.8
             on_press: root.download_project()
 
-
 <SelectProjectView>
     orientation: "vertical"
     FileChooserListView:
@@ -73,15 +72,22 @@ BorisRoot:
             size_hint_x: 0.8
             on_press: root.view_project(filechooser.selection)
 
-#<ViewProject>
-#    orientation: "vertical"
-#    Label:
-#        height: "40dp"
-#        size_hint_y: None
-#        text: "View project"
-#    ListView:
-#        id: viewobs_list
-#        item_strings: [str(index) for index in range(100)]
+<ViewProjectForm>
+    orientation: "vertical"
+    Label:
+        id: lbl
+        height: "40dp"
+        size_hint_y: None
+        text: "View project!"
+    ListView:
+        id: projectslist
+        halign: 'left'
+        item_strings: []
+    Button:
+        id: btn
+        text: "Go back"
+        size_hint_x: 1
+        on_press: root.go_back()
 
 
 <SelectProjectForm>
@@ -89,7 +95,7 @@ BorisRoot:
     Label:
         height: "40dp"
         size_hint_y: None
-        text: "Select a BORIS project file and then press \"Load project\" button"
+        text: "Select a BORIS project file and then press \"Open project\" button"
     FileChooserListView:
         id: projectfilechooser
         path: "."
@@ -102,9 +108,9 @@ BorisRoot:
             size_hint_x: 0.2
             on_press: root.cancel()
         Button:
-            text: "Load project"
+            text: "Open project"
             size_hint_x: 0.8
-            on_press: root.load_project(projectfilechooser.path, projectfilechooser.selection)
+            on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
 
 <StartObservationForm>
     orientation: "vertical"

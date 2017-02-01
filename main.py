@@ -1,3 +1,9 @@
+#!/usr/bin/python3
+
+'''
+add behaviors categories
+projects list avec # behaviors ...
+'''
 
 
 from kivy.app import App
@@ -16,9 +22,10 @@ import json
 import time
 import codecs
 import datetime
-import urllib.request
+#import urllib.request
+#import urllib2
 
-NO_FOCAL_SUBJECT = 'No focal subject'
+NO_FOCAL_SUBJECT = "No focal subject"
 
 
 class StartPageForm(BoxLayout):
@@ -48,7 +55,8 @@ class DownloadProjectForm(BoxLayout):
     def download_project(self):
         print(self.url_input.text)
         url = "http://penelope.unito.it/archive/boris/files/Lemur_catta_ethogram.boris"
-        response = urllib.request.urlopen(url)
+        #response = urllib.request.urlopen(url)
+        response = urllib2.urlopen(url)
         print(response.code)
         if response.code == 200:
             txt = response.read()
@@ -78,7 +86,7 @@ class SelectProjectView(BoxLayout):
         self.add_widget(StartPageForm())
 
     def view_project(self, selection):
-        print( selection[0])
+        print("project: {}".format(selection[0]))
 
         try:
             fileName = selection[0]
@@ -87,32 +95,33 @@ class SelectProjectView(BoxLayout):
             #rows = open( selection[0], "r").readlines()
             #print( 'project:', project)
         except:
-            popup = Popup(title='Error', content=Label(text='The selected file is not a BORIS observation file!'),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="The selected file is not a BORIS project file!"),   size_hint=(None, None), size=(400, 200))
             popup.open()
             return
 
+
         self.clear_widgets()
-        view_project_form = ViewProject()
-
-        view_project_form.view(fileName, project)
-        self.add_widget(view_project_form)
-
-class ViewProject(BoxLayout):
-
-    def view(self, fileName, project):
-
-        layout = BoxLayout(orientation='vertical')
-        lb = Label(text="project file name: {}".format(fileName), size_hint_y= 0.1)
-        layout.add_widget(lb)
+        w = ViewProjectForm()
+        w.ids.lbl.text = "project file name: {}".format(fileName)
 
         rows =  []
         rows.append("project name: {}".format(project["project_name"]))
-        rows.append("project date: {}".format(project["project_date"]))
+        rows.append("project date: {}".format(project["project_date"].replace("T", " ")))
+        rows.append("project description: {}".format(project["project_description"]))
+        rows.append("Number of behaviors: {}".format(len(project["behaviors_conf"].keys())))
+        rows.append("Number of subjects: {}".format(len(project["subjects_conf"].keys())))
 
-        lv = ListView(item_strings=rows)
-        layout.add_widget(lv)
+        w.ids.projectslist.item_strings = rows
+        self.add_widget(w)
+
+        #print("ViewProjectForm.ids", w.ids.projectslist.item_strings)
+
+
+
+class ViewProjectForm(BoxLayout):
+    def go_back(self):
         self.clear_widgets()
-        self.add_widget(layout)
+        self.add_widget(StartPageForm())
 
 
 
@@ -122,8 +131,8 @@ class SelectProjectForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
-    def load_project(self, path, selection):
-        """load project from selected file"""
+    def open_project(self, path, selection):
+        """open project from selected file"""
 
         if not selection:
             popup = Popup(title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200))
@@ -170,12 +179,23 @@ class StartObservationForm(BoxLayout):
 
     def start(self):
 
+        def view_behaviors_layout(obj):
+            self.clear_widgets()
+            self.add_widget(self.behaviorsLayout)
+
+
+        def view_subjects_layout(obj):
+            self.clear_widgets()
+            self.add_widget(self.subjectsLayout)
+            print("current focal subject:", self.focal_subject)
+
+
         def btnBehaviorPressed(obj):
             """
             behavior button pressed
             """
             t = time.time()
-            out = ''
+            out = ""
             newState = obj.text
 
             # state event
@@ -219,21 +239,28 @@ class StartObservationForm(BoxLayout):
             """
             subject button pressed
             """
+
+            print("clicked button", obj.text)
+
             # set focal subject
             if self.focal_subject and self.focal_subject != NO_FOCAL_SUBJECT:
                 self.btnSubjectsList[ self.focal_subject ].background_color = [1, 1, 1, 1]
 
+            # deselect already selected subject
             if obj.text == self.focal_subject:
-                # set focal subject to NO_FOCAL_SUBJECT
-                self.focal_subject == NO_FOCAL_SUBJECT
+                self.focal_subject = NO_FOCAL_SUBJECT
             else:
                 self.focal_subject = obj.text
                 obj.background_color = [5, 1, 1, 1]
 
-            print( "focal subject:", self.focal_subject )
+            print("new focal subject:", self.focal_subject)
+            btnSelSubj.text = self.focal_subject
             # show behaviors
+            '''
             self.clear_widgets()
             self.add_widget(self.behaviorsLayout)
+            '''
+            view_behaviors_layout(None)
 
 
         def btnStopPressed(obj):
@@ -259,10 +286,6 @@ class StartObservationForm(BoxLayout):
             pop.open()
 
 
-        def view_subjects_layout(obj):
-            self.clear_widgets()
-            self.add_widget(self.subjectsLayout)
-
         def clock_callback(dt):
             print('clock')
         # create file for observations
@@ -278,17 +301,28 @@ class StartObservationForm(BoxLayout):
         # create layout with subject buttons
         if BorisApp.project["subjects_conf"]:
 
-            subjectsList = sorted([ BorisApp.project["subjects_conf"][k]["name"]  for k in BorisApp.project["subjects_conf"].keys()])
+            subjectsList = sorted([BorisApp.project["subjects_conf"][k]["name"] for k in BorisApp.project["subjects_conf"].keys()])
+
+            # check number of subjects
+            subjects_font_size = 24
+            if len(subjectsList) > 20:
+                subjects_font_size = 14
 
             self.subjectsLayout = GridLayout(cols= int((len(subjectsList) + 1)**0.5) , size_hint=(1, 1), spacing=5)
-            btn = Button(text=NO_FOCAL_SUBJECT, size_hint_x=1, font_size=24)
+            btn = Button(text=NO_FOCAL_SUBJECT, size_hint_x=1, font_size=subjects_font_size)
             btn.bind(on_release = btnSubjectPressed)
             for subject in subjectsList:
-                btn = Button(text=subject, size_hint_x=1, font_size=24)
+                btn = Button(text=subject, size_hint_x=1, font_size=subjects_font_size)
                 btn.background_color = [1, 1, 1, 1]
                 btn.bind(on_release = btnSubjectPressed)
                 self.btnSubjectsList[subject] = btn
                 self.subjectsLayout.add_widget(btn)
+
+            # cancel button
+            btn = Button(text = "Cancel", size_hint_x=1, font_size=subjects_font_size)
+            btn.background_color = [1, 0, 0, 1] # red
+            btn.bind(on_release = view_behaviors_layout)
+            self.subjectsLayout.add_widget(btn)
 
 
         # create layout with behavior buttons
@@ -296,20 +330,26 @@ class StartObservationForm(BoxLayout):
 
         behaviorsList = sorted([BorisApp.project["behaviors_conf"][k]["code"] for k in BorisApp.project["behaviors_conf"].keys()])
 
+        # check number of behaviors
+        behaviors_font_size = 24
+        if len(behaviorsList) > 20:
+            behaviors_font_size = 14
+
         for behavior in behaviorsList:
-            btn = Button(text=behavior, size_hint_x=1, font_size=24)
+            btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
             btn.background_color = [1, 1, 1, 1]
             btn.bind(on_release = btnBehaviorPressed)
             self.btnList[behavior] = btn
             self.behaviorsLayout.add_widget(btn)
 
-        btn = Button(text = "Select subject", size_hint_x = 1, font_size = 24)
-        btn.background_color = [ 0,1,0,1 ]
-        btn.bind(on_release = view_subjects_layout)
-        self.behaviorsLayout.add_widget(btn)
+        if BorisApp.project["subjects_conf"]:
+            btnSelSubj = Button(text = "Select\nsubject", size_hint_x=1, font_size=behaviors_font_size)
+            btnSelSubj.background_color = [0, 1, 0, 1] # green
+            btnSelSubj.bind(on_release = view_subjects_layout)
+            self.behaviorsLayout.add_widget(btnSelSubj)
 
-        btn = Button(text = "Stop obs", size_hint_x = 1, font_size = 24)
-        btn.background_color = [ 1,0,0,1 ]
+        btn = Button(text = "Stop obs", size_hint_x=1, font_size=behaviors_font_size)
+        btn.background_color = [1, 0, 0, 1] # red
         btn.bind(on_release = btnStopPressed)
         self.behaviorsLayout.add_widget(btn)
 
