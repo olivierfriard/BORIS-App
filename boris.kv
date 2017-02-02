@@ -23,10 +23,10 @@ BorisRoot:
             text: "Open project"
             size_hint_x: 0.4
             on_press: root.show_SelectProjectForm()
-        Button:
-            text: "View project"
-            size_hint_x: 0.4
-            on_press: root.show_SelectProjectView()
+#        Button:
+#            text: "View project"
+#            size_hint_x: 0.4
+#            on_press: root.show_SelectProjectView()
         Button:
             text: "Exit"
             size_hint_x: 0.2
@@ -54,26 +54,27 @@ BorisRoot:
             size_hint_x: 0.8
             on_press: root.download_project()
 
-<SelectProjectView>
-    orientation: "vertical"
-    FileChooserListView:
-        id: filechooser
-        path: "."
-        filters: ["*.boris"]
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-        Button:
-            text: "Cancel"
-            size_hint_x: 0.2
-            on_press: root.cancel()
-        Button:
-            text: "View project"
-            size_hint_x: 0.8
-            on_press: root.view_project(filechooser.selection)
+#<SelectProjectView>
+#    orientation: "vertical"
+#    FileChooserListView:
+#        id: filechooser
+#        path: "."
+#        filters: ["*.boris"]
+#    BoxLayout:
+#        height: "40dp"
+#        size_hint_y: None
+#        Button:
+#            text: "Cancel"
+#            size_hint_x: 0.2
+#            on_press: root.cancel()
+#        Button:
+#            text: "View project"
+#            size_hint_x: 0.8
+#            on_press: root.view_project(filechooser.selection)
 
 <ViewProjectForm>
     orientation: "vertical"
+    halign: 'left'
     Label:
         id: lbl
         height: "40dp"
@@ -81,13 +82,20 @@ BorisRoot:
         text: "View project!"
     ListView:
         id: projectslist
-        halign: 'left'
         item_strings: []
-    Button:
-        id: btn
-        text: "Go back"
-        size_hint_x: 1
-        on_press: root.go_back()
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+        Button:
+            id: btnGoBack
+            text: "Go back"
+            size_hint_x: 0.2
+            on_press: root.go_back()
+        Button:
+            id: btnStartObs
+            text: "New observation"
+            size_hint_x: 0.2
+            on_press: root.new_observation()
 
 
 <SelectProjectForm>
@@ -116,6 +124,7 @@ BorisRoot:
     orientation: "vertical"
     obsid_input: obsid
     obsdate_input: obsdate
+    obsdescription_input: obsdescription
     BoxLayout:
         height: "40dp"
         size_hint_y: None
@@ -131,6 +140,14 @@ BorisRoot:
         TextInput:
             id: obsdate
     BoxLayout:
+        height: "120dp"
+        size_hint_y: None
+        Label:
+            text: "Description"
+        TextInput:
+            id: obsdescription
+            multiline: True
+    BoxLayout:
         height: "40dp"
         size_hint_y: None
         Button:
@@ -138,8 +155,12 @@ BorisRoot:
             size_hint_x: 0.2
             on_press: root.cancel()
         Button:
+            text: "Independent var"
+            size_hint_x: 0.4
+            on_press: root.indep_var()
+        Button:
             text: "Start observation"
-            size_hint_x: 0.8
+            size_hint_x: 0.4
             on_press: root.start()
 
 <ConfirmStopPopup>
