@@ -1,7 +1,26 @@
 #!/usr/bin/python3
 
 '''
+BORIS mobile
+Behavioral Observation Research Interactive Software
+Copyright 2017 Olivier Friard
 
+This file is part of BORIS mobile.
+
+  BORIS is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  any later version.
+
+  BORIS mobile is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not see <http://www.gnu.org/licenses/>.
+
+  www.boris.unito.it
 '''
 
 
@@ -19,16 +38,18 @@ from kivy.uix.listview import ListView
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 
+import os
 import sys
 import json
 import time
 import codecs
 import datetime
-#import urllib.request
-#import urllib2
+import urllib.request
 
 NO_FOCAL_SUBJECT = "No focal subject"
-
+OBSERVATIONS = "observations"
+SUBJECTS = "subjects_conf"
+ETHOGRAM = "behaviors_conf"
 
 class StartPageForm(BoxLayout):
 
@@ -50,28 +71,56 @@ class StartPageForm(BoxLayout):
 
 class DownloadProjectForm(BoxLayout):
 
+
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
     def download_project(self):
-        print(self.url_input.text)
-        url = "http://penelope.unito.it/archive/boris/files/Lemur_catta_ethogram.boris"
-        #response = urllib.request.urlopen(url)
-        response = urllib2.urlopen(url)
-        print(response.code)
-        if response.code == 200:
-            txt = response.read()
-            print(txt)
-            filename = url.rsplit("/", 1)[-1]
+
+        def save_project_file(filename, content):
             try:
                 with open(filename, "wb") as f:
-                    f.write(txt)
-                popup = Popup(title="OK", content=Label(text="Project downloaded and saved"),   size_hint=(None, None), size=(400, 200))
+                    f.write(content)
+                popup = Popup(title="OK", content=Label(text="Project downloaded and saved as '{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
                 popup.open()
             except:
                 popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
                 popup.open()
+
+
+        def my_callback(instance):
+            print(instance.title)
+            if instance.title == "cancel":
+                return
+            if instance.title == "overwrite":
+                save_project_file(self.filename, self.content)
+                return
+            if instance.title == "rename":
+                save_project_file( "{}.{}.boris".format(self.filename, datetime.datetime.now().isoformat("_").split(".")[0].replace(":","")), self.content)
+                return
+
+
+        print(self.url_input.text)
+        url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
+
+        with urllib.request.urlopen(url) as f:
+            self.content = f.read()
+
+        if self.content:
+            self.filename = url.rsplit("/", 1)[-1]
+            #print("filename", filename)
+
+            if os.path.isfile(self.filename):
+                print("file exists!")
+
+                pop = AskForExistingFile()
+                pop.bind(on_dismiss=my_callback)
+                pop.open()
+
+            else:
+                save_project_file(self.filename, self.content)
+
         else:
             popup = Popup(title="Error", content=Label(text="Project file can not be downloaded!"),   size_hint=(None, None), size=(400, 200))
             popup.open()
@@ -126,7 +175,7 @@ class SelectProjectForm(BoxLayout):
         rows.append("project name: {}".format(BorisApp.project["project_name"]))
         rows.append("project date: {}".format(BorisApp.project["project_date"].replace("T", " ")))
         rows.append("project description: {}".format(BorisApp.project["project_description"]))
-        rows.append("Number of behaviors: {}".format(len(BorisApp.project["behaviors_conf"].keys())))
+        rows.append("Number of behaviors: {}".format(len(BorisApp.project[ETHOGRAM].keys())))
         if "behavioral_categories" in BorisApp.project:
             rows.append("Number of behavior categories: {}".format(len(BorisApp.project["behavioral_categories"])))
         rows.append("Number of subjects: {}".format(len(BorisApp.project["subjects_conf"].keys())))
@@ -135,12 +184,6 @@ class SelectProjectForm(BoxLayout):
         w.ids.projectslist.item_strings = rows
         self.add_widget(w)
 
-        '''
-        self.clear_widgets()
-        a = StartObservationForm()
-        a.obsdate_input.text = "{:%Y-%m-%d %H:%M}".format(datetime.datetime.now())
-        self.add_widget(a)
-        '''
 
 
 def behaviorType(ethogram, behavior):
@@ -159,17 +202,35 @@ class StartObservationForm(BoxLayout):
 
     time_ = 0
     behav_ = ""
-
-
+    iv = {}
 
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
-    def go_back(self, obj):
 
-        print("go back")
+    def go_back(self, obj):
+        """
+        return to 'start observation' screen
+        """
+
+        print("go back", obj)
         print("mem obs id", self.mem)
+
+        # check if numeric indep var are numeric
+        if "independent_variables" in BorisApp.project:
+            for idx in BorisApp.project["independent_variables"]:
+                if BorisApp.project["independent_variables"][idx]["label"] in self.iv:
+                    if (BorisApp.project["independent_variables"][idx]["type"] == "numeric" and
+                       self.iv[BorisApp.project["independent_variables"][idx]["label"]].text):
+                        try:
+                            _ = float(self.iv[BorisApp.project["independent_variables"][idx]["label"]].text)
+                        except:
+                            p = Popup(title="Error", content=Label(text="The variable '{}' must be numeric".format(BorisApp.project["independent_variables"][idx]["label"])),
+                                      size_hint=(None, None), size=(400, 200))
+                            p.open()
+                            return
+
 
         self.clear_widgets()
         w = StartObservationForm()
@@ -181,10 +242,10 @@ class StartObservationForm(BoxLayout):
 
     def indep_var(self):
         """
-        show independent variables
+        input independent variables
         """
 
-        self.mem = {"obsId": self.obsid_input.text, "obsDate": self.obsdate_input.text, "obsDescription":self.obsdescription_input.text}
+        self.mem = {"obsId": self.obsid_input.text, "obsDate": self.obsdate_input.text, "obsDescription": self.obsdescription_input.text}
         print("mem :", self.mem)
 
         layout = BoxLayout(orientation="vertical")
@@ -201,6 +262,7 @@ class StartObservationForm(BoxLayout):
                 layout1.add_widget(lb1)
 
                 ti = TextInput(text=BorisApp.project["independent_variables"][idx]["default value"], multiline=False)
+                self.iv[BorisApp.project["independent_variables"][idx]["label"]] = ti
                 layout1.add_widget(ti)
 
                 layout.add_widget(layout1)
@@ -219,6 +281,9 @@ class StartObservationForm(BoxLayout):
 
 
     def start(self):
+        """
+        start new observation
+        """
 
         def view_behaviors_layout(obj):
             """
@@ -266,10 +331,8 @@ class StartObservationForm(BoxLayout):
             self.add_widget(anchor_layout)
         '''
 
-
-
         def write_event(event):
-            print("event", event)
+            #print("event", event)
             t, newState, modifier = event
 
             if "State" in behaviorType(BorisApp.project["behaviors_conf"], newState):
@@ -318,13 +381,13 @@ class StartObservationForm(BoxLayout):
             print(BorisApp.project["observations"][self.obsId]["events"][-1])
 
 
-
         def btnBehaviorPressed(obj):
             """
             behavior button pressed
             """
 
             selected_modifier = ""
+
             def callback(obj):
 
                 print("selected_modifier", obj.text)
@@ -366,8 +429,6 @@ class StartObservationForm(BoxLayout):
 
             else:
                 write_event([t, obj.text, ""])
-
-
 
 
         def btnSubjectPressed(obj):
@@ -420,20 +481,31 @@ class StartObservationForm(BoxLayout):
             pop.bind(on_dismiss=my_callback)
             pop.open()
 
+
         def clock_callback(dt):
             print('clock')
         # create file for observations
 
+        # check if observation id field is empty
         if not self.obsid_input.text:
             p = Popup(title="Error", content=Label(text="The observation id is empty"), size_hint=(None, None), size=(400, 200))
             p.open()
             return
 
+        # check if observation id already exists
+        if self.obsid_input.text in BorisApp.project[OBSERVATIONS]:
+            p = Popup(title="Error", content=Label(text="This observation id already exists."), size_hint=(None, None), size=(400, 200))
+            p.open()
+            return
+
+
+
         print("obs id:", self.obsid_input.text)
         print("description:", self.obsdescription_input.text)
 
+
         self.obsId = self.obsid_input.text
-        BorisApp.project["observations"][self.obsId] = {"date": self.obsdate_input.text,
+        BorisApp.project[OBSERVATIONS][self.obsId] = {"date": self.obsdate_input.text,
                                                         "close_behaviors_between_videos": False,
                                                         "time offset": 0.0,
                                                         "scan_sampling_time": 0,
@@ -445,10 +517,15 @@ class StartObservationForm(BoxLayout):
                                                         "type": "LIVE",
                                                         "independent_variables": {}}
 
-        # create layout with subject buttons
-        if BorisApp.project["subjects_conf"]:
+        for label in self.iv:
+            BorisApp.project[OBSERVATIONS][self.obsId]["independent_variables"][label] = self.iv[label].text
+        print("indep var\n", BorisApp.project[OBSERVATIONS][self.obsId]["independent_variables"])
 
-            subjectsList = sorted([BorisApp.project["subjects_conf"][k]["name"] for k in BorisApp.project["subjects_conf"].keys()])
+
+        # create layout with subject buttons
+        if BorisApp.project[SUBJECTS]:
+
+            subjectsList = sorted([BorisApp.project[SUBJECTS][k]["name"] for k in BorisApp.project[SUBJECTS].keys()])
 
             # check number of subjects
             subjects_font_size = 24
@@ -525,7 +602,7 @@ class StartObservationForm(BoxLayout):
 
         hlayout = BoxLayout(orientation='horizontal', size_hint_y=0.1)
         # add subject button
-        if BorisApp.project["subjects_conf"]:
+        if BorisApp.project[SUBJECTS]:
             btnSelSubj = Button(text = "Select focal subject", size_hint_x=1, font_size=behaviors_font_size)
             btnSelSubj.background_normal = ""
             btnSelSubj.background_color = [0.1, 0.9, 0.1, 1] # green
@@ -548,6 +625,17 @@ class StartObservationForm(BoxLayout):
 
         # start timer
         Clock.schedule_interval(clock_callback, 60)
+
+class AskForExistingFile(Popup):
+    def cancel(self):
+        self.title = "cancel"
+        self.dismiss()
+    def overwrite(self):
+        self.title = "overwrite"
+        self.dismiss()
+    def rename(self):
+        self.title = "rename"
+        self.dismiss()
 
 
 class ConfirmStopPopup(Popup):
