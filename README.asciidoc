@@ -1,5 +1,4 @@
-= BORIS-kivy-app
+BORIS mobile 
+============
 
-Application for recording behavioral observations compatible with BORIS (http://penelope.unito.it/boris)
-
-Require Kivy
+Require Python3 and Kivy
