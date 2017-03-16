@@ -44,12 +44,19 @@ import json
 import time
 import codecs
 import datetime
-import urllib.request
+import urllib2
+import socket
 
 NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
 SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
+
+def get_ip_address():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    return s.getsockname()[0]
+
 
 class StartPageForm(BoxLayout):
 
@@ -60,17 +67,97 @@ class StartPageForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
 
-    def show_SelectProjectView(self):
+    def receive_project_from_boris(self):
         self.clear_widgets()
-        self.add_widget(SelectProjectView())
+        form = ReceiveProject()
+        form.lb_receive_input.text = "IP: {}".format(get_ip_address())
+        self.add_widget(form)
 
     def show_DownloadProject(self):
         self.clear_widgets()
-        self.add_widget(DownloadProjectForm())
+        d = DownloadProjectForm()
+        #d.label1_input.text = "AA"
+        self.add_widget(d)
+
+
+class ReceiveProject(BoxLayout):
+
+
+
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+
+
+
+    def start_receiving(self):
+
+
+        TCP_IP = ''
+        TCP_PORT = 5006
+        BUFFER_SIZE = 20  # Normally 1024, but we want fast response
+
+        #print(socket.gethostbyname(socket.gethostname()))
+
+        print(get_ip_address())
+
+
+        self.lb_receive_input.text = "text"
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind((TCP_IP, TCP_PORT))
+
+        s.settimeout(60)
+
+        try:
+            s.listen(1)
+            print("Listening...")
+            conn, addr = s.accept()
+
+        except socket.timeout:
+            print("Time out")
+            self.clear_widgets()
+            self.add_widget(StartPageForm())
+
+            popup = Popup(title="Receiving project", content=Label(text="Timeout"), auto_dismiss=True,  size_hint=(None, None), size=(400, 200))
+            popup.open()
+
+            return
+
+        print( 'Connection address:', addr)
+
+        received = b""
+
+        while 1:
+            data = conn.recv(BUFFER_SIZE)
+            if not data:
+                break
+            received += data
+
+            #conn.send(b'ok')  # echo
+        conn.close()
+
+        print( "received data:", received)
+
+        filename = datetime.datetime.now().isoformat("_").split(".")[0].replace(":","") + ".boris"
+        try:
+            with open(filename, "wb") as f:
+                f.write(received)
+
+            popup = Popup(title="OK", content=Label(text="Project received and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+        except:
+            popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
+            popup.open()
+
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+
 
 
 class DownloadProjectForm(BoxLayout):
-
 
     def cancel(self):
         self.clear_widgets()
@@ -82,14 +169,14 @@ class DownloadProjectForm(BoxLayout):
             try:
                 with open(filename, "wb") as f:
                     f.write(content)
-                popup = Popup(title="OK", content=Label(text="Project downloaded and saved as '{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
+                popup = Popup(title="OK", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
                 popup.open()
             except:
                 popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
                 popup.open()
 
 
-        def my_callback(instance):
+        def choose_for_existing_file(instance):
             print(instance.title)
             if instance.title == "cancel":
                 return
@@ -104,19 +191,23 @@ class DownloadProjectForm(BoxLayout):
         print(self.url_input.text)
         url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
 
-        with urllib.request.urlopen(url) as f:
-            self.content = f.read()
+        self.url_input.text = url
+
+        response = urllib2.urlopen(self.url_input.text)
+        self.content = response.read()
 
         if self.content:
             self.filename = url.rsplit("/", 1)[-1]
-            #print("filename", filename)
 
             if os.path.isfile(self.filename):
                 print("file exists!")
 
                 pop = AskForExistingFile()
-                pop.bind(on_dismiss=my_callback)
+                pop.title = "The project '{}' already exists on this device".format(self.filename)
+                #pop.content=Label(text='Hello world')
+                pop.bind(on_dismiss=choose_for_existing_file)
                 pop.open()
+
 
             else:
                 save_project_file(self.filename, self.content)
@@ -257,11 +348,11 @@ class StartObservationForm(BoxLayout):
                 layout1 = BoxLayout(orientation="horizontal")
                 s = BorisApp.project["independent_variables"][idx]["label"]
                 if BorisApp.project["independent_variables"][idx]["description"]:
-                    s += " ({})".format(BorisApp.project["independent_variables"][idx]["description"])
-                lb1 = Label(text=s)
+                    s += "\n({})".format(BorisApp.project["independent_variables"][idx]["description"])
+                lb1 = Label(text=s, size_hint_x=1, font_size=20)
                 layout1.add_widget(lb1)
 
-                ti = TextInput(text=BorisApp.project["independent_variables"][idx]["default value"], multiline=False)
+                ti = TextInput(text=BorisApp.project["independent_variables"][idx]["default value"], multiline=False, size_hint_x=1, font_size=25)
                 self.iv[BorisApp.project["independent_variables"][idx]["label"]] = ti
                 layout1.add_widget(ti)
 

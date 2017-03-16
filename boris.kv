@@ -50,10 +50,10 @@ BorisRoot:
             text: "Open project"
             size_hint_x: 0.4
             on_press: root.show_SelectProjectForm()
-#        Button:
-#            text: "View project"
-#            size_hint_x: 0.4
-#            on_press: root.show_SelectProjectView()
+        Button:
+            text: "Receive project"
+            size_hint_x: 0.4
+            on_press: root.receive_project_from_boris()
         Button:
             text: "Exit"
             size_hint_x: 0.2
@@ -62,13 +62,27 @@ BorisRoot:
 <DownloadProjectForm>
     orientation: "vertical"
     url_input: url
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
+    label1_input: label1
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
         Label:
-            text: "URL"
-        TextInput:
-            id: url
+            id: label1
+            text: 'Insert the URL of the project'
+            #size_hint: None, None
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        #height: "40dp"
+        #size_hint_y: None
+        BoxLayout:
+            size_hint_y: 0.2
+            Label:
+                size_hint_x: 0.1
+                text: "URL"
+            TextInput:
+                size_hint_x: 0.9
+                id: url
     BoxLayout:
         height: "40dp"
         size_hint_y: None
@@ -81,38 +95,39 @@ BorisRoot:
             size_hint_x: 0.8
             on_press: root.download_project()
 
-#<SelectProjectView>
-#    orientation: "vertical"
-#    FileChooserListView:
-#        id: filechooser
-#        path: "."
-#        filters: ["*.boris"]
-#    BoxLayout:
-#        height: "40dp"
-#        size_hint_y: None
-#        Button:
-#            text: "Cancel"
-#            size_hint_x: 0.2
-#            on_press: root.cancel()
-#        Button:
-#            text: "View project"
-#            size_hint_x: 0.8
-#            on_press: root.view_project(filechooser.selection)
-
-<ViewProjectForm>
+<ReceiveProject>
     orientation: "vertical"
-    halign: 'left'
+    lb_receive_input: lb_receive
     Label:
-        id: lbl
-        height: "40dp"
-        size_hint_y: None
-        text: "View project!"
-    ListView:
-        id: projectslist
-        item_strings: []
+        id: lb_receive
+        text: "RECEIVING"
     BoxLayout:
         height: "40dp"
         size_hint_y: None
+        Button:
+            text: "Go back"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+        Button:
+            text: "Start listening"
+            size_hint_x: 0.8
+            on_press: root.start_receiving()
+
+
+<ViewProjectForm>
+    orientation: "vertical"
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.9
+        Label:
+            id: lbl
+            text: "View project!"
+        ListView:
+            id: projectslist
+            item_strings: []
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: 0.1
         Button:
             id: btnGoBack
             text: "Go back"
@@ -121,7 +136,7 @@ BorisRoot:
         Button:
             id: btnStartObs
             text: "New observation"
-            size_hint_x: 0.2
+            size_hint_x: 0.8
             on_press: root.new_observation()
 
 
@@ -152,31 +167,55 @@ BorisRoot:
     obsid_input: obsid
     obsdate_input: obsdate
     obsdescription_input: obsdescription
+
     BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-        Label:
-            text: "Observation id"
-        TextInput:
-            id: obsid
+        orientation: "vertical"
+        size_hint_y: 0.9
+        BoxLayout:
+            size_hint_y: 0.2
+            #height: "40dp"
+            #size_hint_y: None
+            Label:
+                size_hint_x: 0.2
+                text: "Observation id"
+                font_size: 20
+            TextInput:
+                size_hint_x: 0.8
+                multiline: False
+                font_size: 25
+                id: obsid
+
+        BoxLayout:
+            #height: "40dp"
+            size_hint_y: 0.2
+            #size_hint_y: None
+            Label:
+                size_hint_x: 0.2
+                text: "Observation date"
+                font_size: 20
+            TextInput:
+                size_hint_x: 0.8
+                id: obsdate
+                multiline: False
+                font_size: 25
+
+        BoxLayout:
+            #height: "120dp"
+            size_hint_y: 0.6
+            #size_hint_y: None
+            Label:
+                size_hint_x: 0.2
+                text: "Description"
+                font_size: 20
+            TextInput:
+                size_hint_x: 0.8
+                id: obsdescription
+                multiline: True
+                font_size: 20
     BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-        Label:
-            text: "Observation date"
-        TextInput:
-            id: obsdate
-    BoxLayout:
-        height: "120dp"
-        size_hint_y: None
-        Label:
-            text: "Description"
-        TextInput:
-            id: obsdescription
-            multiline: True
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
+        #height: "40dp"
+        size_hint_y: 0.1
+        #size_hint_y: None
         Button:
             text: "Cancel"
             size_hint_x: 0.2
@@ -209,17 +248,17 @@ BorisRoot:
     title: "This project already exists on this device."
     title_size: "20sp"
     BoxLayout:
-        height: "40dp"
+        #height: "40dp"
         size_hint_y: None
         Button:
             text: "Cancel"
-            size_hint_x: 0.5
+            size_hint_x: 1
             on_press: root.cancel()
         Button:
             text: "Overwrite"
-            size_hint_x: 0.5
+            size_hint_x: 1
             on_press: root.overwrite()
         Button:
             text: "Rename it"
-            size_hint_x: 0.5
+            size_hint_x: 1
             on_press: root.rename()
