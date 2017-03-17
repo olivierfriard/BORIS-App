@@ -1,0 +1,699 @@
+{
+ "coding_map": {},
+ "behavioral_categories": [
+  "Locomotion",
+  "Physiological",
+  "Social"
+ ],
+ "independent_variables": {
+  "0": {
+   "default value": "sun",
+   "description": "meteo conditions",
+   "type": "text",
+   "label": "weather"
+  },
+  "1": {
+   "default value": "10",
+   "description": "number of individu",
+   "type": "numeric",
+   "label": "group"
+  },
+  "2": {
+   "default value": "",
+   "description": "number of visitors per day",
+   "type": "numeric",
+   "label": "number of visitors"
+  }
+ },
+ "project_date": "2016-08-25T09:29:34",
+ "project_description": "",
+ "time_format": "hh:mm:ss",
+ "subjects_conf": {
+  "0": {
+   "name": "toto",
+   "description": "Male 8 years",
+   "key": "T"
+  },
+  "1": {
+   "name": "bobo",
+   "description": "Female 10 years",
+   "key": "B"
+  }
+ },
+ "project_format_version": "1.6",
+ "behaviors_conf": {
+  "9": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "attack",
+   "category": "Social",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "A"
+  },
+  "6": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "defecate",
+   "category": "Physiological",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "F"
+  },
+  "1": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "run",
+   "category": "Locomotion",
+   "excluded": "walk",
+   "description": "",
+   "type": "State event",
+   "key": "R"
+  },
+  "4": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "drink",
+   "category": "Physiological",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "D"
+  },
+  "0": {
+   "coding map": "",
+   "modifiers": "quadrupedal (Q),bipedal (B)",
+   "code": "walk",
+   "category": "Locomotion",
+   "excluded": "run,eat",
+   "description": "",
+   "type": "State event",
+   "key": "W"
+  },
+  "10": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "approach",
+   "category": "",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "A"
+  },
+  "7": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "groom",
+   "category": "Social",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "G"
+  },
+  "2": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "jump",
+   "category": "Locomotion",
+   "excluded": "",
+   "description": "",
+   "type": "Point event",
+   "key": "J"
+  },
+  "8": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "play",
+   "category": "Social",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "P"
+  },
+  "5": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "urinate",
+   "category": "Physiological",
+   "excluded": "",
+   "description": "",
+   "type": "State event",
+   "key": "U"
+  },
+  "3": {
+   "coding map": "",
+   "modifiers": "",
+   "code": "eat",
+   "category": "Physiological",
+   "excluded": "walk",
+   "description": "",
+   "type": "State event",
+   "key": "E"
+  }
+ },
+ "observations": {
+  "observation #1": {
+   "events": [
+    [
+     1.827,
+     "toto",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     22.467,
+     "toto",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     26.547,
+     "bobo",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     31.347,
+     "toto",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     39.507,
+     "bobo",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     43.107,
+     "bobo",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     47.667,
+     "toto",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     54.507,
+     "bobo",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     61.947,
+     "bobo",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     70.587,
+     "bobo",
+     "drink",
+     "",
+     ""
+    ]
+   ],
+   "media_info": {
+    "length": {
+     "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video2.MOD": 75.36
+    },
+    "hasVideo": {},
+    "fps": {
+     "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video2.MOD": 25.0
+    },
+    "hasAudio": {}
+   },
+   "independent_variables": {
+    "weather": "test2",
+    "group": "12"
+   },
+   "file": {
+    "1": [
+     "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video2.MOD"
+    ],
+    "2": []
+   },
+   "date": "2016-08-24T17:33:18",
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "MEDIA",
+   "time offset second player": 0.0
+  },
+  "observation #2": {
+   "events": [
+    [
+     2.787,
+     "toto",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     14.667,
+     "toto",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     16.707,
+     "",
+     "eat",
+     "",
+     ""
+    ],
+    [
+     20.186,
+     "",
+     "eat",
+     "",
+     ""
+    ],
+    [
+     20.187,
+     "",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     21.627,
+     "",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     30.627,
+     "toto",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     40.467,
+     "toto",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     42.507,
+     "toto",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     45.267,
+     "toto",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     48.507,
+     "toto",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     50.788,
+     "toto",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     53.547,
+     "toto",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     54.267,
+     "toto",
+     "groom",
+     "",
+     ""
+    ],
+    [
+     63.267,
+     "toto",
+     "groom",
+     "",
+     ""
+    ],
+    [
+     66.387,
+     "toto",
+     "walk",
+     "quadrupedal",
+     ""
+    ],
+    [
+     77.187,
+     "toto",
+     "walk",
+     "quadrupedal",
+     ""
+    ]
+   ],
+   "media_info": {
+    "length": {
+     "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video1.MOD": 396.0
+    },
+    "hasVideo": {},
+    "fps": {
+     "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video1.MOD": 25.0
+    },
+    "hasAudio": {}
+   },
+   "independent_variables": {
+    "weather": "test1",
+    "group": "10"
+   },
+   "file": {
+    "1": [
+     "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video1.MOD"
+    ],
+    "2": []
+   },
+   "date": "2016-08-26T13:43:15",
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "MEDIA",
+   "time offset second player": 0.0
+  },
+  "kk3": {
+   "events": [],
+   "media_info": {
+    "length": {
+     "/home/olivier/ownCloud/media_files_boris/crop2.avi": 300.0,
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 225.64
+    },
+    "hasVideo": {
+     "/home/olivier/ownCloud/media_files_boris/crop2.avi": true,
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": true
+    },
+    "fps": {
+     "/home/olivier/ownCloud/media_files_boris/crop2.avi": 25.0,
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 25.0
+    },
+    "hasAudio": {
+     "/home/olivier/ownCloud/media_files_boris/crop2.avi": true,
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": true
+    }
+   },
+   "independent_variables": {},
+   "file": {
+    "1": [
+     "/home/olivier/ownCloud/media_files_boris/crop.avi",
+     "/home/olivier/ownCloud/media_files_boris/crop2.avi"
+    ],
+    "2": []
+   },
+   "date": "2016-09-29T16:04:17",
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "MEDIA",
+   "time offset second player": 0.0
+  },
+  "observation #0": {
+   "events": [],
+   "visualize_spectrogram": false,
+   "independent_variables": {},
+   "file": [],
+   "date": "2016-09-02T14:30:59",
+   "scan_sampling_time": 0,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "LIVE",
+   "time offset second player": 0.0
+  },
+  "kkk": {
+   "events": [],
+   "media_info": {
+    "length": {
+     "/home/olivier/ownCloud/media_files_boris/crop.avi.re-encoded.avi": 225.72,
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 225.64,
+     "/home/olivier/ownCloud/media_files_boris/50FPS.mp4": 180.05
+    },
+    "hasVideo": {},
+    "fps": {
+     "/home/olivier/ownCloud/media_files_boris/crop.avi.re-encoded.avi": 25.0,
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 25.0,
+     "/home/olivier/ownCloud/media_files_boris/50FPS.mp4": 50.0
+    },
+    "hasAudio": {}
+   },
+   "independent_variables": {},
+   "file": {
+    "1": [
+     "/home/olivier/ownCloud/media_files_boris/50FPS.mp4"
+    ],
+    "2": [
+     "/home/olivier/ownCloud/media_files_boris/crop.avi"
+    ]
+   },
+   "date": "2016-09-29T15:52:36",
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "MEDIA",
+   "time offset second player": 0.0
+  },
+  "bubu": {
+   "events": [
+    [
+     4.408,
+     "bobo",
+     "walk",
+     "quadrupedal (Q)",
+     ""
+    ],
+    [
+     8.173,
+     "bobo",
+     "walk",
+     "quadrupedal (Q)",
+     ""
+    ],
+    [
+     10.538,
+     "bobo",
+     "play",
+     "",
+     ""
+    ],
+    [
+     22.544,
+     "toto",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     25.001,
+     "toto",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     29.545,
+     "bobo",
+     "play",
+     "",
+     ""
+    ]
+   ],
+   "scan_sampling_time": 0,
+   "independent_variables": {},
+   "file": [],
+   "date": "2017-03-15 15:06",
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "sdfdfsd\nsdfsfdf\ns\ns\nfsdf\n\nsdsd\nfsdf",
+   "type": "LIVE",
+   "time offset second player": 0.0
+  },
+  "aaaa": {
+   "events": [
+    [
+     40.953,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     41.619,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     42.297,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "independent_variables": {
+    "weather": "sun",
+    "group": "102",
+    "number of visitors": ""
+   },
+   "file": [],
+   "date": "2017-03-14 15:23",
+   "scan_sampling_time": 0,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "LIVE",
+   "time offset second player": 0.0
+  },
+  "xxx": {
+   "events": [
+    [
+     1.022,
+     "No focal subject",
+     "walk",
+     "quadrupedal (Q)",
+     ""
+    ],
+    [
+     3.686,
+     "No focal subject",
+     "walk",
+     "",
+     ""
+    ],
+    [
+     3.686,
+     "No focal subject",
+     "eat",
+     "",
+     ""
+    ],
+    [
+     5.276,
+     "No focal subject",
+     "eat",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "independent_variables": {},
+   "file": [],
+   "date": "2017-02-03 18:17",
+   "scan_sampling_time": 0,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "description": "",
+   "type": "LIVE",
+   "time offset second player": 0.0
+  },
+  "bububu": {
+   "events": [
+    [
+     16.196,
+     "No focal subject",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     18.962,
+     "No focal subject",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     20.459,
+     "No focal subject",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     21.777,
+     "No focal subject",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     23.813,
+     "bobo",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     29.893,
+     "toto",
+     "run",
+     "",
+     ""
+    ],
+    [
+     31.506,
+     "toto",
+     "run",
+     "",
+     ""
+    ],
+    [
+     36.715,
+     "bobo",
+     "drink",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "independent_variables": {},
+   "description": "",
+   "file": [],
+   "date": "2017-03-15 15:43",
+   "scan_sampling_time": 0,
+   "time offset": 0.0,
+   "close_behaviors_between_videos": false,
+   "type": "LIVE",
+   "time offset second player": 0.0
+  }
+ },
+ "project_name": "demo"
+}
