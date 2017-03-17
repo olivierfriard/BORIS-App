@@ -1,6 +1,0 @@
-{"grooming":{"type":"state","exclude":["eat","sleep"]},
-"eat":{"type":"state","exclude":["sleep"]},
-"sleep":{"type":"state","exclude":["eat"]},
-"jump":{"type":"point","exclude":[]},
-"èçàaa":{"type":"point","exclude":[]}}
-
