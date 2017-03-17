@@ -1,0 +1,3 @@
+title=BORIS mobile
+author=Olivier Friard - Marco Gamba
+orientation=landscape
