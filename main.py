@@ -161,7 +161,6 @@ class ReceiveProject(BoxLayout):
 
 
 
-
 class DownloadProjectForm(BoxLayout):
 
     def cancel(self):
@@ -216,23 +215,26 @@ class DownloadProjectForm(BoxLayout):
                 return
 
 
-        #print(self.cb_input.active)
-
+        print(self.cb_input.active)
 
         #url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
         url = self.url_input.text
 
-
         print(url)
 
-        if "/" in url:
+        # from site
+        if not self.cb_input.active:
             response = urllib2.urlopen(url)
             self.content = response.read()
+        # from BORIS
         else:
             self.content = download_from_boris(url)
 
         if self.content:
-            self.filename = url.rsplit("/", 1)[-1]
+            if self.cb_input.active:
+                "project_name"
+            else:
+                self.filename = url.rsplit("/", 1)[-1]
 
             if os.path.isfile(self.filename):
                 print("file exists!")
