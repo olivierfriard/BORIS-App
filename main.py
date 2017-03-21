@@ -46,6 +46,7 @@ import codecs
 import datetime
 import urllib2
 import socket
+import time
 
 NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
@@ -67,34 +68,30 @@ class StartPageForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
 
+    '''
     def receive_project_from_boris(self):
         self.clear_widgets()
         form = ReceiveProject()
-        form.lb_receive_input.text = "IP: {}".format(get_ip_address())
+        form.lb_receive_input.text = "OLD IP: {}".format(get_ip_address())
         self.add_widget(form)
+    '''
 
     def show_DownloadProject(self):
         self.clear_widgets()
         d = DownloadProjectForm()
-        #d.label1_input.text = "AA"
         self.add_widget(d)
 
 
 class ReceiveProject(BoxLayout):
-
-
 
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
 
-
-
     def start_receiving(self):
 
-
-        TCP_IP = ''
+        TCP_IP = ""
         TCP_PORT = 5006
         BUFFER_SIZE = 20  # Normally 1024, but we want fast response
 
@@ -102,13 +99,20 @@ class ReceiveProject(BoxLayout):
 
         print(get_ip_address())
 
+        self.vlayout = BoxLayout(orientation='vertical', spacing=5)
+        self.vlayout.add_widget(Label(text="IP: {}".format(get_ip_address()), size_hint_y=0.05))
+
+        self.clear_widgets()
+        self.add_widget(self.vlayout)
+        self.do_layout()
+        time.sleep(5)
 
         self.lb_receive_input.text = "text"
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind((TCP_IP, TCP_PORT))
 
-        s.settimeout(60)
+        s.settimeout(10)
 
         try:
             s.listen(1)
@@ -157,6 +161,7 @@ class ReceiveProject(BoxLayout):
 
 
 
+
 class DownloadProjectForm(BoxLayout):
 
     def cancel(self):
@@ -164,6 +169,29 @@ class DownloadProjectForm(BoxLayout):
         self.add_widget(StartPageForm())
 
     def download_project(self):
+
+        def download_from_boris(url):
+
+            TCP_IP, TCP_PORT = url.split(":")
+            BUFFER_SIZE = 1024
+
+            s = socket.socket()
+
+            s.connect((TCP_IP, int(TCP_PORT)))
+            s.send(str.encode("get"))
+
+            received = ""
+            while 1:
+                data = s.recv(BUFFER_SIZE)
+                if not data:
+                    break
+                received += data
+
+            print "received:\n" + received
+            s.close
+
+            return received
+
 
         def save_project_file(filename, content):
             try:
@@ -188,13 +216,20 @@ class DownloadProjectForm(BoxLayout):
                 return
 
 
-        print(self.url_input.text)
-        url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
+        #print(self.cb_input.active)
 
-        self.url_input.text = url
 
-        response = urllib2.urlopen(self.url_input.text)
-        self.content = response.read()
+        #url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
+        url = self.url_input.text
+
+
+        print(url)
+
+        if "/" in url:
+            response = urllib2.urlopen(url)
+            self.content = response.read()
+        else:
+            self.content = download_from_boris(url)
 
         if self.content:
             self.filename = url.rsplit("/", 1)[-1]
@@ -207,7 +242,6 @@ class DownloadProjectForm(BoxLayout):
                 #pop.content=Label(text='Hello world')
                 pop.bind(on_dismiss=choose_for_existing_file)
                 pop.open()
-
 
             else:
                 save_project_file(self.filename, self.content)
@@ -308,7 +342,7 @@ class StartObservationForm(BoxLayout):
         print("go back", obj)
         print("mem obs id", self.mem)
 
-        # check if numeric indep var are numeric
+        # check if numeric indep var values are numeric
         if "independent_variables" in BorisApp.project:
             for idx in BorisApp.project["independent_variables"]:
                 if BorisApp.project["independent_variables"][idx]["label"] in self.iv:
@@ -589,11 +623,8 @@ class StartObservationForm(BoxLayout):
             p.open()
             return
 
-
-
         print("obs id:", self.obsid_input.text)
         print("description:", self.obsdescription_input.text)
-
 
         self.obsId = self.obsid_input.text
         BorisApp.project[OBSERVATIONS][self.obsId] = {"date": self.obsdate_input.text,

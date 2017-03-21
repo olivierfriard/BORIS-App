@@ -41,19 +41,22 @@ BorisRoot:
     BoxLayout:
         height: "40dp"
         size_hint_y: None
-        Button:
-            text: "Download project"
-            size_hint_x: 0.4
-            on_press: root.show_DownloadProject()
 
         Button:
             text: "Open project"
             size_hint_x: 0.4
             on_press: root.show_SelectProjectForm()
+
         Button:
-            text: "Receive project"
+            text: "Download project"
             size_hint_x: 0.4
-            on_press: root.receive_project_from_boris()
+            on_press: root.show_DownloadProject()
+
+
+#        Button:
+#            text: "Receive project"
+#            size_hint_x: 0.4
+#            on_press: root.receive_project_from_boris()
         Button:
             text: "Exit"
             size_hint_x: 0.2
@@ -63,6 +66,8 @@ BorisRoot:
     orientation: "vertical"
     url_input: url
     label1_input: label1
+    cp_input: cb
+
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'top'
@@ -70,11 +75,13 @@ BorisRoot:
             id: label1
             text: 'Insert the URL of the project'
             #size_hint: None, None
+
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'top'
         #height: "40dp"
         #size_hint_y: None
+
         BoxLayout:
             size_hint_y: 0.2
             Label:
@@ -83,17 +90,32 @@ BorisRoot:
             TextInput:
                 size_hint_x: 0.9
                 id: url
+
+    BoxLayout:
+        CheckBox:
+            active: True
+            id: cb
+            text: 'ciao'
+            color: (1, 0, 0)
+            size_hint_x: 0.1
+        Label:
+            size_hint_x: 0.9
+            text: "Download from BORIS"
+
     BoxLayout:
         height: "40dp"
         size_hint_y: None
+
         Button:
             text: "Cancel"
             size_hint_x: 0.2
             on_press: root.cancel()
+
         Button:
             text: "Download project"
             size_hint_x: 0.8
             on_press: root.download_project()
+
 
 <ReceiveProject>
     orientation: "vertical"
