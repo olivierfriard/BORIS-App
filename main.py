@@ -180,7 +180,7 @@ class DownloadProjectForm(BoxLayout):
                 TCP_PORT = int(TCP_PORT)
             except:
                 return None
-                
+
             BUFFER_SIZE = 1024
 
             s = socket.socket()
@@ -634,15 +634,12 @@ class StartObservationForm(BoxLayout):
             def my_callback(instance):
                 if instance.title == "y":
                     try:
-                        f = open(BorisApp.projectFileName, "w")
-                        f.write(json.dumps(BorisApp.project, indent=1))
-                        f.close()
+                        with open(BorisApp.projectFileName, "w") as f:
+                            f.write(json.dumps(BorisApp.project, indent=1))
 
                         popup = Popup(title="Observation saved", content=Label(text="Observation saved in {}".format(BorisApp.projectFileName)), size_hint=(None, None), size=(400, 200))
                         popup.open()
-
                     except:
-
                         print("The observation {} can not be saved!".format(self.obsId))
                         popup = Popup(title="Error", content=Label(text="The observation {} can not be saved!".format(self.obsId)), size_hint=(None, None), size=(400, 200))
                         popup.open()
