@@ -38,6 +38,11 @@ from kivy.uix.listview import ListView
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 
+'''
+from kivy.core.window import Window
+Window.clearcolor = (1, 1, 1, 1)
+'''
+
 import os
 import sys
 import json
@@ -81,7 +86,7 @@ class StartPageForm(BoxLayout):
         d = DownloadProjectForm()
         self.add_widget(d)
 
-
+'''
 class ReceiveProject(BoxLayout):
 
     def cancel(self):
@@ -157,7 +162,7 @@ class ReceiveProject(BoxLayout):
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
-
+'''
 
 
 
@@ -170,8 +175,12 @@ class DownloadProjectForm(BoxLayout):
     def download_project(self):
 
         def download_from_boris(url):
-
-            TCP_IP, TCP_PORT = url.split(":")
+            try:
+                TCP_IP, TCP_PORT = url.split(":")
+                TCP_PORT = int(TCP_PORT)
+            except:
+                return None
+                
             BUFFER_SIZE = 1024
 
             s = socket.socket()
@@ -196,7 +205,7 @@ class DownloadProjectForm(BoxLayout):
             try:
                 with open(filename, "wb") as f:
                     f.write(content)
-                popup = Popup(title="OK", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
+                popup = Popup(title="Success", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
                 popup.open()
             except:
                 popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
@@ -221,6 +230,12 @@ class DownloadProjectForm(BoxLayout):
         url = self.url_input.text
 
         print(url)
+        if not url:
+            popup = Popup(title="Error", content=Label(text="The URL is empty!"),
+                                         size_hint=(None, None),
+                                         size=(400, 200))
+            popup.open()
+            return
 
         # from site
         if not self.cb_input.active:
@@ -228,11 +243,36 @@ class DownloadProjectForm(BoxLayout):
             self.content = response.read()
         # from BORIS
         else:
+            if url.count(":") != 1:
+                popup = Popup(title="Error", content=Label(text="The URL is not well formed!\nExample: 192.168.1.1:1234"),
+                                             size_hint=(None, None),
+                                             size=(400, 200))
+                popup.open()
+                return
+
             self.content = download_from_boris(url)
+            if self.content is None:
+                popup = Popup(title="Error", content=Label(text="The URL is not well formed!\nExample: 192.168.1.1:1234"),
+                                             size_hint=(None, None),
+                                             size=(400, 200))
+                popup.open()
+                return
+
 
         if self.content:
-            if self.cb_input.active:
-                "project_name"
+            if self.cb_input.active: # from BORIS
+                try:
+                    decoded = json.loads(self.content)
+                except:
+                    popup = Popup(title="Error", content=Label(text="Error in BORIS project!"),
+                                                 size_hint=(None, None),
+                                                 size=(400, 200))
+                    popup.open()
+                    return
+                if "project_name" in decoded and decoded["project_name"]:
+                    self.filename = decoded["project_name"] + ".boris"
+                else:
+                    self.filename = "NONAME_" + datetime.datetime.now().isoformat("_").split(".")[0].replace(":","") + ".boris"
             else:
                 self.filename = url.rsplit("/", 1)[-1]
 
@@ -294,6 +334,12 @@ class SelectProjectForm(BoxLayout):
             popup.open()
             return
 
+        if not BorisApp.project[ETHOGRAM]:
+            popup = Popup(title="Error", content=Label(text="The ethogram of this project is empty!"),
+                          size_hint=(None, None), size=(400, 200))
+            popup.open()
+            return
+
         self.clear_widgets()
         w = ViewProjectForm()
         w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
@@ -305,8 +351,8 @@ class SelectProjectForm(BoxLayout):
         rows.append("Number of behaviors: {}".format(len(BorisApp.project[ETHOGRAM].keys())))
         if "behavioral_categories" in BorisApp.project:
             rows.append("Number of behavior categories: {}".format(len(BorisApp.project["behavioral_categories"])))
-        rows.append("Number of subjects: {}".format(len(BorisApp.project["subjects_conf"].keys())))
-        rows.append("Number of observations: {}".format(len(BorisApp.project["observations"].keys())))
+        rows.append("Number of subjects: {}".format(len(BorisApp.project[SUBJECTS].keys())))
+        rows.append("Number of observations: {}".format(len(BorisApp.project[OBSERVATIONS].keys())))
 
         w.ids.projectslist.item_strings = rows
         self.add_widget(w)
@@ -462,11 +508,11 @@ class StartObservationForm(BoxLayout):
             #print("event", event)
             t, newState, modifier = event
 
-            if "State" in behaviorType(BorisApp.project["behaviors_conf"], newState):
+            if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
 
                 # deselect
                 if self.focal_subject in self.currentStates and newState in self.currentStates[self.focal_subject]:
-                    BorisApp.project["observations"][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
+                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
                     #obj.background_color = self.behavior_color[newState]
 
                     self.btnList[newState].background_color = self.behavior_color[newState]
@@ -476,20 +522,20 @@ class StartObservationForm(BoxLayout):
                 # select
                 else:
                     # test if state is exclusive
-                    if behaviorExcluded(BorisApp.project["behaviors_conf"], newState) != [""]:
+                    if behaviorExcluded(BorisApp.project[ETHOGRAM], newState) != [""]:
                         statesToStop = []
 
                         if self.focal_subject in self.currentStates:
                             for cs in self.currentStates[self.focal_subject]:
-                                if cs in behaviorExcluded(BorisApp.project["behaviors_conf"], newState):
-                                    BorisApp.project["observations"][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, cs, "", ""])
+                                if cs in behaviorExcluded(BorisApp.project[ETHOGRAM], newState):
+                                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, cs, "", ""])
                                     statesToStop.append(cs)
                                     self.btnList[cs].background_color = self.behavior_color[cs]
 
                             for s in statesToStop:
                                 self.currentStates[self.focal_subject].remove(s)
 
-                    BorisApp.project["observations"][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
+                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
 
                     #obj.background_color = [1, 0, 0, 1] # red
                     self.btnList[newState].background_color = [1, 0, 0, 1] # red
@@ -500,12 +546,12 @@ class StartObservationForm(BoxLayout):
                     self.currentStates[self.focal_subject].append(newState)
 
             # point event
-            if "Point" in behaviorType(BorisApp.project["behaviors_conf"], newState):
-                BorisApp.project["observations"][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
+            if "Point" in behaviorType(BorisApp.project[ETHOGRAM], newState):
+                BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
 
             print("current state", self.currentStates)
 
-            print(BorisApp.project["observations"][self.obsId]["events"][-1])
+            print(BorisApp.project[OBSERVATIONS][self.obsId]["events"][-1])
 
 
         def btnBehaviorPressed(obj):
@@ -609,9 +655,10 @@ class StartObservationForm(BoxLayout):
             pop.open()
 
 
+        '''
         def clock_callback(dt):
             print('clock')
-        # create file for observations
+        '''
 
         # check if observation id field is empty
         if not self.obsid_input.text:
@@ -678,12 +725,12 @@ class StartObservationForm(BoxLayout):
 
         self.behaviorsLayout.add_widget(Label(text="Observation: {}".format(self.obsId), size_hint_y=0.05))
 
-        gdrid_layout = GridLayout(cols=int((len(BorisApp.project["behaviors_conf"]) + 1)**0.5), size_hint=(1, 1), spacing=5)
+        gdrid_layout = GridLayout(cols=int((len(BorisApp.project[ETHOGRAM]) + 1)**0.5), size_hint=(1, 1), spacing=5)
 
-        behaviorsList = sorted([BorisApp.project["behaviors_conf"][k]["code"] for k in BorisApp.project["behaviors_conf"].keys()])
+        behaviorsList = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys()])
         # check modifiers
-        for idx in BorisApp.project["behaviors_conf"]:
-            self.modifiers[BorisApp.project["behaviors_conf"][idx]["code"]] = BorisApp.project["behaviors_conf"][idx]["modifiers"]
+        for idx in BorisApp.project[ETHOGRAM]:
+            self.modifiers[BorisApp.project[ETHOGRAM][idx]["code"]] = BorisApp.project[ETHOGRAM][idx]["modifiers"]
 
         print("modiifers", self.modifiers)
 
@@ -694,12 +741,12 @@ class StartObservationForm(BoxLayout):
 
         if "behavioral_categories" in BorisApp.project:
             colors_list = [[1.0, 0.6, 0.0, 1], [.1, 0.8, .1, 1], [.1, .1, 1, 1], [0.94, 0.35, 0.48, 1], [0.2, 0.4, 0.6, 1], [0.4, 0.2, 0.6, 1]]
-            categoriesList = set([BorisApp.project["behaviors_conf"][k]["category"] for k in BorisApp.project["behaviors_conf"].keys() if "category" in BorisApp.project["behaviors_conf"][k]])
+            categoriesList = set([BorisApp.project[ETHOGRAM][k]["category"] for k in BorisApp.project[ETHOGRAM].keys() if "category" in BorisApp.project[ETHOGRAM][k]])
 
             #print(sorted(categoriesList))
 
             for idx, category in enumerate(sorted(categoriesList)):
-                behav_list_category = sorted([BorisApp.project["behaviors_conf"][k]["code"] for k in BorisApp.project["behaviors_conf"].keys() if "category" in BorisApp.project["behaviors_conf"][k] and BorisApp.project["behaviors_conf"][k]["category"] == category])
+                behav_list_category = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys() if "category" in BorisApp.project[ETHOGRAM][k] and BorisApp.project[ETHOGRAM][k]["category"] == category])
                 for behavior in behav_list_category:
                     btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
                     btn.background_normal = ""
@@ -748,7 +795,10 @@ class StartObservationForm(BoxLayout):
         self.t0 = time.time()
 
         # start timer
+        '''
         Clock.schedule_interval(clock_callback, 60)
+        '''
+
 
 class AskForExistingFile(Popup):
     def cancel(self):
