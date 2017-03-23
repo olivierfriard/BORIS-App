@@ -1,12 +1,4 @@
 {
- "time_format": "hh:mm:ss", 
- "project_description": "", 
- "project_format_version": "1.6", 
- "behavioral_categories": [
-  "Locomotion", 
-  "Physiological", 
-  "Social"
- ], 
  "behaviors_conf": {
   "10": {
    "category": "", 
@@ -119,6 +111,14 @@
    "description": ""
   }
  }, 
+ "project_description": "", 
+ "project_format_version": "1.6", 
+ "behavioral_categories": [
+  "Locomotion", 
+  "Physiological", 
+  "Social"
+ ], 
+ "time_format": "hh:mm:ss", 
  "project_date": "2016-08-25T09:29:34", 
  "project_name": "demo", 
  "observations": {
@@ -259,20 +259,20 @@
     ], 
     "2": []
    }, 
+   "independent_variables": {
+    "weather": "test2", 
+    "group": "12"
+   }, 
+   "date": "2016-08-24T17:33:18", 
    "media_info": {
     "hasVideo": {}, 
     "length": {
      "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video2.MOD": 75.36
     }, 
+    "hasAudio": {}, 
     "fps": {
      "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video2.MOD": 25.0
-    }, 
-    "hasAudio": {}
-   }, 
-   "date": "2016-08-24T17:33:18", 
-   "independent_variables": {
-    "weather": "test2", 
-    "group": "12"
+    }
    }, 
    "type": "MEDIA", 
    "events": [
@@ -373,20 +373,20 @@
     ], 
     "2": []
    }, 
+   "independent_variables": {
+    "weather": "test1", 
+    "group": "10"
+   }, 
+   "date": "2016-08-26T13:43:15", 
    "media_info": {
     "hasVideo": {}, 
     "length": {
      "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video1.MOD": 396.0
     }, 
+    "hasAudio": {}, 
     "fps": {
      "/home/olivier/Dropbox/ETOGRAMMA x Boris/VIDEO catta Traking/video1.MOD": 25.0
-    }, 
-    "hasAudio": {}
-   }, 
-   "date": "2016-08-26T13:43:15", 
-   "independent_variables": {
-    "weather": "test1", 
-    "group": "10"
+    }
    }, 
    "type": "MEDIA", 
    "events": [
@@ -524,6 +524,8 @@
     ], 
     "2": []
    }, 
+   "independent_variables": {}, 
+   "date": "2016-09-29T16:04:17", 
    "media_info": {
     "hasVideo": {
      "/home/olivier/ownCloud/media_files_boris/crop.avi": true, 
@@ -533,17 +535,15 @@
      "/home/olivier/ownCloud/media_files_boris/crop.avi": 225.64, 
      "/home/olivier/ownCloud/media_files_boris/crop2.avi": 300.0
     }, 
-    "fps": {
-     "/home/olivier/ownCloud/media_files_boris/crop.avi": 25.0, 
-     "/home/olivier/ownCloud/media_files_boris/crop2.avi": 25.0
-    }, 
     "hasAudio": {
      "/home/olivier/ownCloud/media_files_boris/crop.avi": true, 
      "/home/olivier/ownCloud/media_files_boris/crop2.avi": true
+    }, 
+    "fps": {
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 25.0, 
+     "/home/olivier/ownCloud/media_files_boris/crop2.avi": 25.0
     }
    }, 
-   "date": "2016-09-29T16:04:17", 
-   "independent_variables": {}, 
    "type": "MEDIA", 
    "events": [], 
    "close_behaviors_between_videos": false
@@ -587,6 +587,34 @@
    ], 
    "close_behaviors_between_videos": false
   }, 
+  "123": {
+   "visualize_spectrogram": false, 
+   "time offset": 0.0, 
+   "description": "", 
+   "file": [], 
+   "date": "2017-03-23 14:39", 
+   "close_behaviors_between_videos": false, 
+   "time offset second player": 0.0, 
+   "scan_sampling_time": 0, 
+   "independent_variables": {}, 
+   "type": "LIVE", 
+   "events": [
+    [
+     1.459, 
+     "No focal subject", 
+     "walk", 
+     "quadrupedal (Q)", 
+     ""
+    ], 
+    [
+     4.731, 
+     "No focal subject", 
+     "walk", 
+     "quadrupedal (Q)", 
+     ""
+    ]
+   ]
+  }, 
   "kkk": {
    "visualize_spectrogram": false, 
    "time offset second player": 0.0, 
@@ -600,38 +628,38 @@
      "/home/olivier/ownCloud/media_files_boris/crop.avi"
     ]
    }, 
+   "independent_variables": {}, 
+   "date": "2016-09-29T15:52:36", 
    "media_info": {
     "hasVideo": {}, 
     "length": {
-     "/home/olivier/ownCloud/media_files_boris/crop.avi": 225.64, 
      "/home/olivier/ownCloud/media_files_boris/50FPS.mp4": 180.05, 
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 225.64, 
      "/home/olivier/ownCloud/media_files_boris/crop.avi.re-encoded.avi": 225.72
     }, 
+    "hasAudio": {}, 
     "fps": {
-     "/home/olivier/ownCloud/media_files_boris/crop.avi": 25.0, 
      "/home/olivier/ownCloud/media_files_boris/50FPS.mp4": 50.0, 
+     "/home/olivier/ownCloud/media_files_boris/crop.avi": 25.0, 
      "/home/olivier/ownCloud/media_files_boris/crop.avi.re-encoded.avi": 25.0
-    }, 
-    "hasAudio": {}
+    }
    }, 
-   "date": "2016-09-29T15:52:36", 
-   "independent_variables": {}, 
    "type": "MEDIA", 
    "events": [], 
    "close_behaviors_between_videos": false
   }, 
   "aaaaa": {
    "visualize_spectrogram": false, 
+   "time offset second player": 0.0, 
    "time offset": 0.0, 
    "description": "", 
+   "scan_sampling_time": 0, 
    "file": [], 
    "date": "2017-03-22 12:22", 
-   "close_behaviors_between_videos": false, 
-   "time offset second player": 0.0, 
-   "scan_sampling_time": 0, 
    "independent_variables": {}, 
    "type": "LIVE", 
-   "events": []
+   "events": [], 
+   "close_behaviors_between_videos": false
   }, 
   "bububu": {
    "visualize_spectrogram": false, 

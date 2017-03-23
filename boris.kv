@@ -62,6 +62,51 @@ BorisRoot:
             size_hint_x: 0.2
             on_press: root.exit()
 
+
+<SendObsForm>
+    orientation: "vertical"
+    url_input: url
+    label1_input: label1
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        Label:
+            id: label1
+            text: 'Insert the URL of the project server'
+            #size_hint: None, None
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        #height: "40dp"
+        #size_hint_y: None
+
+        BoxLayout:
+            size_hint_y: 0.2
+            Label:
+                size_hint_x: 0.1
+                text: "URL"
+            TextInput:
+                size_hint_x: 0.9
+                id: url
+
+    BoxLayout:
+        height: "40dp"
+        size_hint_y: None
+
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            on_press: root.cancel()
+
+        Button:
+            text: "Send observation(s)"
+            size_hint_x: 0.8
+            on_press: root.send_obs()
+
+
+
 <DownloadProjectForm>
     orientation: "vertical"
     url_input: url
@@ -115,6 +160,7 @@ BorisRoot:
             on_press: root.download_project()
 
 
+
 <ReceiveProject>
     orientation: "vertical"
     lb_receive_input: lb_receive
@@ -139,7 +185,7 @@ BorisRoot:
     orientation: "vertical"
     BoxLayout:
         orientation: "vertical"
-        size_hint_y: 0.9
+        size_hint_y: 0.8
         Label:
             id: lbl
             text: "View project!"
@@ -148,16 +194,24 @@ BorisRoot:
             item_strings: []
     BoxLayout:
         orientation: "horizontal"
-        size_hint_y: 0.1
+        size_hint_y: 0.2
+
         Button:
             id: btnGoBack
             text: "Go back"
             size_hint_x: 0.2
             on_press: root.go_back()
+
+        Button:
+            id: btnStartObs
+            text: "Send observation(s)"
+            size_hint_x: 0.4
+            on_press: root.send_observations()
+
         Button:
             id: btnStartObs
             text: "New observation"
-            size_hint_x: 0.8
+            size_hint_x: 0.4
             on_press: root.new_observation()
 
 
@@ -182,6 +236,7 @@ BorisRoot:
             text: "Open project"
             size_hint_x: 0.8
             on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
+
 
 <StartObservationForm>
     orientation: "vertical"
@@ -264,6 +319,7 @@ BorisRoot:
             text: "No"
             size_hint_x: 0.5
             on_press: root.no()
+
 
 <AskForExistingFile>
     title: "This project already exists on this device."

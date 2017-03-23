@@ -165,6 +165,106 @@ class ReceiveProject(BoxLayout):
 '''
 
 
+class SendObsForm(BoxLayout):
+
+    def cancel(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+
+    def send_obs(self):
+
+        def send_to_boris(url, observations):
+
+            BUFFER_SIZE = 1024
+
+            def decimal_default(obj):
+                if isinstance(obj, Decimal):
+                    return float(obj)
+                raise TypeError
+
+            try:
+                TCP_IP, TCP_PORT = url.split(":")
+                TCP_PORT = int(TCP_PORT)
+            except:
+                return None
+
+            MSG = str.encode(str(json.dumps(observations,
+                                            indent=None,
+                                            separators=(",", ":"),
+                                            default=decimal_default)))
+
+            s = socket.socket()
+
+            s.connect((TCP_IP, int(TCP_PORT)))
+            s.send("put")
+
+            print("sent ",MSG)
+
+            received = ""
+            while 1:
+                data = s.recv(BUFFER_SIZE)
+                if not data:
+                    break
+                received += data
+
+            print "received:\n" + received
+
+            if received == "SEND":
+                print("sending")
+
+                s = socket.socket()
+                s.connect((TCP_IP, int(TCP_PORT)))
+                s.send(MSG + b"#####")
+                print("sent")
+                while 1:
+                    data = s.recv(BUFFER_SIZE)
+                    if not data:
+                        break
+
+            s.close
+            return True
+
+
+        url = self.url_input.text
+
+        if not url:
+            popup = Popup(title="Error", content=Label(text="The URL is empty!"),
+                                         size_hint=(None, None),
+                                         size=(400, 200))
+            popup.open()
+            return
+
+
+        if url.count(":") != 1:
+            popup = Popup(title="Error", content=Label(text="The URL is not well formed!\nExample: 192.168.1.1:1234"),
+                                         size_hint=(None, None),
+                                         size=(400, 200))
+            popup.open()
+            return
+
+
+        if BorisApp.project[OBSERVATIONS]:
+            if send_to_boris(url, BorisApp.project[OBSERVATIONS]):
+                popup = Popup(title="Info", content=Label(text="Observation(s) sent successfully"),
+                                             size_hint=(None, None),
+                                             size=(400, 200))
+            else:
+                popup = Popup(title="Error", content=Label(text="Observation(s) not sent"),
+                                         size_hint=(None, None),
+                                         size=(400, 200))
+
+            popup.open()
+            return
+
+        else:
+            popup = Popup(title="Error", content=Label(text="No observations were found in the selected project"),
+                                         size_hint=(None, None),
+                                         size=(400, 200))
+            popup.open()
+            return
+
+
 
 class DownloadProjectForm(BoxLayout):
 
@@ -224,7 +324,7 @@ class DownloadProjectForm(BoxLayout):
                 return
 
 
-        print(self.cb_input.active)
+        #print(self.cb_input.active)
 
         #url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
         url = self.url_input.text
@@ -298,6 +398,14 @@ class DownloadProjectForm(BoxLayout):
 
 class ViewProjectForm(BoxLayout):
 
+
+    def send_observations(self):
+
+        self.clear_widgets()
+        a = SendObsForm()
+        self.add_widget(a)
+
+
     def new_observation(self):
 
         self.clear_widgets()
@@ -317,6 +425,7 @@ class SelectProjectForm(BoxLayout):
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
+
 
     def open_project(self, path, selection):
         """open project from selected file"""
@@ -364,6 +473,7 @@ def behaviorType(ethogram, behavior):
 
 def behaviorExcluded(ethogram, behavior):
     return [ ethogram[k]["excluded"] for k in ethogram.keys() if ethogram[k]["code"] == behavior][0].split(",")
+
 
 
 class StartObservationForm(BoxLayout):
