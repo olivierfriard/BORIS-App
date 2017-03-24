@@ -22,7 +22,8 @@
 
 #: import main main
 #: import ListAdapter kivy.adapters.listadapter.ListAdapter
-
+#: import lv kivy.uix.listview
+#: import la kivy.adapters.listadapter
 
 BorisRoot:
 
@@ -37,19 +38,21 @@ BorisRoot:
         id: lbversion
         height: "40dp"
         size_hint_y: None
-        text: "version 0.0.0 (2017-03-14)"
+        text: "Olivier Friard - Marco Gamba - v. 0.0 (2017-03-24) ALPHA"
     BoxLayout:
-        height: "40dp"
+        #height: "40dp"
         size_hint_y: None
 
         Button:
             text: "Open project"
             size_hint_x: 0.4
+            font_size: 20
             on_press: root.show_SelectProjectForm()
 
         Button:
             text: "Download project"
             size_hint_x: 0.4
+            font_size: 20
             on_press: root.show_DownloadProject()
 
 
@@ -60,21 +63,74 @@ BorisRoot:
         Button:
             text: "Exit"
             size_hint_x: 0.2
+            font_size: 20
             on_press: root.exit()
+
+
+<SelectObservationToSendForm>
+    observations_list: observations_list_id
+    orientation: "vertical"
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.8
+        Label:
+            size_hint_y: 0.1
+            id: lbl
+            text: "Observation(s)"
+        ListView:
+            size_hint_y: 0.9
+            id: observations_list_id
+            adapter:
+                la.ListAdapter(
+                data=[],
+                selection_mode='single',
+                allow_empty_selection=False,
+                cls=lv.ListItemButton)
+
+            # item_strings: []
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: 0.2
+
+        Button:
+            id: btnGoBack
+            text: "Go back"
+            size_hint_x: 0.2
+            font_size: 20
+            on_press: root.go_back()
+
+        Button:
+            id: btnStartObs
+            text: "Send observation"
+            size_hint_x: 0.4
+            font_size: 20
+            on_press: root.send_observation()
+
 
 
 <SendObsForm>
     orientation: "vertical"
     url_input: url
-    label1_input: label1
+    #label1: label1_id
+    label2: label2_id
 
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'top'
+
         Label:
-            id: label1
-            text: 'Insert the URL of the project server'
+            id: label2_id
+            text: ''
+            font_size: 20
             #size_hint: None, None
+
+#        Label:
+#            size_hint_y: 0.2
+#            id: label1_id
+#            text: 'Insert the URL of the project server'
+#            #font_size: 20
+#            #size_hint: None, None
+
 
     AnchorLayout:
         anchor_x: 'left'
@@ -89,20 +145,23 @@ BorisRoot:
                 text: "URL"
             TextInput:
                 size_hint_x: 0.9
+                font_size: 20
                 id: url
 
     BoxLayout:
-        height: "40dp"
+        #height: "40dp"
         size_hint_y: None
 
         Button:
             text: "Cancel"
             size_hint_x: 0.2
+            font_size: 20
             on_press: root.cancel()
 
         Button:
-            text: "Send observation(s)"
+            text: "Send observation"
             size_hint_x: 0.8
+            font_size: 20
             on_press: root.send_obs()
 
 
@@ -119,6 +178,7 @@ BorisRoot:
         Label:
             id: label1
             text: 'Insert the URL of the project'
+            font_size: 20
             #size_hint: None, None
 
     AnchorLayout:
@@ -134,6 +194,7 @@ BorisRoot:
                 text: "URL"
             TextInput:
                 size_hint_x: 0.9
+                font_size: 20
                 id: url
 
     BoxLayout:
@@ -144,6 +205,7 @@ BorisRoot:
         Label:
             size_hint_x: 0.9
             text: "Download from BORIS"
+            font_size: 20
 
     BoxLayout:
         height: "40dp"
@@ -152,11 +214,13 @@ BorisRoot:
         Button:
             text: "Cancel"
             size_hint_x: 0.2
+            font_size: 20
             on_press: root.cancel()
 
         Button:
             text: "Download project"
             size_hint_x: 0.8
+            font_size: 20
             on_press: root.download_project()
 
 
@@ -200,18 +264,21 @@ BorisRoot:
             id: btnGoBack
             text: "Go back"
             size_hint_x: 0.2
+            font_size: 20
             on_press: root.go_back()
 
         Button:
             id: btnStartObs
-            text: "Send observation(s)"
+            text: "Send observation"
             size_hint_x: 0.4
+            font_size: 20
             on_press: root.send_observations()
 
         Button:
             id: btnStartObs
             text: "New observation"
             size_hint_x: 0.4
+            font_size: 20
             on_press: root.new_observation()
 
 
@@ -304,6 +371,7 @@ BorisRoot:
             text: "Start observation"
             size_hint_x: 0.4
             on_press: root.start()
+
 
 <ConfirmStopPopup>
     title: "Are you sure you want to stop the current observation?"

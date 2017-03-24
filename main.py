@@ -37,6 +37,7 @@ from kivy.clock import Clock
 from kivy.uix.listview import ListView
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
+from kivy.properties import StringProperty
 
 '''
 from kivy.core.window import Window
@@ -165,6 +166,13 @@ class ReceiveProject(BoxLayout):
 '''
 
 
+class SelectObservationToSendForm(BoxLayout):
+
+    def send_observation(self):
+        self.clear_widgets()
+        self.add_widget(SendObsForm())
+
+
 class SendObsForm(BoxLayout):
 
     def cancel(self):
@@ -187,7 +195,7 @@ class SendObsForm(BoxLayout):
                 TCP_IP, TCP_PORT = url.split(":")
                 TCP_PORT = int(TCP_PORT)
             except:
-                return None
+                return False
 
             MSG = str.encode(str(json.dumps(observations,
                                             indent=None,
@@ -196,8 +204,12 @@ class SendObsForm(BoxLayout):
 
             s = socket.socket()
 
-            s.connect((TCP_IP, int(TCP_PORT)))
-            s.send("put")
+            try:
+                s.connect((TCP_IP, int(TCP_PORT)))
+                s.send("put")
+            except:
+                print("socket error")
+                return False
 
             print("sent ",MSG)
 
@@ -226,6 +238,8 @@ class SendObsForm(BoxLayout):
             return True
 
 
+        print "obsid", self.obsId
+
         url = self.url_input.text
 
         if not url:
@@ -245,24 +259,24 @@ class SendObsForm(BoxLayout):
 
 
         if BorisApp.project[OBSERVATIONS]:
-            if send_to_boris(url, BorisApp.project[OBSERVATIONS]):
-                popup = Popup(title="Info", content=Label(text="Observation(s) sent successfully"),
+            if send_to_boris(url, {self.obsId: BorisApp.project[OBSERVATIONS][self.obsId]}):
+                popup = Popup(title="Info", content=Label(text="Observation sent successfully"),
                                              size_hint=(None, None),
                                              size=(400, 200))
             else:
-                popup = Popup(title="Error", content=Label(text="Observation(s) not sent"),
+                popup = Popup(title="Error", content=Label(text="Observation not sent"),
                                          size_hint=(None, None),
                                          size=(400, 200))
-
             popup.open()
-            return
 
         else:
             popup = Popup(title="Error", content=Label(text="No observations were found in the selected project"),
                                          size_hint=(None, None),
                                          size=(400, 200))
             popup.open()
-            return
+
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
 
 
 
@@ -398,12 +412,39 @@ class DownloadProjectForm(BoxLayout):
 
 class ViewProjectForm(BoxLayout):
 
+    selected_item = StringProperty('no selection')
+
+    def selection_changed(self, *args):
+        self.selected_item = args[0].selection[0].text
+
+    def on_selected_item(self, *args):
+        print 'selected item text', args[1]
+        self.clear_widgets()
+        w = SendObsForm()
+        w.obsId = args[1]
+        w.label2.text = "Observation: %s" % args[1]
+        self.add_widget(w)
+
 
     def send_observations(self):
 
+
         self.clear_widgets()
-        a = SendObsForm()
-        self.add_widget(a)
+        w = SelectObservationToSendForm()
+
+
+        w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
+
+        rows =  []
+        for obsId in BorisApp.project[OBSERVATIONS]:
+            rows.append(obsId)
+        w.observations_list.adapter.data = rows
+
+        w.observations_list.adapter.bind(on_selection_change=self.selection_changed)
+
+        self.add_widget(w)
+
+
 
 
     def new_observation(self):
@@ -431,7 +472,8 @@ class SelectProjectForm(BoxLayout):
         """open project from selected file"""
 
         if not selection:
-            popup = Popup(title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="No project file selected!"),
+                          size_hint=(None, None), size=(400, 200))
             popup.open()
             return
 
@@ -439,7 +481,8 @@ class SelectProjectForm(BoxLayout):
             BorisApp.projectFileName = selection[0]
             BorisApp.project = json.loads(open(BorisApp.projectFileName, "r").read())
         except:
-            popup = Popup(title="Error", content=Label(text="The selected file is not a BORIS behaviors file!"),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="The selected file is not a BORIS behaviors file!"),
+                          size_hint=(None, None), size=(400, 200))
             popup.open()
             return
 
