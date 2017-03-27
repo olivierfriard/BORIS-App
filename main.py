@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 
 '''
 BORIS mobile
@@ -22,7 +22,6 @@ This file is part of BORIS mobile.
 
   www.boris.unito.it
 '''
-
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
