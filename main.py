@@ -39,11 +39,6 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
 
-'''
-from kivy.core.window import Window
-Window.clearcolor = (1, 1, 1, 1)
-'''
-
 import os
 import sys
 import json
@@ -74,96 +69,10 @@ class StartPageForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
 
-    '''
-    def receive_project_from_boris(self):
-        self.clear_widgets()
-        form = ReceiveProject()
-        form.lb_receive_input.text = "OLD IP: {}".format(get_ip_address())
-        self.add_widget(form)
-    '''
-
     def show_DownloadProject(self):
         self.clear_widgets()
         d = DownloadProjectForm()
         self.add_widget(d)
-
-'''
-class ReceiveProject(BoxLayout):
-
-    def cancel(self):
-        self.clear_widgets()
-        self.add_widget(StartPageForm())
-
-
-    def start_receiving(self):
-
-        TCP_IP = ""
-        TCP_PORT = 5006
-        BUFFER_SIZE = 20  # Normally 1024, but we want fast response
-
-        #print(socket.gethostbyname(socket.gethostname()))
-
-        print(get_ip_address())
-
-        self.vlayout = BoxLayout(orientation='vertical', spacing=5)
-        self.vlayout.add_widget(Label(text="IP: {}".format(get_ip_address()), size_hint_y=0.05))
-
-        self.clear_widgets()
-        self.add_widget(self.vlayout)
-        self.do_layout()
-        time.sleep(5)
-
-        self.lb_receive_input.text = "text"
-
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind((TCP_IP, TCP_PORT))
-
-        s.settimeout(10)
-
-        try:
-            s.listen(1)
-            print("Listening...")
-            conn, addr = s.accept()
-
-        except socket.timeout:
-            print("Time out")
-            self.clear_widgets()
-            self.add_widget(StartPageForm())
-
-            popup = Popup(title="Receiving project", content=Label(text="Timeout"), auto_dismiss=True,  size_hint=(None, None), size=(400, 200))
-            popup.open()
-
-            return
-
-        print( 'Connection address:', addr)
-
-        received = b""
-
-        while 1:
-            data = conn.recv(BUFFER_SIZE)
-            if not data:
-                break
-            received += data
-
-            #conn.send(b'ok')  # echo
-        conn.close()
-
-        print( "received data:", received)
-
-        filename = datetime.datetime.now().isoformat("_").split(".")[0].replace(":","") + ".boris"
-        try:
-            with open(filename, "wb") as f:
-                f.write(received)
-
-            popup = Popup(title="OK", content=Label(text="Project received and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
-            popup.open()
-        except:
-            popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
-            popup.open()
-
-        self.clear_widgets()
-        self.add_widget(StartPageForm())
-'''
 
 
 class SelectObservationToSendForm(BoxLayout):
@@ -279,7 +188,6 @@ class SendObsForm(BoxLayout):
         self.add_widget(StartPageForm())
 
 
-
 class DownloadProjectForm(BoxLayout):
 
     def cancel(self):
@@ -337,13 +245,8 @@ class DownloadProjectForm(BoxLayout):
                 save_project_file( "{}.{}.boris".format(self.filename, datetime.datetime.now().isoformat("_").split(".")[0].replace(":","")), self.content)
                 return
 
-
-        #print(self.cb_input.active)
-
-        #url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
         url = self.url_input.text
 
-        print(url)
         if not url:
             popup = Popup(title="Error", content=Label(text="The URL is empty!"),
                                          size_hint=(None, None),
@@ -635,27 +538,6 @@ class StartObservationForm(BoxLayout):
             self.add_widget(self.subjectsLayout)
             print("current focal subject:", self.focal_subject)
 
-        '''
-        def view_modifiers(obj):
-
-            anchor_layout = BoxLayout(orientation="vertical")
-
-            font_size = 24
-            if len(self.modifiers[obj.text].split(",")) > 10:
-                font_size = 14
-
-            for modif in self.modifiers[obj.text].split(","):
-                btn = Button(text=modif, size_hint=(1, .5), font_size=font_size)
-                anchor_layout.add_widget(btn)
-
-            btn = Button(text="Go back", size_hint=(1, .1), font_size=14)
-            btn.background_color = [1, 0, 0, 1] # red
-            btn.bind(on_release=view_behaviors_layout)
-            anchor_layout.add_widget(btn)
-
-            self.clear_widgets()
-            self.add_widget(anchor_layout)
-        '''
 
         def write_event(event):
             #print("event", event)
