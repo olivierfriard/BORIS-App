@@ -856,10 +856,17 @@ class BorisRoot(BoxLayout):
     pass
 
 class BorisApp(App):
+
     project = {}
     projectFileName = ""
-    pass
+
+    def on_pause(self):
+        print 'on_pause'
+        return True
+
+    def on_resume(self):
+        print 'on_resume'
+    
 
 if __name__ == "__main__":
     BorisApp().run()
-
