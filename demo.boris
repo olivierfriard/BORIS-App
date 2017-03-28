@@ -1,24 +1,152 @@
 {
+ "time_format": "hh:mm:ss",
+ "project_name": "demo",
+ "observations": {},
  "project_date": "2016-08-25T09:29:34",
- "project_description": "",
+ "project_format_version": "1.6",
  "independent_variables": {
-  "2": {
-   "description": "number of visitors per day",
-   "label": "number of visitors",
-   "default value": "",
-   "type": "numeric"
-  },
   "1": {
-   "description": "number of individu",
    "label": "group",
-   "default value": "10",
-   "type": "numeric"
+   "type": "numeric",
+   "description": "number of individu",
+   "default value": "10"
   },
   "0": {
-   "description": "meteo conditions",
    "label": "weather",
-   "default value": "sun",
-   "type": "text"
+   "type": "text",
+   "description": "meteo conditions",
+   "default value": "sun"
+  },
+  "2": {
+   "label": "number of visitors",
+   "type": "numeric",
+   "description": "number of visitors per day",
+   "default value": ""
+  }
+ },
+ "subjects_conf": {
+  "1": {
+   "key": "B",
+   "description": "Female 10 years",
+   "name": "bobo"
+  },
+  "0": {
+   "key": "T",
+   "description": "Male 8 years",
+   "name": "toto"
+  }
+ },
+ "coding_map": {},
+ "behaviors_conf": {
+  "1": {
+   "category": "Locomotion",
+   "excluded": "walk,eat,drink",
+   "key": "R",
+   "coding map": "",
+   "type": "State event",
+   "code": "run",
+   "description": "",
+   "modifiers": ""
+  },
+  "2": {
+   "category": "Social",
+   "excluded": "",
+   "key": "P",
+   "coding map": "",
+   "type": "State event",
+   "code": "play",
+   "description": "",
+   "modifiers": ""
+  },
+  "10": {
+   "category": "Social",
+   "excluded": "",
+   "key": "G",
+   "coding map": "",
+   "type": "State event",
+   "code": "groom",
+   "description": "",
+   "modifiers": "itself (1),others (2)"
+  },
+  "3": {
+   "category": "Social",
+   "excluded": "",
+   "key": "A",
+   "coding map": "",
+   "type": "State event",
+   "code": "attack",
+   "description": "",
+   "modifiers": ""
+  },
+  "6": {
+   "category": "Physiological",
+   "excluded": "walk,run,drink",
+   "key": "E",
+   "coding map": "",
+   "type": "State event",
+   "code": "eat",
+   "description": "",
+   "modifiers": ""
+  },
+  "9": {
+   "category": "Physiological",
+   "excluded": "",
+   "key": "F",
+   "coding map": "",
+   "type": "State event",
+   "code": "defecate",
+   "description": "",
+   "modifiers": ""
+  },
+  "7": {
+   "category": "Physiological",
+   "excluded": "walk,run,eat",
+   "key": "D",
+   "coding map": "",
+   "type": "State event",
+   "code": "drink",
+   "description": "",
+   "modifiers": ""
+  },
+  "4": {
+   "category": "Social",
+   "excluded": "",
+   "key": "A",
+   "coding map": "",
+   "type": "State event",
+   "code": "approach",
+   "description": "",
+   "modifiers": ""
+  },
+  "0": {
+   "category": "Locomotion",
+   "excluded": "run,eat,drink",
+   "key": "W",
+   "coding map": "",
+   "type": "State event",
+   "code": "walk",
+   "description": "",
+   "modifiers": "quadrupedal (Q),bipedal (B)"
+  },
+  "5": {
+   "category": "Locomotion",
+   "excluded": "",
+   "key": "J",
+   "coding map": "",
+   "type": "Point event",
+   "code": "jump",
+   "description": "",
+   "modifiers": ""
+  },
+  "8": {
+   "category": "Physiological",
+   "excluded": "",
+   "key": "U",
+   "coding map": "",
+   "type": "State event",
+   "code": "urinate",
+   "description": "",
+   "modifiers": ""
   }
  },
  "behavioral_categories": [
@@ -26,133 +154,5 @@
   "Physiological",
   "Social"
  ],
- "project_format_version": "1.6",
- "observations": {},
- "time_format": "hh:mm:ss",
- "subjects_conf": {
-  "1": {
-   "name": "bobo",
-   "description": "Female 10 years",
-   "key": "B"
-  },
-  "0": {
-   "name": "toto",
-   "description": "Male 8 years",
-   "key": "T"
-  }
- },
- "coding_map": {},
- "behaviors_conf": {
-  "2": {
-   "modifiers": "",
-   "category": "Social",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "A",
-   "excluded": "",
-   "code": "attack"
-  },
-  "9": {
-   "modifiers": "itself (1),others (2)",
-   "category": "Social",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "G",
-   "excluded": "",
-   "code": "groom"
-  },
-  "8": {
-   "modifiers": "",
-   "category": "Physiological",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "F",
-   "excluded": "",
-   "code": "defecate"
-  },
-  "1": {
-   "modifiers": "",
-   "category": "",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "R",
-   "excluded": "walk,eat,drink",
-   "code": "run"
-  },
-  "5": {
-   "modifiers": "",
-   "category": "Physiological",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "E",
-   "excluded": "walk,run,drink",
-   "code": "eat"
-  },
-  "10": {
-   "modifiers": "",
-   "category": "Social",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "P",
-   "excluded": "",
-   "code": "play"
-  },
-  "6": {
-   "modifiers": "",
-   "category": "Physiological",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "D",
-   "excluded": "walk,run,eat",
-   "code": "drink"
-  },
-  "4": {
-   "modifiers": "",
-   "category": "Locomotion",
-   "type": "Point event",
-   "coding map": "",
-   "description": "",
-   "key": "J",
-   "excluded": "",
-   "code": "jump"
-  },
-  "3": {
-   "modifiers": "",
-   "category": "",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "A",
-   "excluded": "",
-   "code": "approach"
-  },
-  "7": {
-   "modifiers": "",
-   "category": "Physiological",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "U",
-   "excluded": "",
-   "code": "urinate"
-  },
-  "0": {
-   "modifiers": "quadrupedal (Q),bipedal (B)",
-   "category": "Locomotion",
-   "type": "State event",
-   "coding map": "",
-   "description": "",
-   "key": "W",
-   "excluded": "run,eat,drink",
-   "code": "walk"
-  }
- },
- "project_name": "demo"
+ "project_description": ""
 }
