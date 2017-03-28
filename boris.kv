@@ -375,23 +375,26 @@ BorisRoot:
 
 <ConfirmStopPopup>
     title: "Are you sure you want to stop the current observation?"
-    title_size: "20sp"
+    font_size: 20
+    #title_size: "20sp"
     BoxLayout:
         #height: "40dp"
         size_hint_y: None
         Button:
             text: "Yes"
             size_hint_x: 0.5
+            font_size: 20
             on_press: root.yes()
         Button:
             text: "No"
             size_hint_x: 0.5
+            font_size: 20
             on_press: root.no()
 
 
 <AskForExistingFile>
     title: "This project already exists on this device."
-    title_size: "20sp"
+    #title_size: "20sp"
     BoxLayout:
         #height: "40dp"
         size_hint_y: None
