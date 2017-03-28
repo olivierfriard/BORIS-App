@@ -1,0 +1,158 @@
+{
+ "project_date": "2016-08-25T09:29:34",
+ "project_description": "",
+ "independent_variables": {
+  "2": {
+   "description": "number of visitors per day",
+   "label": "number of visitors",
+   "default value": "",
+   "type": "numeric"
+  },
+  "1": {
+   "description": "number of individu",
+   "label": "group",
+   "default value": "10",
+   "type": "numeric"
+  },
+  "0": {
+   "description": "meteo conditions",
+   "label": "weather",
+   "default value": "sun",
+   "type": "text"
+  }
+ },
+ "behavioral_categories": [
+  "Locomotion",
+  "Physiological",
+  "Social"
+ ],
+ "project_format_version": "1.6",
+ "observations": {},
+ "time_format": "hh:mm:ss",
+ "subjects_conf": {
+  "1": {
+   "name": "bobo",
+   "description": "Female 10 years",
+   "key": "B"
+  },
+  "0": {
+   "name": "toto",
+   "description": "Male 8 years",
+   "key": "T"
+  }
+ },
+ "coding_map": {},
+ "behaviors_conf": {
+  "2": {
+   "modifiers": "",
+   "category": "Social",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "A",
+   "excluded": "",
+   "code": "attack"
+  },
+  "9": {
+   "modifiers": "itself (1),others (2)",
+   "category": "Social",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "G",
+   "excluded": "",
+   "code": "groom"
+  },
+  "8": {
+   "modifiers": "",
+   "category": "Physiological",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "F",
+   "excluded": "",
+   "code": "defecate"
+  },
+  "1": {
+   "modifiers": "",
+   "category": "",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "R",
+   "excluded": "walk,eat,drink",
+   "code": "run"
+  },
+  "5": {
+   "modifiers": "",
+   "category": "Physiological",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "E",
+   "excluded": "walk,run,drink",
+   "code": "eat"
+  },
+  "10": {
+   "modifiers": "",
+   "category": "Social",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "P",
+   "excluded": "",
+   "code": "play"
+  },
+  "6": {
+   "modifiers": "",
+   "category": "Physiological",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "D",
+   "excluded": "walk,run,eat",
+   "code": "drink"
+  },
+  "4": {
+   "modifiers": "",
+   "category": "Locomotion",
+   "type": "Point event",
+   "coding map": "",
+   "description": "",
+   "key": "J",
+   "excluded": "",
+   "code": "jump"
+  },
+  "3": {
+   "modifiers": "",
+   "category": "",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "A",
+   "excluded": "",
+   "code": "approach"
+  },
+  "7": {
+   "modifiers": "",
+   "category": "Physiological",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "U",
+   "excluded": "",
+   "code": "urinate"
+  },
+  "0": {
+   "modifiers": "quadrupedal (Q),bipedal (B)",
+   "category": "Locomotion",
+   "type": "State event",
+   "coding map": "",
+   "description": "",
+   "key": "W",
+   "excluded": "run,eat,drink",
+   "code": "walk"
+  }
+ },
+ "project_name": "demo"
+}

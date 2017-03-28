@@ -1,3 +1,3 @@
-title=BORIS mobile
+title=BORIS App
 author=Olivier Friard - Marco Gamba
 orientation=landscape
