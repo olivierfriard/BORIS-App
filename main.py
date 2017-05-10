@@ -59,6 +59,8 @@ OBSERVATIONS = "observations"
 SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
 
+selected_modifiers = {}
+
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -658,7 +660,7 @@ class StartObservationForm(BoxLayout):
         '''
 
         def write_event(event):
-            #print("event", event)
+
             t, newState, modifier = event
 
             if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
@@ -712,18 +714,30 @@ class StartObservationForm(BoxLayout):
             behavior button pressed
             """
 
-            selected_modifier = ""
+            global selected_modifier
+            selected_modifier = {}
 
             def callback(obj):
 
-                print("selected_modifier", obj.text)
+                #print("selected_modifier", obj.text)
 
-                if obj.text != "Go back":
-                    selected_modifier = obj.text
+                global selected_modifier
+
+                if obj.text == "Go back":
+                    print("selected_modifier", selected_modifier)
+                    write_event([self.time_, self.behav_, selected_modifier])
+                    popup.dismiss()
+
+
+                if obj.background_color == [0.5, 0.5, 0.5, 1]:  # not selected
+                    selected_modifier[obj.text.split("|")[0]] = obj.text.split("|")[1]
+                    obj.background_color = [1, 0.5, 0.5, 1]
                 else:
-                    selected_modifier = ""
-                popup.dismiss()
-                write_event([self.time_, self.behav_, selected_modifier])
+                    selected_modifier[obj.text.split("|")[0]] = ""
+                    obj.background_color = [0.5, 0.5, 0.5, 1]
+
+
+
 
             t = time.time()
             newState = obj.text
@@ -734,16 +748,33 @@ class StartObservationForm(BoxLayout):
             # check if modifiers
             if self.modifiers[newState]:
 
-                popup = Popup()
+                popup = Popup(title="Select modifiers for {}".format(obj.text))
                 anchor_layout = BoxLayout(orientation="vertical")
 
                 font_size = 24
-                if len(self.modifiers[obj.text].split(",")) > 10:
-                    font_size = 14
 
-                for modif in self.modifiers[obj.text].split(","):
-                    btn = Button(text=modif, size_hint=(1, .5), font_size=font_size, on_release=callback)
-                    anchor_layout.add_widget(btn)
+                print(self.modifiers[obj.text])
+
+                if isinstance(self.modifiers[obj.text], dict):
+                    print("new project")
+
+                    for iidx in sorted( [int(x) for x in self.modifiers[obj.text].keys()]):
+                        idx = str(iidx)
+                        if self.modifiers[obj.text][idx]["type"] == 0:
+
+                            anchor_layout.add_widget(Label(text=self.modifiers[obj.text][idx]["name"], size_hint=(.1, .1)))
+
+                            for modif in self.modifiers[obj.text][idx]["values"]:
+                                btn = Button(text=idx + "|" + modif, size_hint=(1, .5), font_size=font_size, on_release=callback, background_normal="", background_color=[0.5,0.5,0.5,1])
+                                anchor_layout.add_widget(btn)
+
+                else:
+                    if len(self.modifiers[obj.text].split(",")) > 10:
+                        font_size = 14
+
+                    for modif in self.modifiers[obj.text].split(","):
+                        btn = Button(text=modif, size_hint=(1, .5), font_size=font_size, on_release=callback)
+                        anchor_layout.add_widget(btn)
 
                 btn = Button(text="Go back", size_hint=(1, .1), font_size=14)
                 btn.background_color = [1, 0, 0, 1] # red
