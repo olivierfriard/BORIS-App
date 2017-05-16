@@ -38,7 +38,7 @@ from kivy.uix.listview import ListView
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
-
+from kivy.logger import Logger
 from kivy.base import EventLoop
 
 import os
@@ -99,26 +99,31 @@ class MoreForm(BoxLayout):
 
 
         def confirm_update(instance):
-            print("confirm update")
+
             if instance.title == "y":
 
-                print("UPDATE")
+                Logger.info('updating...')
                 try:
                     for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
                         response = urllib2.urlopen(url)
                         content = response.read()
 
+                        Logger.info("renaming %s" % url.split("/")[-1])
                         if os.path.isfile(url.split("/")[-1]):
                             os.rename(url.split("/")[-1], url.split("/")[-1] + "." + datetime.datetime.now().isoformat())
+                            Logger.info("renamed %s" % url.split("/")[-1])
 
                         if content:
                             with open(url.split("/")[-1], "w") as f:
                                 f.write(content)
 
                     if os.path.isfile("main.pyo"):
+                        Logger.info("removing main.pyo")
                         os.remove("main.pyo")
+                        Logger.info("removed main.pyo")
 
                     Popup(title="BORIS", content=Label(text="The BORIS App was updated succesfully to v. {}.\nYou should restart it now.".format(new_version)),size_hint=(None, None), size=("600dp", "200dp")).open()
+                    Logger.info("BORIS App updated successfully")
 
                 except:
                     Popup(title="Error", content=Label(text="An error occured during update..."),size_hint=(None, None), size=("400dp", "200dp")).open()
@@ -129,7 +134,7 @@ class MoreForm(BoxLayout):
 
         try:
             new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.txt").read().strip()
-            print(new_version)
+            Logger.info('remote version %s' % new_version)
         except:
             Popup(title="BORIS - Error", content=Label(text="Current version can not be checked on BORIS web site"), size_hint=(None, None), size=("500dp", "200dp")).open()
             self.clear_widgets()
@@ -138,18 +143,21 @@ class MoreForm(BoxLayout):
 
 
         if tuple(map(int, (new_version.split(".")))) > tuple(map(int, (__version__.split(".")))):
-            print("new version available")
+            Logger.info('new version available %s > %s' % (__version__,new_version))
+
             pop = ConfirmUpdatePopup()
             pop.bind(on_dismiss=confirm_update)
             pop.open()
         else:
             Popup(title="BORIS", content=Label(text="Your version is up to date (v. {})".format(__version__)),size_hint=(None, None), size=("400dp", "200dp")).open()
+            Logger.info("version up to date")
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
 
     def exit(self):
+        Logger.info('exiting...')
         sys.exit()
 
 
@@ -165,7 +173,6 @@ class SendObsForm(BoxLayout):
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
-
 
     def send_obs(self):
 
@@ -195,10 +202,10 @@ class SendObsForm(BoxLayout):
                 s.connect((TCP_IP, int(TCP_PORT)))
                 s.send("put")
             except:
-                print("socket error")
+                Logger.info("socket error")
                 return False
 
-            print("sent ",MSG)
+            Logger.info("sent %s" % MSG)
 
             received = ""
             while 1:
@@ -207,15 +214,16 @@ class SendObsForm(BoxLayout):
                     break
                 received += data
 
-            print "received:\n" + received
+            Logger.info("received:\n" + received)
 
             if received == "SEND":
-                print("sending")
+                Logger.info("Sending")
 
                 s = socket.socket()
                 s.connect((TCP_IP, int(TCP_PORT)))
                 s.send(MSG + b"#####")
                 print("sent")
+                Logger.info("sent")
                 while 1:
                     data = s.recv(BUFFER_SIZE)
                     if not data:
@@ -224,8 +232,7 @@ class SendObsForm(BoxLayout):
             s.close
             return True
 
-
-        print "obsid", self.obsId
+        Logger.info("obs id: %s" % self.obsId)
 
         url = self.url_input.text
 
