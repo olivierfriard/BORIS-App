@@ -369,6 +369,22 @@ BorisRoot:
             font_size: "20dp"
             on_press: root.no()
 
+<ConfirmUpdatePopup>
+    title: "Are you sure you want to update BORIS App?"
+    title_size: "30dp"
+    font_size: "20dp"
+    BoxLayout:
+        size_hint_y: None
+        Button:
+            text: "Yes"
+            size_hint_x: 0.5
+            font_size: "20dp"
+            on_press: root.yes()
+        Button:
+            text: "No"
+            size_hint_x: 0.5
+            font_size: "20dp"
+            on_press: root.no()
 
 <AskForExistingFile>
     title: "This project already exists on this device."

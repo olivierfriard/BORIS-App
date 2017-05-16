@@ -22,6 +22,7 @@ This file is part of BORIS mobile.
 
   www.boris.unito.it
 '''
+__version__ = "0.2.0"
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -84,36 +85,52 @@ class MoreForm(BoxLayout):
         self.add_widget(StartPageForm())
 
     def update(self):
-
-        try:
-            new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.txt").read()
-            print(new_version)
-            aaa
-        except:
-            Popup(title="BORIS", content=Label(text="The BORIS App was updated succesfully")).open()
+        """
+        check if installed version is the most recent
+        update after user confirmation
+        """
 
 
-        try:
-            for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
-                response = urllib2.urlopen()
-                content = response.read()
+        def confirm_update(instance):
+            print("confirm update")
+            if instance.title == "y":
 
-                '''
-                if content:
-                    with open(url.split("/")[0], "w") as f:
-                        f.write(content)
-                '''
+                print("UPDATE")
+                try:
+                    for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
+                        response = urllib2.urlopen(url)
+                        content = response.read()
+
+                        """
+                        if content:
+                            with open(url.split("/")[0], "w") as f:
+                                f.write(content)
+                        """
+
+                    if os.path.isfile("main.pyo"):
+                        os.remove("main.pyo")
+
+                    Popup(title="BORIS", content=Label(text="The BORIS App was updated succesfully to v. {}.\nYou should restart it now.".format(new_version)),size_hint=(None, None), size=("600dp", "200dp")).open()
+
+                except:
+                    Popup(title="Error", content=Label(text="An error occured during update..."),size_hint=(None, None), size=("400dp", "200dp")).open()
 
 
-            os.remove("main.pyo")
+            self.clear_widgets()
+            self.add_widget(StartPageForm())
 
-            popup = Popup(title="BORIS", content=Label(text="The BORIS App was updated succesfully"))
-            popup.open()
+        #try:
+        new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.txt").read().strip()
+        print(new_version)
 
+        if tuple(map(int, (new_version.split(".")))) > tuple(map(int, (__version__.split(".")))):
+            print("new version available")
 
-        except:
-            popup = Popup(title="Error", content=Label(text="An error occured during update..."))
-            popup.open()
+            pop = ConfirmUpdatePopup()
+            pop.bind(on_dismiss=confirm_update)
+            pop.open()
+        else:
+            Popup(title="BORIS", content=Label(text="Your version is up to date (v. {})".format(__version__)),size_hint=(None, None), size=("400dp", "200dp")).open()
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
@@ -997,6 +1014,15 @@ class AskForExistingFile(Popup):
         self.dismiss()
     def rename(self):
         self.title = "rename"
+        self.dismiss()
+
+class ConfirmUpdatePopup(Popup):
+    def yes(self):
+        self.title = "y"
+        self.dismiss()
+
+    def no(self):
+        self.title = "n"
         self.dismiss()
 
 
