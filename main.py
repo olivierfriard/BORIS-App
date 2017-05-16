@@ -69,7 +69,6 @@ class StartPageForm(BoxLayout):
 
     def show_DownloadProject(self):
         self.clear_widgets()
-<<<<<<< HEAD
         self.add_widget(DownloadProjectForm())
 
     def more(self):
@@ -86,30 +85,34 @@ class MoreForm(BoxLayout):
 
     def update(self):
 
-        url =
+        try:
+            new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.txt").read()
+            print(new_version)
+            aaa
+        except:
+            Popup(title="BORIS", content=Label(text="The BORIS App was updated succesfully")).open()
+
+
         try:
             for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
-            response = urllib2.urlopen()
-            content = response.read()
-            if content:
-                with open("main.py", "w") as f:
-                    f.write(content)
+                response = urllib2.urlopen()
+                content = response.read()
 
-            response = urllib2.urlopen(url)
-            content = response.read()
-            if content:
-                with open("main.py", "w") as f:
-                    f.write(content)
+                '''
+                if content:
+                    with open(url.split("/")[0], "w") as f:
+                        f.write(content)
+                '''
 
 
             os.remove("main.pyo")
 
-            popup = Popup(title="BORIS", content=Label(text="The BORIS App was update succesfully to version v.5"),   size_hint=(None, None))
+            popup = Popup(title="BORIS", content=Label(text="The BORIS App was updated succesfully"))
             popup.open()
 
 
         except:
-            popup = Popup(title="Error", content=Label(text="An error occured during updating..."),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="An error occured during update..."))
             popup.open()
 
         self.clear_widgets()
@@ -118,10 +121,6 @@ class MoreForm(BoxLayout):
 
     def exit(self):
         sys.exit()
-=======
-        d = DownloadProjectForm()
-        self.add_widget(d)
->>>>>>> 07d8d60e4deafca367e6428c8fbba28a10b75820
 
 
 class SelectObservationToSendForm(BoxLayout):
@@ -810,14 +809,10 @@ class StartObservationForm(BoxLayout):
             self.add_widget(self.subjectsLayout)
             print("current focal subject:", self.focal_subject)
 
-<<<<<<< HEAD
-
         def view_modifiers_layout(behavior):
             self.clear_widgets()
             self.add_widget(self.modifiers_layout[behavior])
 
-=======
->>>>>>> 07d8d60e4deafca367e6428c8fbba28a10b75820
 
         def write_event(event):
 
@@ -1028,7 +1023,7 @@ class BorisApp(App):
 
     def on_resume(self):
         print 'on_resume'
-    
+
 
 if __name__ == "__main__":
     BorisApp().run()
