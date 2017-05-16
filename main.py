@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 
 '''
 BORIS mobile
@@ -22,7 +22,6 @@ This file is part of BORIS mobile.
 
   www.boris.unito.it
 '''
-
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -70,6 +69,7 @@ class StartPageForm(BoxLayout):
 
     def show_DownloadProject(self):
         self.clear_widgets()
+<<<<<<< HEAD
         self.add_widget(DownloadProjectForm())
 
     def more(self):
@@ -118,6 +118,10 @@ class MoreForm(BoxLayout):
 
     def exit(self):
         sys.exit()
+=======
+        d = DownloadProjectForm()
+        self.add_widget(d)
+>>>>>>> 07d8d60e4deafca367e6428c8fbba28a10b75820
 
 
 class SelectObservationToSendForm(BoxLayout):
@@ -233,7 +237,6 @@ class SendObsForm(BoxLayout):
         self.add_widget(StartPageForm())
 
 
-
 class DownloadProjectForm(BoxLayout):
 
     def cancel(self):
@@ -291,13 +294,8 @@ class DownloadProjectForm(BoxLayout):
                 save_project_file( "{}.{}.boris".format(self.filename, datetime.datetime.now().isoformat("_").split(".")[0].replace(":","")), self.content)
                 return
 
-
-        #print(self.cb_input.active)
-
-        #url = "http://www.boris.unito.it/static/archive/Lemur_catta_ethogram.boris"
         url = self.url_input.text
 
-        print(url)
         if not url:
             popup = Popup(title="Error", content=Label(text="The URL is empty!"),
                                          size_hint=(None, None),
@@ -812,11 +810,14 @@ class StartObservationForm(BoxLayout):
             self.add_widget(self.subjectsLayout)
             print("current focal subject:", self.focal_subject)
 
+<<<<<<< HEAD
 
         def view_modifiers_layout(behavior):
             self.clear_widgets()
             self.add_widget(self.modifiers_layout[behavior])
 
+=======
+>>>>>>> 07d8d60e4deafca367e6428c8fbba28a10b75820
 
         def write_event(event):
 
@@ -1017,10 +1018,17 @@ class BorisRoot(BoxLayout):
     pass
 
 class BorisApp(App):
+
     project = {}
     projectFileName = ""
-    pass
+
+    def on_pause(self):
+        print 'on_pause'
+        return True
+
+    def on_resume(self):
+        print 'on_resume'
+    
 
 if __name__ == "__main__":
     BorisApp().run()
-
