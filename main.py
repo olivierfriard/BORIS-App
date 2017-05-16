@@ -1,18 +1,18 @@
 #!/usr/bin/python2
 
 '''
-BORIS mobile
+BORIS App
 Behavioral Observation Research Interactive Software
 Copyright 2017 Olivier Friard
 
 This file is part of BORIS mobile.
 
-  BORIS is free software; you can redistribute it and/or modify
+  BORIS App is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   any later version.
 
-  BORIS mobile is distributed in the hope that it will be useful,
+  BORIS App is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
@@ -108,11 +108,11 @@ class MoreForm(BoxLayout):
                         response = urllib2.urlopen(url)
                         content = response.read()
 
-                        if os.path.isfile(url.split("/")[0]):
-                            os.rename(url.split("/")[0], url.split("/")[0] + "." + datetime.datetime.now().isoformat())
+                        if os.path.isfile(url.split("/")[-1]):
+                            os.rename(url.split("/")[-1], url.split("/")[-1] + "." + datetime.datetime.now().isoformat())
 
                         if content:
-                            with open(url.split("/")[0], "w") as f:
+                            with open(url.split("/")[-1], "w") as f:
                                 f.write(content)
 
                     if os.path.isfile("main.pyo"):
@@ -128,7 +128,7 @@ class MoreForm(BoxLayout):
             self.add_widget(StartPageForm())
 
         try:
-            new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.xt").read().strip()
+            new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.txt").read().strip()
             print(new_version)
         except:
             Popup(title="BORIS - Error", content=Label(text="Current version can not be checked on BORIS web site"), size_hint=(None, None), size=("500dp", "200dp")).open()
