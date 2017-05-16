@@ -39,11 +39,6 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
 
-'''
-from kivy.core.window import Window
-Window.clearcolor = (1, 1, 1, 1)
-'''
-
 import os
 import sys
 import json
@@ -69,103 +64,60 @@ def get_ip_address():
 
 class StartPageForm(BoxLayout):
 
-    def exit(self):
-        sys.exit()
-
     def show_SelectProjectForm(self):
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
 
-    '''
-    def receive_project_from_boris(self):
-        self.clear_widgets()
-        form = ReceiveProject()
-        form.lb_receive_input.text = "OLD IP: {}".format(get_ip_address())
-        self.add_widget(form)
-    '''
-
     def show_DownloadProject(self):
         self.clear_widgets()
-        d = DownloadProjectForm()
-        self.add_widget(d)
+        self.add_widget(DownloadProjectForm())
 
-'''
-class ReceiveProject(BoxLayout):
+    def more(self):
+        self.clear_widgets()
+        self.add_widget(MoreForm())
+
+
+class MoreForm(BoxLayout):
 
     def cancel(self):
+
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
+    def update(self):
 
-    def start_receiving(self):
-
-        TCP_IP = ""
-        TCP_PORT = 5006
-        BUFFER_SIZE = 20  # Normally 1024, but we want fast response
-
-        #print(socket.gethostbyname(socket.gethostname()))
-
-        print(get_ip_address())
-
-        self.vlayout = BoxLayout(orientation='vertical', spacing=5)
-        self.vlayout.add_widget(Label(text="IP: {}".format(get_ip_address()), size_hint_y=0.05))
-
-        self.clear_widgets()
-        self.add_widget(self.vlayout)
-        self.do_layout()
-        time.sleep(5)
-
-        self.lb_receive_input.text = "text"
-
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind((TCP_IP, TCP_PORT))
-
-        s.settimeout(10)
-
+        url =
         try:
-            s.listen(1)
-            print("Listening...")
-            conn, addr = s.accept()
+            for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
+            response = urllib2.urlopen()
+            content = response.read()
+            if content:
+                with open("main.py", "w") as f:
+                    f.write(content)
 
-        except socket.timeout:
-            print("Time out")
-            self.clear_widgets()
-            self.add_widget(StartPageForm())
+            response = urllib2.urlopen(url)
+            content = response.read()
+            if content:
+                with open("main.py", "w") as f:
+                    f.write(content)
 
-            popup = Popup(title="Receiving project", content=Label(text="Timeout"), auto_dismiss=True,  size_hint=(None, None), size=(400, 200))
+
+            os.remove("main.pyo")
+
+            popup = Popup(title="BORIS", content=Label(text="The BORIS App was update succesfully to version v.5"),   size_hint=(None, None))
             popup.open()
 
-            return
 
-        print( 'Connection address:', addr)
-
-        received = b""
-
-        while 1:
-            data = conn.recv(BUFFER_SIZE)
-            if not data:
-                break
-            received += data
-
-            #conn.send(b'ok')  # echo
-        conn.close()
-
-        print( "received data:", received)
-
-        filename = datetime.datetime.now().isoformat("_").split(".")[0].replace(":","") + ".boris"
-        try:
-            with open(filename, "wb") as f:
-                f.write(received)
-
-            popup = Popup(title="OK", content=Label(text="Project received and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
-            popup.open()
         except:
-            popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
+            popup = Popup(title="Error", content=Label(text="An error occured during updating..."),   size_hint=(None, None), size=(400, 200))
             popup.open()
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
-'''
+
+
+    def exit(self):
+        sys.exit()
 
 
 class SelectObservationToSendForm(BoxLayout):
@@ -532,6 +484,8 @@ class StartObservationForm(BoxLayout):
     behav_ = ""
     iv = {}
 
+
+
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
@@ -612,6 +566,227 @@ class StartObservationForm(BoxLayout):
         """
         start new observation
         """
+        self.modifier_buttons = {}
+        self.current_modifiers = {}
+
+
+        def create_modifiers_layout(behavior):
+            """
+            create modifiers layout for each behavior
+            """
+
+            def on_button_release(obj):
+
+                print(obj.text)
+                print("modifier_buttons", self.modifier_buttons[obj])
+                behavior, idx, type_, modifier = self.modifier_buttons[obj]
+                if behavior not in self.current_modifiers:
+                    self.current_modifiers[behavior] = {}
+
+                if type_ == 0:
+                    # all button to grey
+                    for o in [o for o in self.modifier_buttons if self.modifier_buttons[o][0] == behavior and self.modifier_buttons[o][1] == idx]:
+                        o.background_color = [0.5, 0.5, 0.5, 1]
+
+                    if idx in self.current_modifiers[behavior]:
+                        if self.current_modifiers[behavior][idx] == [] or modifier not in self.current_modifiers[behavior][idx]:
+                            self.current_modifiers[behavior][idx] = [modifier]
+                            obj.background_color = [0.9, 0.1, 0.1, 1] # red
+                        else:
+                            self.current_modifiers[behavior][idx] = []
+                            obj.background_color = [0.5, 0.5, 0.5, 1]
+                    else:
+                        self.current_modifiers[behavior][idx] = [modifier]
+                        obj.background_color = [0.9, 0.1, 0.1, 1] # red
+
+                if type_ == 1:
+                    if idx in self.current_modifiers[behavior]:
+                        if self.current_modifiers[behavior][idx] == [] or modifier not in self.current_modifiers[behavior][idx]:
+                            self.current_modifiers[behavior][idx].append(modifier)
+                            obj.background_color = [0.9, 0.1, 0.1, 1] # red
+                        else:
+                            self.current_modifiers[behavior][idx].remove(modifier)
+                            obj.background_color = [0.5, 0.5, 0.5, 1]
+                    else:
+                        self.current_modifiers[behavior][idx] = [modifier]
+                        obj.background_color = [0.9, 0.1, 0.1, 1] # red
+
+                print("self.current_modifiers", self.current_modifiers)
+
+
+            def on_goback_button_release(obj):
+                print("self.current_modifiers", self.current_modifiers)
+                modifiers = ""
+                behavior, _, _ = self.modifier_buttons[obj]
+                for idx in sorted([int(k) for k in self.current_modifiers[behavior]]):
+                    if modifiers:
+                        modifiers += "|"
+                    if self.current_modifiers[behavior][str(idx)]:
+                        modifiers += ",".join(self.current_modifiers[behavior][str(idx)])
+                    else:
+                        modifiers += "None"
+
+                write_event([self.time_, self.behav_, modifiers])
+
+                view_behaviors_layout(obj)
+
+
+            layout = BoxLayout(orientation="vertical")
+            font_size = 24
+
+            self.current_modifiers[behavior] = {}
+
+            if isinstance(self.modifiers[behavior], dict): # project version >= 4.0.0
+                print("new project")
+
+                print("self.modifiers[behavior]", self.modifiers[behavior])
+                for iidx in sorted( [int(x) for x in self.modifiers[behavior].keys()]):
+                    idx = str(iidx)
+
+                    self.current_modifiers[behavior][idx] = []
+
+                    if self.modifiers[behavior][idx]["type"] in [0, 1]:  # modifiers type: one, many
+
+                        layout.add_widget(Label(text=self.modifiers[behavior][idx]["name"], size_hint=(.1, .1)))
+
+                        for modif in self.modifiers[behavior][idx]["values"]:
+                            btn = Button(text=modif.split(" (")[0], size_hint=(1, .5), font_size=font_size, on_release=on_button_release, background_normal="", background_color=[0.5, 0.5, 0.5, 1])
+                            self.modifier_buttons[btn] = [behavior, idx, self.modifiers[behavior][idx]["type"], modif.split(" (")[0]]
+                            layout.add_widget(btn)
+
+            else: # project version < 4.0.0
+                if len(self.modifiers[behavior].split(",")) > 10:
+                    font_size = 14
+
+                for idx, modifier_set in enumerate(self.modifiers[behavior].split("|")):
+                    self.current_modifiers[behavior][str(idx)] = []
+                    for modif in modifier_set.split(","):
+                        btn = Button(text=modif.split(" (")[0], size_hint=(1, .5), font_size=font_size, on_release=on_button_release, background_normal="", background_color=[0.5, 0.5, 0.5, 1])
+                        self.modifier_buttons[btn] = [behavior, str(idx), 0, modif.split(" (")[0]]
+                        layout.add_widget(btn)
+
+            btn = Button(text="Go back", size_hint=(1, .1), font_size=14)
+            btn.background_color = [1, 0, 0, 1] # red
+            btn.bind(on_release=on_goback_button_release)
+            self.modifier_buttons[btn] = [behavior, 0, ""]
+            layout.add_widget(btn)
+
+            return layout
+
+
+        def create_subjects_layout():
+            """
+            create subject layout
+            """
+
+            subjectsList = sorted([BorisApp.project[SUBJECTS][k]["name"] for k in BorisApp.project[SUBJECTS].keys()])
+
+            # check number of subjects
+            subjects_font_size = 24
+            if len(subjectsList) > 20:
+                subjects_font_size = 14
+
+            subjectsLayout = GridLayout(cols=int((len(subjectsList) + 1)**0.5), size_hint=(1, 1), spacing=5)
+            btn = Button(text=NO_FOCAL_SUBJECT, size_hint_x=1, font_size=subjects_font_size)
+            btn.bind(on_release = btnSubjectPressed)
+            for subject in subjectsList:
+                btn = Button(text=subject, size_hint_x=1, font_size=subjects_font_size)
+                btn.background_normal = ""
+                btn.background_color = [.5, .5, .5, 1] # gray
+                btn.bind(on_release = btnSubjectPressed)
+                self.btnSubjectsList[subject] = btn
+                subjectsLayout.add_widget(btn)
+
+            # cancel button
+            btn = Button(text = "Cancel", size_hint_x=1, font_size=subjects_font_size)
+            btn.background_color = [1, 0, 0, 1] # red
+            btn.bind(on_release = view_behaviors_layout)
+            subjectsLayout.add_widget(btn)
+
+            return subjectsLayout
+
+
+        def create_behaviors_layout():
+
+            behaviorsLayout = BoxLayout(orientation='vertical', spacing=3)
+
+            behaviorsLayout.add_widget(Label(text="Observation: {}".format(self.obsId), size_hint_y=0.05))
+
+            gdrid_layout = GridLayout(cols=int((len(BorisApp.project[ETHOGRAM]) + 1)**0.5), size_hint=(1, 1), spacing=5)
+
+            behaviorsList = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys()])
+            # check modifiers
+            self.modifiers_layout = {}
+            for idx in BorisApp.project[ETHOGRAM]:
+                self.modifiers[BorisApp.project[ETHOGRAM][idx]["code"]] = BorisApp.project[ETHOGRAM][idx]["modifiers"]
+
+            print("modifiers", self.modifiers)
+
+            # check number of behaviors
+            behaviors_font_size = 24
+            if len(behaviorsList) > 20:
+                behaviors_font_size = 14
+
+            if "behavioral_categories" in BorisApp.project:
+                colors_list = [[1.0, 0.6, 0.0, 1], [.1, 0.8, .1, 1], [.1, .1, 1, 1], [0.94, 0.35, 0.48, 1], [0.2, 0.4, 0.6, 1], [0.4, 0.2, 0.6, 1]]
+                categoriesList = set([BorisApp.project[ETHOGRAM][k]["category"] for k in BorisApp.project[ETHOGRAM].keys() if "category" in BorisApp.project[ETHOGRAM][k]])
+
+                for idx, category in enumerate(sorted(categoriesList)):
+                    behav_list_category = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys() if "category" in BorisApp.project[ETHOGRAM][k] and BorisApp.project[ETHOGRAM][k]["category"] == category])
+                    for behavior in behav_list_category:
+                        btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
+                        btn.background_normal = ""
+                        if category == "":
+                            btn.background_color = [.5, .5, .5, 1] # gray
+                        else:
+                            btn.background_color = colors_list[idx % len(colors_list)]
+                        self.behavior_color[behavior] = btn.background_color
+                        btn.bind(on_release = btnBehaviorPressed)
+                        self.btnList[behavior] = btn
+                        gdrid_layout.add_widget(btn)
+
+                        # create modifiers layout
+                        if self.modifiers[behavior]:
+                            self.modifiers_layout[behavior] = create_modifiers_layout(behavior)
+
+            else:
+                for behavior in behaviorsList:
+                    btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
+                    btn.background_normal = ""
+                    btn.background_color = [.5, .5, .5, 1] # gray
+                    self.behavior_color[behavior] = btn.background_color
+                    btn.bind(on_release = btnBehaviorPressed)
+                    self.btnList[behavior] = btn
+                    gdrid_layout.add_widget(btn)
+
+                    # create modifiers layout
+                    if self.modifiers[behavior]:
+                        self.modifiers_layout[behavior] = create_modifiers_layout(behavior)
+
+
+            behaviorsLayout.add_widget(gdrid_layout)
+
+            hlayout = BoxLayout(orientation='horizontal', size_hint_y=0.1)
+            # add subject button
+            if BorisApp.project[SUBJECTS]:
+                self.btnSelSubj = Button(text = "Select focal subject", size_hint_x=1, font_size=behaviors_font_size)
+                self.btnSelSubj.background_normal = ""
+                self.btnSelSubj.background_color = [0.1, 0.9, 0.1, 1] # green
+                self.btnSelSubj.bind(on_release = view_subjects_layout)
+                hlayout.add_widget(self.btnSelSubj)
+
+            # add stop button
+            btn = Button(text = "Stop obs", size_hint_x=1, font_size=behaviors_font_size)
+            btn.background_normal = ""
+            btn.background_color = [0.9, 0.1, 0.1, 1] # red
+            btn.bind(on_release = btnStopPressed)
+            hlayout.add_widget(btn)
+
+            behaviorsLayout.add_widget(hlayout)
+
+            return behaviorsLayout
+
+
 
         def view_behaviors_layout(obj):
             """
@@ -637,27 +812,11 @@ class StartObservationForm(BoxLayout):
             self.add_widget(self.subjectsLayout)
             print("current focal subject:", self.focal_subject)
 
-        '''
-        def view_modifiers(obj):
 
-            anchor_layout = BoxLayout(orientation="vertical")
-
-            font_size = 24
-            if len(self.modifiers[obj.text].split(",")) > 10:
-                font_size = 14
-
-            for modif in self.modifiers[obj.text].split(","):
-                btn = Button(text=modif, size_hint=(1, .5), font_size=font_size)
-                anchor_layout.add_widget(btn)
-
-            btn = Button(text="Go back", size_hint=(1, .1), font_size=14)
-            btn.background_color = [1, 0, 0, 1] # red
-            btn.bind(on_release=view_behaviors_layout)
-            anchor_layout.add_widget(btn)
-
+        def view_modifiers_layout(behavior):
             self.clear_widgets()
-            self.add_widget(anchor_layout)
-        '''
+            self.add_widget(self.modifiers_layout[behavior])
+
 
         def write_event(event):
 
@@ -668,7 +827,6 @@ class StartObservationForm(BoxLayout):
                 # deselect
                 if self.focal_subject in self.currentStates and newState in self.currentStates[self.focal_subject]:
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
-                    #obj.background_color = self.behavior_color[newState]
 
                     self.btnList[newState].background_color = self.behavior_color[newState]
 
@@ -692,9 +850,7 @@ class StartObservationForm(BoxLayout):
 
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([round(t - self.t0, 3), self.focal_subject, newState, modifier, ""])
 
-                    #obj.background_color = [1, 0, 0, 1] # red
                     self.btnList[newState].background_color = [1, 0, 0, 1] # red
-
 
                     if self.focal_subject not in self.currentStates:
                         self.currentStates[self.focal_subject] = []
@@ -717,75 +873,19 @@ class StartObservationForm(BoxLayout):
             global selected_modifier
             selected_modifier = {}
 
-            def callback(obj):
-
-                #print("selected_modifier", obj.text)
-
-                global selected_modifier
-
-                if obj.text == "Go back":
-                    print("selected_modifier", selected_modifier)
-                    write_event([self.time_, self.behav_, selected_modifier])
-                    popup.dismiss()
-
-
-                if obj.background_color == [0.5, 0.5, 0.5, 1]:  # not selected
-                    selected_modifier[obj.text.split("|")[0]] = obj.text.split("|")[1]
-                    obj.background_color = [1, 0.5, 0.5, 1]
-                else:
-                    selected_modifier[obj.text.split("|")[0]] = ""
-                    obj.background_color = [0.5, 0.5, 0.5, 1]
-
-
-
-
             t = time.time()
             newState = obj.text
 
             self.time_ = t
             self.behav_ = newState
 
+
             # check if modifiers
             if self.modifiers[newState]:
-
-                popup = Popup(title="Select modifiers for {}".format(obj.text))
-                anchor_layout = BoxLayout(orientation="vertical")
-
-                font_size = 24
-
-                print(self.modifiers[obj.text])
-
-                if isinstance(self.modifiers[obj.text], dict):
-                    print("new project")
-
-                    for iidx in sorted( [int(x) for x in self.modifiers[obj.text].keys()]):
-                        idx = str(iidx)
-                        if self.modifiers[obj.text][idx]["type"] == 0:
-
-                            anchor_layout.add_widget(Label(text=self.modifiers[obj.text][idx]["name"], size_hint=(.1, .1)))
-
-                            for modif in self.modifiers[obj.text][idx]["values"]:
-                                btn = Button(text=idx + "|" + modif, size_hint=(1, .5), font_size=font_size, on_release=callback, background_normal="", background_color=[0.5,0.5,0.5,1])
-                                anchor_layout.add_widget(btn)
-
-                else:
-                    if len(self.modifiers[obj.text].split(",")) > 10:
-                        font_size = 14
-
-                    for modif in self.modifiers[obj.text].split(","):
-                        btn = Button(text=modif, size_hint=(1, .5), font_size=font_size, on_release=callback)
-                        anchor_layout.add_widget(btn)
-
-                btn = Button(text="Go back", size_hint=(1, .1), font_size=14)
-                btn.background_color = [1, 0, 0, 1] # red
-                btn.bind(on_release=callback)
-                anchor_layout.add_widget(btn)
-
-                popup.content=anchor_layout
-                popup.open()
+                view_modifiers_layout(newState)
 
             else:
-                write_event([t, obj.text, ""])
+                write_event([self.time_, newState, ""])
 
 
         def btnSubjectPressed(obj):
@@ -806,7 +906,7 @@ class StartObservationForm(BoxLayout):
                 self.btnSubjectsList[self.focal_subject].background_color = [1, 0, 0, 1] # red
 
             print("new focal subject:", self.focal_subject)
-            btnSelSubj.text = self.focal_subject
+            self.btnSelSubj.text = self.focal_subject
 
             print("current states", self.currentStates)
             # show behaviors
@@ -858,16 +958,16 @@ class StartObservationForm(BoxLayout):
 
         self.obsId = self.obsid_input.text
         BorisApp.project[OBSERVATIONS][self.obsId] = {"date": self.obsdate_input.text,
-                                                        "close_behaviors_between_videos": False,
-                                                        "time offset": 0.0,
-                                                        "scan_sampling_time": 0,
-                                                        "time offset second player": 0.0,
-                                                        "description": self.obsdescription_input.text,
-                                                        "file": [],
-                                                        "events": [],
-                                                        "visualize_spectrogram": False,
-                                                        "type": "LIVE",
-                                                        "independent_variables": {}}
+                                                      "close_behaviors_between_videos": False,
+                                                      "time offset": 0.0,
+                                                      "scan_sampling_time": 0,
+                                                      "time offset second player": 0.0,
+                                                      "description": self.obsdescription_input.text,
+                                                      "file": [],
+                                                      "events": [],
+                                                      "visualize_spectrogram": False,
+                                                      "type": "LIVE",
+                                                      "independent_variables": {}}
 
         for label in self.iv:
             BorisApp.project[OBSERVATIONS][self.obsId]["independent_variables"][label] = self.iv[label].text
@@ -876,102 +976,13 @@ class StartObservationForm(BoxLayout):
 
         # create layout with subject buttons
         if BorisApp.project[SUBJECTS]:
+            self.subjectsLayout = create_subjects_layout()
 
-            subjectsList = sorted([BorisApp.project[SUBJECTS][k]["name"] for k in BorisApp.project[SUBJECTS].keys()])
-
-            # check number of subjects
-            subjects_font_size = 24
-            if len(subjectsList) > 20:
-                subjects_font_size = 14
-
-            self.subjectsLayout = GridLayout(cols=int((len(subjectsList) + 1)**0.5), size_hint=(1, 1), spacing=5)
-            btn = Button(text=NO_FOCAL_SUBJECT, size_hint_x=1, font_size=subjects_font_size)
-            btn.bind(on_release = btnSubjectPressed)
-            for subject in subjectsList:
-                btn = Button(text=subject, size_hint_x=1, font_size=subjects_font_size)
-                btn.background_normal = ""
-                btn.background_color = [.5, .5, .5, 1] # gray
-                btn.bind(on_release = btnSubjectPressed)
-                self.btnSubjectsList[subject] = btn
-                self.subjectsLayout.add_widget(btn)
-
-            # cancel button
-            btn = Button(text = "Cancel", size_hint_x=1, font_size=subjects_font_size)
-            btn.background_color = [1, 0, 0, 1] # red
-            btn.bind(on_release = view_behaviors_layout)
-            self.subjectsLayout.add_widget(btn)
 
         # create layout with behavior buttons
-        self.behaviorsLayout = BoxLayout(orientation='vertical', spacing=5)
+        self.behaviorsLayout = create_behaviors_layout()
 
-        self.behaviorsLayout.add_widget(Label(text="Observation: {}".format(self.obsId), size_hint_y=0.05))
-
-        gdrid_layout = GridLayout(cols=int((len(BorisApp.project[ETHOGRAM]) + 1)**0.5), size_hint=(1, 1), spacing=5)
-
-        behaviorsList = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys()])
-        # check modifiers
-        for idx in BorisApp.project[ETHOGRAM]:
-            self.modifiers[BorisApp.project[ETHOGRAM][idx]["code"]] = BorisApp.project[ETHOGRAM][idx]["modifiers"]
-
-        print("modiifers", self.modifiers)
-
-        # check number of behaviors
-        behaviors_font_size = 24
-        if len(behaviorsList) > 20:
-            behaviors_font_size = 14
-
-        if "behavioral_categories" in BorisApp.project:
-            colors_list = [[1.0, 0.6, 0.0, 1], [.1, 0.8, .1, 1], [.1, .1, 1, 1], [0.94, 0.35, 0.48, 1], [0.2, 0.4, 0.6, 1], [0.4, 0.2, 0.6, 1]]
-            categoriesList = set([BorisApp.project[ETHOGRAM][k]["category"] for k in BorisApp.project[ETHOGRAM].keys() if "category" in BorisApp.project[ETHOGRAM][k]])
-
-            #print(sorted(categoriesList))
-
-            for idx, category in enumerate(sorted(categoriesList)):
-                behav_list_category = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys() if "category" in BorisApp.project[ETHOGRAM][k] and BorisApp.project[ETHOGRAM][k]["category"] == category])
-                for behavior in behav_list_category:
-                    btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
-                    btn.background_normal = ""
-                    if category == "":
-                        btn.background_color = [.5, .5, .5, 1] # gray
-                    else:
-                        btn.background_color = colors_list[idx % len(colors_list)]
-                    self.behavior_color[behavior] = btn.background_color
-                    btn.bind(on_release = btnBehaviorPressed)
-                    self.btnList[behavior] = btn
-                    gdrid_layout.add_widget(btn)
-
-        else:
-            for behavior in behaviorsList:
-                btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
-                btn.background_normal = ""
-                btn.background_color = [.5, .5, .5, 1] # gray
-                self.behavior_color[behavior] = btn.background_color
-                btn.bind(on_release = btnBehaviorPressed)
-                self.btnList[behavior] = btn
-                gdrid_layout.add_widget(btn)
-
-        self.behaviorsLayout.add_widget(gdrid_layout)
-
-        hlayout = BoxLayout(orientation='horizontal', size_hint_y=0.1)
-        # add subject button
-        if BorisApp.project[SUBJECTS]:
-            btnSelSubj = Button(text = "Select focal subject", size_hint_x=1, font_size=behaviors_font_size)
-            btnSelSubj.background_normal = ""
-            btnSelSubj.background_color = [0.1, 0.9, 0.1, 1] # green
-            btnSelSubj.bind(on_release = view_subjects_layout)
-            hlayout.add_widget(btnSelSubj)
-
-        # add stop button
-        btn = Button(text = "Stop obs", size_hint_x=1, font_size=behaviors_font_size)
-        btn.background_normal = ""
-        btn.background_color = [0.9, 0.1, 0.1, 1] # red
-        btn.bind(on_release = btnStopPressed)
-        hlayout.add_widget(btn)
-
-        self.behaviorsLayout.add_widget(hlayout)
-
-        self.clear_widgets()
-        self.add_widget(self.behaviorsLayout)
+        view_behaviors_layout(None)
 
         self.t0 = time.time()
 

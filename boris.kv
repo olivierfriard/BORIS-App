@@ -38,33 +38,167 @@ BorisRoot:
         id: lbversion
         height: "40dp"
         size_hint_y: None
-        text: "Olivier Friard - Marco Gamba - v. 0.2 (2017-05-10) ALPHA"
+        text: "Olivier Friard - Marco Gamba - v. 0.3.0 (2017-05-10) ALPHA"
     BoxLayout:
-        #height: "40dp"
         size_hint_y: None
 
         Button:
             text: "Open project"
             size_hint_x: 0.4
-            font_size: 20
+            font_size: "20dp"
             on_press: root.show_SelectProjectForm()
 
         Button:
             text: "Download project"
             size_hint_x: 0.4
-            font_size: 20
+            font_size: "20dp"
             on_press: root.show_DownloadProject()
 
-
-#        Button:
-#            text: "Receive project"
-#            size_hint_x: 0.4
-#            on_press: root.receive_project_from_boris()
         Button:
-            text: "Exit"
+            text: "more..."
+            size_hint_x: 0.2
+            font_size: "15dp"
+            on_press: root.more()
+
+<MoreForm>
+    orientation: "vertical"
+    BoxLayout:
+        size_hint_y: None
+        height: "60dp"
+        Button:
+            text: "Go back"
+            size_hint_x: 20
+            font_size: "20dp"
+            on_press: root.cancel()
+        Button:
+            text: "Update"
+            size_hint_x: 40
+            font_size: "20dp"
+            on_press: root.update()
+        Button:
+            text: "Quit"
+            size_hint_x: 40
+            font_size: "20dp"
+            on_press: root.exit()
+
+
+<SelectProjectForm>
+    orientation: "vertical"
+    Label:
+        size_hint_y: None
+        height: "40dp"
+        text: "Select a BORIS project file and then press \"Open project\" button"
+    FileChooserListView:
+        id: projectfilechooser
+        path: "."
+        filters: ["*.boris"]
+    BoxLayout:
+        size_hint_y: None
+        height: "60dp"
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            font_size: "20dp"
+            on_press: root.cancel()
+        Button:
+            text: "Open project"
+            size_hint_x: 0.8
+            font_size: "20dp"
+            on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
+
+
+<DownloadProjectForm>
+    orientation: "vertical"
+    url_input: url
+    label1_input: label1
+    cb_input: cb
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        Label:
+            id: label1
+            text: 'Insert the URL of the project'
+            font_size: 20
+            #size_hint: None, None
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        #height: "40dp"
+        #size_hint_y: None
+
+        BoxLayout:
+            size_hint_y: 0.2
+            Label:
+                size_hint_x: 0.1
+                text: "URL"
+            TextInput:
+                size_hint_x: 0.9
+                font_size: 20
+                id: url
+
+    BoxLayout:
+        CheckBox:
+            active: True
+            id: cb
+            size_hint_x: 0.1
+        Label:
+            size_hint_x: 0.9
+            text: "Download from BORIS"
+            font_size: 20
+
+    BoxLayout:
+        height: "60dp"
+        size_hint_y: None
+
+        Button:
+            text: "Cancel"
+            size_hint_x: 0.2
+            font_size: "20dp"
+            on_press: root.cancel()
+
+        Button:
+            text: "Download project"
+            size_hint_x: 0.8
+            font_size: "20dp"
+            on_press: root.download_project()
+
+<ViewProjectForm>
+    orientation: "vertical"
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.8
+        Label:
+            id: lbl
+            text: "View project!"
+        ListView:
+            id: projectslist
+            item_strings: []
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: 0.2
+
+        Button:
+            id: btnGoBack
+            text: "Go back"
             size_hint_x: 0.2
             font_size: 20
-            on_press: root.exit()
+            on_press: root.go_back()
+
+        Button:
+            id: btnStartObs
+            text: "Send observation"
+            size_hint_x: 0.4
+            font_size: 20
+            on_press: root.send_observations()
+
+        Button:
+            id: btnStartObs
+            text: "New observation"
+            size_hint_x: 0.4
+            font_size: 20
+            on_press: root.new_observation()
 
 
 <SelectObservationToSendForm>
@@ -124,14 +258,6 @@ BorisRoot:
             font_size: 20
             #size_hint: None, None
 
-#        Label:
-#            size_hint_y: 0.2
-#            id: label1_id
-#            text: 'Insert the URL of the project server'
-#            #font_size: 20
-#            #size_hint: None, None
-
-
     AnchorLayout:
         anchor_x: 'left'
         anchor_y: 'top'
@@ -149,7 +275,6 @@ BorisRoot:
                 id: url
 
     BoxLayout:
-        #height: "40dp"
         size_hint_y: None
 
         Button:
@@ -166,145 +291,6 @@ BorisRoot:
 
 
 
-<DownloadProjectForm>
-    orientation: "vertical"
-    url_input: url
-    label1_input: label1
-    cb_input: cb
-
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
-        Label:
-            id: label1
-            text: 'Insert the URL of the project'
-            font_size: 20
-            #size_hint: None, None
-
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
-        #height: "40dp"
-        #size_hint_y: None
-
-        BoxLayout:
-            size_hint_y: 0.2
-            Label:
-                size_hint_x: 0.1
-                text: "URL"
-            TextInput:
-                size_hint_x: 0.9
-                font_size: 20
-                id: url
-
-    BoxLayout:
-        CheckBox:
-            active: True
-            id: cb
-            size_hint_x: 0.1
-        Label:
-            size_hint_x: 0.9
-            text: "Download from BORIS"
-            font_size: 20
-
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-
-        Button:
-            text: "Cancel"
-            size_hint_x: 0.2
-            font_size: 20
-            on_press: root.cancel()
-
-        Button:
-            text: "Download project"
-            size_hint_x: 0.8
-            font_size: 20
-            on_press: root.download_project()
-
-
-
-<ReceiveProject>
-    orientation: "vertical"
-    lb_receive_input: lb_receive
-    Label:
-        font_size: 25
-        id: lb_receive
-        text: "RECEIVING"
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-        Button:
-            text: "Go back"
-            size_hint_x: 0.2
-            on_press: root.cancel()
-        Button:
-            text: "Start listening"
-            size_hint_x: 0.8
-            on_press: root.start_receiving()
-
-
-<ViewProjectForm>
-    orientation: "vertical"
-    BoxLayout:
-        orientation: "vertical"
-        size_hint_y: 0.8
-        Label:
-            id: lbl
-            text: "View project!"
-        ListView:
-            id: projectslist
-            item_strings: []
-    BoxLayout:
-        orientation: "horizontal"
-        size_hint_y: 0.2
-
-        Button:
-            id: btnGoBack
-            text: "Go back"
-            size_hint_x: 0.2
-            font_size: 20
-            on_press: root.go_back()
-
-        Button:
-            id: btnStartObs
-            text: "Send observation"
-            size_hint_x: 0.4
-            font_size: 20
-            on_press: root.send_observations()
-
-        Button:
-            id: btnStartObs
-            text: "New observation"
-            size_hint_x: 0.4
-            font_size: 20
-            on_press: root.new_observation()
-
-
-<SelectProjectForm>
-    orientation: "vertical"
-    Label:
-        height: "40dp"
-        size_hint_y: None
-        text: "Select a BORIS project file and then press \"Open project\" button"
-    FileChooserListView:
-        id: projectfilechooser
-        path: "."
-        filters: ["*.boris"]
-    BoxLayout:
-        height: "40dp"
-        size_hint_y: None
-        Button:
-            text: "Cancel"
-            size_hint_x: 0.2
-            on_press: root.cancel()
-        Button:
-            text: "Open project"
-            size_hint_x: 0.8
-            on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
-
-
 <StartObservationForm>
     orientation: "vertical"
     obsid_input: obsid
@@ -316,8 +302,6 @@ BorisRoot:
         size_hint_y: 0.9
         BoxLayout:
             size_hint_y: 0.2
-            #height: "40dp"
-            #size_hint_y: None
             Label:
                 size_hint_x: 0.2
                 text: "Observation id"
@@ -329,9 +313,7 @@ BorisRoot:
                 id: obsid
 
         BoxLayout:
-            #height: "40dp"
             size_hint_y: 0.2
-            #size_hint_y: None
             Label:
                 size_hint_x: 0.2
                 text: "Observation date"
@@ -343,9 +325,7 @@ BorisRoot:
                 font_size: 25
 
         BoxLayout:
-            #height: "120dp"
             size_hint_y: 0.6
-            #size_hint_y: None
             Label:
                 size_hint_x: 0.2
                 text: "Description"
@@ -356,7 +336,6 @@ BorisRoot:
                 multiline: True
                 font_size: 20
     BoxLayout:
-        #height: "40dp"
         size_hint_y: 0.1
         #size_hint_y: None
         Button:
@@ -375,17 +354,18 @@ BorisRoot:
 
 <ConfirmStopPopup>
     title: "Are you sure you want to stop the current observation?"
-    title_size: "20sp"
+    title_size: "20dp"
     BoxLayout:
-        #height: "40dp"
         size_hint_y: None
         Button:
             text: "Yes"
             size_hint_x: 0.5
+            font_size: "20dp"
             on_press: root.yes()
         Button:
             text: "No"
             size_hint_x: 0.5
+            font_size: "20dp"
             on_press: root.no()
 
 
