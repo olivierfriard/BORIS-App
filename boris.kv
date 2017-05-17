@@ -167,10 +167,13 @@ BorisRoot:
         size_hint_y: 0.8
         Label:
             id: lbl
+            size_hint_y: 0.1
+            font_size: "20dp"
             text: "View project!"
         ListView:
             id: projectslist
             item_strings: []
+            size_hint_y: 0.9
     BoxLayout:
         orientation: "horizontal"
         size_hint_y: 0.2
@@ -179,21 +182,21 @@ BorisRoot:
             id: btnGoBack
             text: "Go back"
             size_hint_x: 0.2
-            font_size: 20
+            font_size: "25dp"
             on_press: root.go_back()
 
         Button:
             id: btnStartObs
             text: "Send observation"
             size_hint_x: 0.4
-            font_size: 20
+            font_size: "25dp"
             on_press: root.send_observations()
 
         Button:
             id: btnStartObs
             text: "New observation"
             size_hint_x: 0.4
-            font_size: "20dp"
+            font_size: "25dp"
             on_press: root.new_observation()
 
 
@@ -272,7 +275,7 @@ BorisRoot:
         size_hint_y: 0.2
 
         Button:
-            text: "Cancel"
+            text: "Go back"
             size_hint_x: 0.2
             font_size: 20
             on_press: root.cancel()
