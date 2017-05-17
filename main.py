@@ -164,6 +164,11 @@ class MoreForm(BoxLayout):
 
 class SelectObservationToSendForm(BoxLayout):
 
+    def go_back(self):
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+
     def send_observation(self):
         self.clear_widgets()
         self.add_widget(SendObsForm())
