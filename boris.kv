@@ -85,18 +85,16 @@ BorisRoot:
 <SelectProjectForm>
     orientation: "vertical"
     Label:
-        size_hint_y: None
-        height: "40dp"
+        size_hint_y: 0.1
         text: "Select a BORIS project file and then press \"Open project\" button"
     FileChooserListView:
         id: projectfilechooser
         path: "."
         filters: ["*.boris"]
     BoxLayout:
-        size_hint_y: None
-        height: "60dp"
+        size_hint_y: 0.1
         Button:
-            text: "Cancel"
+            text: "Go back"
             size_hint_x: 0.2
             font_size: "20dp"
             on_press: root.cancel()
@@ -113,54 +111,52 @@ BorisRoot:
     label1_input: label1
     cb_input: cb
 
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
+    BoxLayout:
+        size_hint_y: 0.2
         Label:
             id: label1
-            text: 'Insert the URL of the project'
-            font_size: 20
+            text: "Insert the URL of the project"
+            font_size: "20dp"
             #size_hint: None, None
 
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
-        #height: "40dp"
-        #size_hint_y: None
+    BoxLayout:
+        size_hint_y: 0.2
 
         BoxLayout:
-            size_hint_y: 0.2
             Label:
                 size_hint_x: 0.1
+                font_size: "20dp"
                 text: "URL"
             TextInput:
                 size_hint_x: 0.9
-                font_size: 20
+                font_size: "30dp"
                 id: url
 
     BoxLayout:
+        size_hint_y: 0.2
         CheckBox:
             active: True
             id: cb
-            size_hint_x: 0.1
+            size_hint_x: 0.2
         Label:
-            size_hint_x: 0.9
-            text: "Download from BORIS"
+            size_hint_x: 0.8
+            text: "Download from BORIS program"
             font_size: 20
 
     BoxLayout:
-        height: "60dp"
-        size_hint_y: None
+        size_hint_y: 0.4
 
+    BoxLayout:
+        size_hint_y: 0.2
         Button:
-            text: "Cancel"
+            text: "Go back"
             size_hint_x: 0.2
             font_size: "20dp"
             on_press: root.cancel()
 
         Button:
             text: "Download project"
-            size_hint_x: 0.8
+            size_hint_x: .8
             font_size: "20dp"
             on_press: root.download_project()
 
@@ -206,7 +202,7 @@ BorisRoot:
     orientation: "vertical"
     BoxLayout:
         orientation: "vertical"
-        size_hint_y: 0.8
+        size_hint_y: 0.9
         Label:
             size_hint_y: 0.1
             id: lbl
@@ -224,7 +220,7 @@ BorisRoot:
             # item_strings: []
     BoxLayout:
         orientation: "horizontal"
-        size_hint_y: 0.2
+        size_hint_y: 0.1
 
         Button:
             id: btnGoBack
@@ -245,37 +241,35 @@ BorisRoot:
 <SendObsForm>
     orientation: "vertical"
     url_input: url
-    #label1: label1_id
     label2: label2_id
 
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
-
+    BoxLayout:
+        size_hint_y: 0.1
         Label:
             id: label2_id
             text: ''
-            font_size: 20
+            font_size: "20dp"
             #size_hint: None, None
 
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
-        #height: "40dp"
-        #size_hint_y: None
-
+    BoxLayout:
+        size_hint_y: 0.2
         BoxLayout:
-            size_hint_y: 0.2
             Label:
                 size_hint_x: 0.1
                 text: "URL"
+                font_size: "20dp"
             TextInput:
                 size_hint_x: 0.9
-                font_size: 20
+                font_size: "25dp"
                 id: url
+                multiline: False
+
 
     BoxLayout:
-        size_hint_y: None
+        size_hint_y: 0.5
+
+    BoxLayout:
+        size_hint_y: 0.2
 
         Button:
             text: "Cancel"
@@ -305,11 +299,11 @@ BorisRoot:
             Label:
                 size_hint_x: 0.2
                 text: "Observation id"
-                font_size: 20
+                font_size: "20dp"
             TextInput:
                 size_hint_x: 0.8
                 multiline: False
-                font_size: 25
+                font_size: "25dp"
                 id: obsid
 
         BoxLayout:
@@ -317,45 +311,47 @@ BorisRoot:
             Label:
                 size_hint_x: 0.2
                 text: "Observation date"
-                font_size: 20
+                font_size: "20dp"
             TextInput:
                 size_hint_x: 0.8
                 id: obsdate
                 multiline: False
-                font_size: 25
+                font_size: "25dp"
 
         BoxLayout:
             size_hint_y: 0.6
             Label:
                 size_hint_x: 0.2
                 text: "Description"
-                font_size: 20
+                font_size: "20dp"
             TextInput:
                 size_hint_x: 0.8
                 id: obsdescription
                 multiline: True
-                font_size: 20
+                font_size: "20dp"
     BoxLayout:
         size_hint_y: 0.1
-        #size_hint_y: None
         Button:
-            text: "Cancel"
+            text: "Go back"
             size_hint_x: 0.2
+            font_size: "20dp"
             on_press: root.cancel()
         Button:
             text: "Independent var"
             size_hint_x: 0.4
+            font_size: "20dp"
             on_press: root.indep_var()
         Button:
             text: "Start observation"
             size_hint_x: 0.4
+            font_size: "20dp"
             on_press: root.start()
 
 
 <ConfirmStopPopup>
     title: "Are you sure you want to stop the current observation?"
     title_size: "20dp"
-    font_size: 20
+    font_size: "20dp"
     BoxLayout:
         size_hint_y: None
         Button:
@@ -388,9 +384,7 @@ BorisRoot:
 
 <AskForExistingFile>
     title: "This project already exists on this device."
-    #title_size: "20sp"
     BoxLayout:
-        #height: "40dp"
         size_hint_y: None
         Button:
             text: "Cancel"

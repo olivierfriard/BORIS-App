@@ -55,6 +55,7 @@ NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
 SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
+INDEPENDENT_VARIABLES = 'independent_variables'
 
 # modifiers
 SINGLE_SELECTION = 0
@@ -232,42 +233,38 @@ class SendObsForm(BoxLayout):
             s.close
             return True
 
-        Logger.info("obs id: %s" % self.obsId)
 
         url = self.url_input.text
 
         if not url:
-            popup = Popup(title="Error", content=Label(text="The URL is empty!"),
+            Popup(title="Error", content=Label(text="The URL is empty!"),
                                          size_hint=(None, None),
-                                         size=(400, 200))
-            popup.open()
+                                         size=("400dp", "200dp")).open()
             return
 
 
         if url.count(":") != 1:
-            popup = Popup(title="Error", content=Label(text="The URL is not well formed!\nExample: 192.168.1.1:1234"),
+            Popup(title="Error", content=Label(text="The URL is not well formed!\nExample: 192.168.1.1:1234"),
                                          size_hint=(None, None),
-                                         size=(400, 200))
-            popup.open()
+                                         size=("400dp", "200dp")).open()
             return
 
 
+        print(BorisApp.project[OBSERVATIONS])
         if BorisApp.project[OBSERVATIONS]:
             if send_to_boris(url, {self.obsId: BorisApp.project[OBSERVATIONS][self.obsId]}):
-                popup = Popup(title="Info", content=Label(text="Observation sent successfully"),
+                Popup(title="BORIS App - Info", content=Label(text="Observation sent successfully"),
                                              size_hint=(None, None),
-                                             size=(400, 200))
+                                             size=("400dp", "200dp")).open()
             else:
-                popup = Popup(title="Error", content=Label(text="Observation not sent"),
+                Popup(title="Error", content=Label(text="Observation not sent"),
                                          size_hint=(None, None),
-                                         size=(400, 200))
-            popup.open()
+                                         size=("400dp", "200dp")).open()
 
         else:
-            popup = Popup(title="Error", content=Label(text="No observations were found in the selected project"),
+            Popup(title="Error", content=Label(text="No observations were found in the selected project"),
                                          size_hint=(None, None),
-                                         size=(400, 200))
-            popup.open()
+                                         size=("400dp", "200dp")).open()
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
@@ -312,10 +309,10 @@ class DownloadProjectForm(BoxLayout):
             try:
                 with open(filename, "wb") as f:
                     f.write(content)
-                popup = Popup(title="Success", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=(400, 200))
+                popup = Popup(title="Success", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=("500dp", "200dp"))
                 popup.open()
             except:
-                popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=(400, 200))
+                popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=("400dp", "200dp"))
                 popup.open()
 
 
@@ -391,8 +388,7 @@ class DownloadProjectForm(BoxLayout):
                 save_project_file(self.filename, self.content)
 
         else:
-            popup = Popup(title="Error", content=Label(text="Project file can not be downloaded!"),   size_hint=(None, None), size=(400, 200))
-            popup.open()
+            Popup(title="Error", content=Label(text="Project file can not be downloaded!"),   size_hint=(None, None), size=(400, 200)).open()
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
@@ -416,10 +412,12 @@ class ViewProjectForm(BoxLayout):
 
     def send_observations(self):
 
+        if not BorisApp.project[OBSERVATIONS]:
+            Popup(title="BORIS", content=Label(text="The current project do not contain observations"),   size_hint=(None, None), size=("400dp", "200dp")).open()
+            return
 
         self.clear_widgets()
         w = SelectObservationToSendForm()
-
 
         w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
 
@@ -524,13 +522,20 @@ class StartObservationForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
+    def show_start_observation_form(self):
+        self.clear_widgets()
+        w = StartObservationForm()
+        w.obsid_input.text = self.mem["obsId"]
+        w.obsdate_input.text = self.mem["obsDate"]
+        w.obsdescription_input.text = self.mem["obsDescription"]
+        self.add_widget(w)
+
 
     def go_back(self, obj):
         """
         return to 'start observation' screen
         """
 
-        print("go back", obj)
         print("mem obs id", self.mem)
 
         # check if numeric indep var values are numeric
@@ -542,18 +547,11 @@ class StartObservationForm(BoxLayout):
                         try:
                             _ = float(self.iv[BorisApp.project["independent_variables"][idx]["label"]].text)
                         except:
-                            p = Popup(title="Error", content=Label(text="The variable '{}' must be numeric".format(BorisApp.project["independent_variables"][idx]["label"])),
-                                      size_hint=(None, None), size=(400, 200))
-                            p.open()
+                            Popup(title="Error", content=Label(text="The variable '{}' must be numeric".format(BorisApp.project["independent_variables"][idx]["label"])),
+                                      size_hint=(None, None), size=(400, 200)).open()
                             return
 
-
-        self.clear_widgets()
-        w = StartObservationForm()
-        w.obsid_input.text = self.mem["obsId"]
-        w.obsdate_input.text = self.mem["obsDate"]
-        w.obsdescription_input.text = self.mem["obsDescription"]
-        self.add_widget(w)
+        self.show_start_observation_form()
 
 
     def indep_var(self):
@@ -562,7 +560,11 @@ class StartObservationForm(BoxLayout):
         """
 
         self.mem = {"obsId": self.obsid_input.text, "obsDate": self.obsdate_input.text, "obsDescription": self.obsdescription_input.text}
-        print("mem :", self.mem)
+        if INDEPENDENT_VARIABLES not in BorisApp.project or not BorisApp.project[INDEPENDENT_VARIABLES]:
+            Popup(title="BORIS", content=Label(text="The current project do not have independent variables"),
+                                      size_hint=(None, None), size=("400dp", "200dp")).open()
+            self.show_start_observation_form()
+            return
 
         layout = BoxLayout(orientation="vertical")
         lb = Label(text="Independent variables", size_hint_y=0.1)
@@ -611,8 +613,6 @@ class StartObservationForm(BoxLayout):
 
             def on_button_release(obj):
 
-                print(obj.text)
-                print("modifier_buttons", self.modifier_buttons[obj])
                 behavior, idx, type_, modifier = self.modifier_buttons[obj]
                 if behavior not in self.current_modifiers:
                     self.current_modifiers[behavior] = {}
