@@ -363,10 +363,9 @@ class DownloadProjectForm(BoxLayout):
                 try:
                     decoded = json.loads(self.content)
                 except:
-                    popup = Popup(title="Error", content=Label(text="Error in BORIS project!"),
+                    Popup(title="Error", content=Label(text="Error in BORIS project!"),
                                                  size_hint=(None, None),
-                                                 size=(400, 200))
-                    popup.open()
+                                                 size=(400, 200)).open()
                     return
                 if "project_name" in decoded and decoded["project_name"]:
                     self.filename = decoded["project_name"] + ".boris"
