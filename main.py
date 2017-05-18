@@ -56,6 +56,7 @@ OBSERVATIONS = "observations"
 SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
 INDEPENDENT_VARIABLES = 'independent_variables'
+VERSION_URL = "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/ver.txt"
 
 # modifiers
 SINGLE_SELECTION = 0
@@ -134,8 +135,8 @@ class MoreForm(BoxLayout):
             self.add_widget(StartPageForm())
 
         try:
-            new_version = urllib2.urlopen("http://www.boris.unito.it/static/boris_app_version.txt").read().strip()
-            Logger.info('remote version %s' % new_version)
+            new_version = urllib2.urlopen(VERSION_URL).read().strip()
+            Logger.info("remote version: {}".format(new_version))
         except:
             Popup(title="BORIS - Error", content=Label(text="Current version can not be checked on BORIS web site"), size_hint=(None, None), size=("500dp", "200dp")).open()
             self.clear_widgets()
