@@ -94,11 +94,12 @@ BorisRoot:
         size_hint_y: 0.1
         text: "Select a BORIS project file and then press \"Open project\" button"
     FileChooserListView:
+        size_hint_y: 0.7
         id: projectfilechooser
         path: "."
         filters: ["*.boris"]
     BoxLayout:
-        size_hint_y: 0.1
+        size_hint_y: 0.2
         Button:
             text: "Go back"
             size_hint_x: 0.2
@@ -170,19 +171,19 @@ BorisRoot:
     orientation: "vertical"
     BoxLayout:
         orientation: "vertical"
-        size_hint_y: 0.8
+        size_hint_y: 0.85
         Label:
             id: lbl
             size_hint_y: 0.1
             font_size: "20dp"
-            text: "View project!"
+            text: "View project"
         ListView:
             id: projectslist
             item_strings: []
             size_hint_y: 0.9
     BoxLayout:
         orientation: "horizontal"
-        size_hint_y: 0.2
+        size_hint_y: 0.15
 
         Button:
             id: btnGoBack
@@ -392,18 +393,32 @@ BorisRoot:
             on_press: root.no()
 
 <AskForExistingFile>
-    title: "This project already exists on this device."
+    title: "BORIS"
     BoxLayout:
-        size_hint_y: None
-        Button:
-            text: "Cancel"
-            size_hint_x: 1
-            on_press: root.cancel()
-        Button:
-            text: "Overwrite"
-            size_hint_x: 1
-            on_press: root.overwrite()
-        Button:
-            text: "Rename it"
-            size_hint_x: 1
-            on_press: root.rename()
+        orientation: "vertical"
+        Label:
+            size_hint_y: 0.3
+            id: lbProjectExists
+            font_size: "20dp"
+            size_hint_y: None
+            text: "A project with the same file name already exists on this device"
+        BoxLayout:
+            size_hint_y: 0.5
+
+        BoxLayout:
+            size_hint_y: 0.2
+            Button:
+                text: "Cancel"
+                size_hint_x: 1
+                font_size: "20dp"
+                on_press: root.cancel()
+            Button:
+                text: "Overwrite"
+                size_hint_x: 1
+                font_size: "20dp"
+                on_press: root.overwrite()
+            Button:
+                text: "Rename it"
+                size_hint_x: 1
+                font_size: "20dp"
+                on_press: root.rename()

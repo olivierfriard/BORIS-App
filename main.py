@@ -318,11 +318,9 @@ class DownloadProjectForm(BoxLayout):
             try:
                 with open(filename, "wb") as f:
                     f.write(content)
-                popup = Popup(title="Success", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)),   size_hint=(None, None), size=("500dp", "200dp"))
-                popup.open()
+                Popup(title="BORIS", content=Label(text="Project downloaded and saved as:\n'{}'".format(filename)), size_hint=(None, None), size=("500dp", "200dp")).open()
             except:
-                popup = Popup(title="Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=("400dp", "200dp"))
-                popup.open()
+                Popup(title="BORIS - Error", content=Label(text="Project not saved!"),   size_hint=(None, None), size=("400dp", "200dp")).open()
 
 
         def choose_for_existing_file(instance):
@@ -374,7 +372,7 @@ class DownloadProjectForm(BoxLayout):
                 except:
                     Popup(title="Error", content=Label(text="Error in BORIS project!"),
                                                  size_hint=(None, None),
-                                                 size=(400, 200)).open()
+                                                 size=("400dp", "200dp")).open()
                     return
                 if "project_name" in decoded and decoded["project_name"]:
                     self.filename = decoded["project_name"] + ".boris"
@@ -386,9 +384,8 @@ class DownloadProjectForm(BoxLayout):
             if os.path.isfile(self.filename):
                 print("file exists!")
 
-                pop = AskForExistingFile()
-                pop.title = "The project '{}' already exists on this device".format(self.filename)
-                #pop.content=Label(text='Hello world')
+                pop = AskForExistingFile(size=("500dp", "200dp"))
+                #pop.content=Label(text="The project '{}'\nalready exists on this device".format(self.filename))
                 pop.bind(on_dismiss=choose_for_existing_file)
                 pop.open()
 
@@ -404,7 +401,7 @@ class DownloadProjectForm(BoxLayout):
 
 class ViewProjectForm(BoxLayout):
 
-    selected_item = StringProperty('no selection')
+    selected_item = StringProperty("no selection")
 
     def selection_changed(self, *args):
         self.selected_item = args[0].selection[0].text
@@ -439,8 +436,6 @@ class ViewProjectForm(BoxLayout):
         self.add_widget(w)
 
 
-
-
     def new_observation(self):
 
         self.clear_widgets()
@@ -466,24 +461,20 @@ class SelectProjectForm(BoxLayout):
         """open project from selected file"""
 
         if not selection:
-            popup = Popup(title="Error", content=Label(text="No project file selected!"),
-                          size_hint=(None, None), size=(400, 200))
-            popup.open()
+            Popup(title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200)).open()
             return
 
         try:
             BorisApp.projectFileName = selection[0]
             BorisApp.project = json.loads(open(BorisApp.projectFileName, "r").read())
         except:
-            popup = Popup(title="Error", content=Label(text="The selected file is not a BORIS behaviors file!"),
-                          size_hint=(None, None), size=(400, 200))
-            popup.open()
+            Popup(title="Error", content=Label(text="The selected file is not a BORIS behaviors file!"),
+                          size_hint=(None, None), size=(400, 200)).open()
             return
 
         if not BorisApp.project[ETHOGRAM]:
-            popup = Popup(title="Error", content=Label(text="The ethogram of this project is empty!"),
-                          size_hint=(None, None), size=(400, 200))
-            popup.open()
+            Popup(title="Error", content=Label(text="The ethogram of this project is empty!"),
+                          size_hint=(None, None), size=(400, 200)).open()
             return
 
         self.clear_widgets()
