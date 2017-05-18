@@ -106,7 +106,8 @@ class MoreForm(BoxLayout):
 
                 Logger.info("updating...")
                 try:
-                    for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
+                    for url in ["https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/main.py",
+                                "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/boris.kv"]:
                         response = urllib2.urlopen(url)
                         content = response.read()
 
@@ -136,6 +137,7 @@ class MoreForm(BoxLayout):
 
         try:
             new_version = urllib2.urlopen(VERSION_URL).read().strip()
+            Logger.info("local version: {}".format(__version__))
             Logger.info("remote version: {}".format(new_version))
         except:
             Popup(title="BORIS - Error", content=Label(text="The last version can not be checked"), size_hint=(None, None), size=("500dp", "200dp")).open()
