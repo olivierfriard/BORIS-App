@@ -137,6 +137,7 @@ class MoreForm(BoxLayout):
 
         try:
             new_version = urllib2.urlopen(VERSION_URL).read().strip()
+            print(VERSION_URL)
             Logger.info("local version: {}".format(__version__))
             Logger.info("remote version: {}".format(new_version))
         except:

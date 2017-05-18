@@ -40,7 +40,7 @@ BorisRoot:
         size_hint_y: None
         text: "Olivier Friard - Marco Gamba - v. 0.2.0 (2017-05-17) ALPHA"
     BoxLayout:
-        size_hint_y: None
+        size_hint_y: .2
 
         Button:
             text: "Open project"
@@ -62,22 +62,28 @@ BorisRoot:
 
 <MoreForm>
     orientation: "vertical"
-    BoxLayout:
+    Image:
+        source: "logo_boris_500px.png"
+    Label:
+        id: lbversion
+        height: "40dp"
         size_hint_y: None
-        height: "60dp"
+        text: "Olivier Friard - Marco Gamba - v. 0.2.0 (2017-05-17) ALPHA"
+    BoxLayout:
+        size_hint_y: 0.2
         Button:
             text: "Go back"
-            size_hint_x: 20
+            size_hint_x: .2
             font_size: "20dp"
             on_press: root.cancel()
         Button:
             text: "Update"
-            size_hint_x: 40
+            size_hint_x: .4
             font_size: "20dp"
             on_press: root.update()
         Button:
             text: "Quit"
-            size_hint_x: 40
+            size_hint_x: .4
             font_size: "20dp"
             on_press: root.exit()
 
