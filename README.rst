@@ -1,7 +1,7 @@
 BORIS App 
 =========
 
-This project is the mobile version of BORIS (www.boris.unito.it).
+BORIS App project is the BORIS version for mobile devices (www.boris.unito.it).
 
 This release is an alpha version. **USE IT ONLY FOR TESTING** and reporting bug and suggestions.
 
