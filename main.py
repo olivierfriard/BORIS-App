@@ -104,7 +104,7 @@ class MoreForm(BoxLayout):
 
             if instance.title == "y":
 
-                Logger.info('updating...')
+                Logger.info("updating...")
                 try:
                     for url in ["http://www.boris.unito.it/static/main.py", "http://www.boris.unito.it/static/boris.kv"]:
                         response = urllib2.urlopen(url)
@@ -138,7 +138,7 @@ class MoreForm(BoxLayout):
             new_version = urllib2.urlopen(VERSION_URL).read().strip()
             Logger.info("remote version: {}".format(new_version))
         except:
-            Popup(title="BORIS - Error", content=Label(text="Current version can not be checked on BORIS web site"), size_hint=(None, None), size=("500dp", "200dp")).open()
+            Popup(title="BORIS - Error", content=Label(text="The last version can not be checked"), size_hint=(None, None), size=("500dp", "200dp")).open()
             self.clear_widgets()
             self.add_widget(StartPageForm())
             return
