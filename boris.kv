@@ -259,7 +259,6 @@ BorisRoot:
             id: label2_id
             text: ''
             font_size: "20dp"
-            #size_hint: None, None
 
     BoxLayout:
         size_hint_y: 0.2
@@ -284,13 +283,13 @@ BorisRoot:
         Button:
             text: "Go back"
             size_hint_x: 0.2
-            font_size: 20
+            font_size: "20dp"
             on_press: root.cancel()
 
         Button:
             text: "Send observation"
             size_hint_x: 0.8
-            font_size: 20
+            font_size: "20dp"
             on_press: root.send_obs()
 
 
