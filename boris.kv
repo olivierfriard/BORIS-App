@@ -30,7 +30,9 @@ BorisRoot:
 <BorisRoot>:
     StartPageForm
 
+
 <StartPageForm>:
+    lb_version_input: lbversion
     orientation: "vertical"
     Image:
         source: "logo_boris_500px.png"
@@ -38,7 +40,7 @@ BorisRoot:
         id: lbversion
         height: "40dp"
         size_hint_y: None
-        text: "Olivier Friard - Marco Gamba - v. 0.2.0 (2017-05-17 - 3) ALPHA"
+        text: root.ver()
     BoxLayout:
         size_hint_y: .2
 
@@ -65,10 +67,9 @@ BorisRoot:
     Image:
         source: "logo_boris_500px.png"
     Label:
-        id: lbversion
         height: "40dp"
         size_hint_y: None
-        text: "Olivier Friard - Marco Gamba - v. 0.2.0 (2017-05-17) ALPHA"
+        text: root.ver()
     BoxLayout:
         size_hint_y: 0.2
         Button:
@@ -217,14 +218,16 @@ BorisRoot:
         ListView:
             size_hint_y: 0.9
             id: observations_list_id
-            adapter:
-                la.ListAdapter(
-                data=[],
-                selection_mode='single',
-                allow_empty_selection=False,
-                cls=lv.ListItemButton)
 
-            # item_strings: []
+            #adapter:
+            #    la.ListAdapter(
+            #    data=[],
+            #    selection_mode='single',
+            #    allow_empty_selection=False,
+            #    cls=MyLabel)
+            #
+            #    #cls=lv.ListItemButton)
+
     BoxLayout:
         orientation: "horizontal"
         size_hint_y: 0.1

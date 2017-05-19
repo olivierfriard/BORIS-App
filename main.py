@@ -25,6 +25,8 @@ This file is part of BORIS mobile.
 
 __version__ = "0.2.0"
 
+__copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, "2017-05-19")
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
@@ -36,11 +38,13 @@ from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
 from kivy.uix.listview import ListView
+from kivy.uix.listview import ListItemButton
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
 from kivy.logger import Logger
 from kivy.base import EventLoop
+from kivy.adapters.listadapter import ListAdapter
 
 import os
 import sys
@@ -56,7 +60,7 @@ NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
 SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
-INDEPENDENT_VARIABLES = 'independent_variables'
+INDEPENDENT_VARIABLES = "independent_variables"
 VERSION_URL = "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/ver.txt"
 
 # modifiers
@@ -70,6 +74,8 @@ def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     return s.getsockname()[0]
+
+
 
 
 class StartPageForm(BoxLayout):
@@ -92,6 +98,9 @@ class StartPageForm(BoxLayout):
     def more(self):
         self.clear_widgets()
         self.add_widget(MoreForm())
+
+    def ver(self):
+        return __copyright__
 
 
 class MoreForm(BoxLayout):
@@ -168,10 +177,13 @@ class MoreForm(BoxLayout):
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
-
     def exit(self):
-        Logger.info('exiting...')
+        Logger.info("exiting...")
         sys.exit()
+
+    def ver(self):
+        return __copyright__
+
 
 
 class SelectObservationToSendForm(BoxLayout):
@@ -407,11 +419,21 @@ class DownloadProjectForm(BoxLayout):
         self.add_widget(StartPageForm())
 
 
+class MyButton(ListItemButton):
+    def __init__(self, **kwargs):
+        self.font_size = 24
+        #self.size_hint = (.1,.1)
+        #self.text_size = self.size
+
+        super(ListItemButton, self).__init__(**kwargs)
+
+
 class ViewProjectForm(BoxLayout):
 
     selected_item = StringProperty("no selection")
 
     def selection_changed(self, *args):
+        print("sel changed")
         self.selected_item = args[0].selection[0].text
 
     def on_selected_item(self, *args):
@@ -428,10 +450,12 @@ class ViewProjectForm(BoxLayout):
         self.add_widget(w)
 
 
+    #ListItemButton
+
     def send_observations(self):
 
         if not BorisApp.project[OBSERVATIONS]:
-            Popup(title="BORIS", content=Label(text="The current project do not contain observations"),   size_hint=(None, None), size=("400dp", "200dp")).open()
+            Popup(title="BORIS", content=Label(text="The current project do not contain observations"), size_hint=(None, None), size=("400dp", "200dp")).open()
             return
 
         self.clear_widgets()
@@ -439,10 +463,9 @@ class ViewProjectForm(BoxLayout):
 
         w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
 
-        rows =  []
-        for obsId in BorisApp.project[OBSERVATIONS]:
-            rows.append(obsId)
-        w.observations_list.adapter.data = rows
+        #w.observations_list.adapter.data = sorted(BorisApp.project[OBSERVATIONS].keys())
+
+        w.observations_list.adapter = ListAdapter(data=sorted(BorisApp.project[OBSERVATIONS].keys()), cls=MyButton, selection_mode="single")
 
         w.observations_list.adapter.bind(on_selection_change=self.selection_changed)
 
@@ -1091,7 +1114,6 @@ class BorisApp(App):
         print 'on_resume'
 
     def hook_keyboard(self, window, key, *largs):
-
         if window == 27:
             print("27")
             return True
