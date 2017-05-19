@@ -23,7 +23,7 @@ This file is part of BORIS mobile.
   www.boris.unito.it
 '''
 
-__version__ = "0.2.1"
+__version__ = "0.2.0"
 
 __copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, "2017-05-19")
 
