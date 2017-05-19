@@ -2,7 +2,7 @@
 BORIS App
 =========
 
-:Author: `Olivier Friard <http://www.di.unito.it/~friard>`_
+:Author: `Olivier Friard <http://www.di.unito.it/~friard>`_ Marco Gamba
 
 
 **BORIS App** is an event logging app for live observations.
