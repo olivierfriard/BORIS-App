@@ -115,16 +115,13 @@ BorisRoot:
 <DownloadProjectForm>
     orientation: "vertical"
     url_input: url
-    label1_input: label1
     cb_input: cb
 
     BoxLayout:
         size_hint_y: 0.2
         Label:
-            id: label1
             text: "Insert the URL of the project"
             font_size: "20dp"
-            #size_hint: None, None
 
     BoxLayout:
         size_hint_y: 0.2
@@ -251,13 +248,17 @@ BorisRoot:
 <SendObsForm>
     orientation: "vertical"
     url_input: url
-    label2: label2_id
+    lb_observation_id: label2_id
 
     BoxLayout:
-        size_hint_y: 0.1
+        orientation: "vertical"
+        size_hint_y: 0.2
+        Label:
+            text: "Send selected observation to BORIS"
+            font_size: "20dp"
         Label:
             id: label2_id
-            text: ''
+            text: ""
             font_size: "20dp"
 
     BoxLayout:
@@ -269,13 +270,12 @@ BorisRoot:
                 font_size: "30dp"
             TextInput:
                 size_hint_x: 0.9
-                font_size: "25dp"
+                font_size: "30dp"
                 id: url
                 multiline: False
 
-
     BoxLayout:
-        size_hint_y: 0.5
+        size_hint_y: 0.4
 
     BoxLayout:
         size_hint_y: 0.2

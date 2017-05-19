@@ -79,8 +79,15 @@ class StartPageForm(BoxLayout):
         self.add_widget(SelectProjectForm())
 
     def show_DownloadProject(self):
+
+        w = DownloadProjectForm()
+        if os.path.isfile("server_url.config"):
+            w.url_input.text = open("server_url.config").read().strip()
+        else:
+            w.url_input.text = ""
+
         self.clear_widgets()
-        self.add_widget(DownloadProjectForm())
+        self.add_widget(w)
 
     def more(self):
         self.clear_widgets()
@@ -412,7 +419,12 @@ class ViewProjectForm(BoxLayout):
         self.clear_widgets()
         w = SendObsForm()
         w.obsId = args[1]
-        w.label2.text = "Observation: %s" % args[1]
+        w.lb_observation_id.text = "Observation: {}".format(args[1])
+
+        if os.path.isfile("server_url.config"):
+            w.url_input.text = open("server_url.config").read().strip()
+        else:
+            w.url_input.text = ""
         self.add_widget(w)
 
 
@@ -767,7 +779,7 @@ class StartObservationForm(BoxLayout):
 
             # check number of behaviors
             behaviors_font_size = "24dp"
-            if len(behaviorsList) > "20dp":
+            if len(behaviorsList) > 20:
                 behaviors_font_size = "14dp"
 
             if "behavioral_categories" in BorisApp.project:
