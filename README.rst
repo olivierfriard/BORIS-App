@@ -13,7 +13,13 @@ It was tested on Android (v. 6) and require Android 2.2+.
 
 To install:
 
-* copy the extracted directory to your /sdcard/kivy (or equivalent) directory.
+* Download the last version from the GitHub repository release page:
+
+`https://github.com/olivierfriard/BORIS-App/releases <https://github.com/olivierfriard/BORIS-App/releases>`_
+
+* Extract the zip / tar.gz archive to your computer
+
+* Copy the extracted directory to the /sdcard/kivy directory (or equivalent) of your mobile device.
 
 Launch **Kivy Launcher** and select the **BORIS App** project
 
