@@ -22,6 +22,7 @@ This file is part of BORIS mobile.
 
   www.boris.unito.it
 '''
+
 __version__ = "0.2.0"
 
 from kivy.app import App
@@ -750,11 +751,11 @@ class StartObservationForm(BoxLayout):
 
         def create_behaviors_layout():
 
-            behaviorsLayout = BoxLayout(orientation='vertical', spacing=3)
+            behaviorsLayout = BoxLayout(orientation="vertical", spacing=3)
 
             behaviorsLayout.add_widget(Label(text="Observation: {}".format(self.obsId), size_hint_y=0.05))
 
-            gdrid_layout = GridLayout(cols=int((len(BorisApp.project[ETHOGRAM]) + 1)**0.5), size_hint=(1, 1), spacing=5)
+            gdrid_layout = GridLayout(cols=int((len(BorisApp.project[ETHOGRAM]) + 1)**0.5), size_hint=(1, 1), spacing=3)
 
             behaviorsList = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM].keys()])
             # check modifiers
@@ -765,9 +766,9 @@ class StartObservationForm(BoxLayout):
             print("modifiers", self.modifiers)
 
             # check number of behaviors
-            behaviors_font_size = 24
-            if len(behaviorsList) > 20:
-                behaviors_font_size = 14
+            behaviors_font_size = "24dp"
+            if len(behaviorsList) > "20dp":
+                behaviors_font_size = "14dp"
 
             if "behavioral_categories" in BorisApp.project:
                 colors_list = [[1.0, 0.6, 0.0, 1], [.1, 0.8, .1, 1], [.1, .1, 1, 1], [0.94, 0.35, 0.48, 1], [0.2, 0.4, 0.6, 1], [0.4, 0.2, 0.6, 1]]
@@ -811,14 +812,14 @@ class StartObservationForm(BoxLayout):
             hlayout = BoxLayout(orientation='horizontal', size_hint_y=0.1)
             # add subject button
             if BorisApp.project[SUBJECTS]:
-                self.btnSelSubj = Button(text = "Select focal subject", size_hint_x=1, font_size=behaviors_font_size)
+                self.btnSelSubj = Button(text = "Select focal subject", size_hint_x=1, font_size="24dp")
                 self.btnSelSubj.background_normal = ""
                 self.btnSelSubj.background_color = [0.1, 0.9, 0.1, 1] # green
                 self.btnSelSubj.bind(on_release = view_subjects_layout)
                 hlayout.add_widget(self.btnSelSubj)
 
             # add stop button
-            btn = Button(text = "Stop obs", size_hint_x=1, font_size=behaviors_font_size)
+            btn = Button(text = "Stop obs", size_hint_x=1, font_size="24dp")
             btn.background_normal = ""
             btn.background_color = [0.9, 0.1, 0.1, 1] # red
             btn.bind(on_release = btnStopPressed)
