@@ -23,9 +23,9 @@ This file is part of BORIS mobile.
   www.boris.unito.it
 '''
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
-__copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, "2017-05-19")
+__copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, "2017-07-21")
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -312,14 +312,17 @@ class DownloadProjectForm(BoxLayout):
                 TCP_IP, TCP_PORT = url.split(":")
                 TCP_PORT = int(TCP_PORT)
             except:
-                return None
+                return "", str(sys.exc_info()[0])
 
             BUFFER_SIZE = 1024
 
             s = socket.socket()
 
-            s.connect((TCP_IP, int(TCP_PORT)))
-            s.send(str.encode("get"))
+            try:
+                s.connect((TCP_IP, int(TCP_PORT)))
+                s.send(str.encode("get"))
+            except:
+                return "", str(sys.exc_info()[0])
 
             received = ""
             while 1:
@@ -331,7 +334,7 @@ class DownloadProjectForm(BoxLayout):
             print "received:\n" + received
             s.close
 
-            return received
+            return received, ""
 
 
         def save_project_file(filename, content):
@@ -365,8 +368,14 @@ class DownloadProjectForm(BoxLayout):
 
         # from site
         if not self.cb_input.active:
-            response = urllib2.urlopen(url)
-            self.content = response.read()
+            try:
+                response = urllib2.urlopen(url)
+                self.content = response.read()
+            except:
+                popup = Popup(title="Error", content=Label(text="Error: " + str(sys.exc_info()[0])),
+                                             size_hint=(None, None),
+                                             size=(400, 200)).open()
+                return
         # from BORIS
         else:
             if url.count(":") != 1:
@@ -376,24 +385,31 @@ class DownloadProjectForm(BoxLayout):
                 popup.open()
                 return
 
-            self.content = download_from_boris(url)
-            if self.content is None:
-                popup = Popup(title="Error", content=Label(text="The URL is not well formed!\nExample: 192.168.1.1:1234"),
+            self.content, err_msg = download_from_boris(url)
+            if err_msg:
+                popup = Popup(title="Error", content=Label(text="Error: " + err_msg),
                                              size_hint=(None, None),
                                              size=(400, 200))
                 popup.open()
                 return
 
-
         if self.content:
+            
+            # check if BORIS project
+            try:
+                decoded = json.loads(self.content)
+            except:
+                Popup(title="Error", content=Label(text="Error in downloaded file!"),
+                                                   size_hint=(None, None),
+                                                   size=("400dp", "200dp")).open()
+                return
+            if "project_name" not in decoded:
+                Popup(title="Error", content=Label(text="The downloaded file does not seem to be a BORIS project!"),
+                                                   size_hint=(None, None),
+                                                   size=("400dp", "200dp")).open()
+                return
+            
             if self.cb_input.active: # from BORIS
-                try:
-                    decoded = json.loads(self.content)
-                except:
-                    Popup(title="Error", content=Label(text="Error in BORIS project!"),
-                                                 size_hint=(None, None),
-                                                 size=("400dp", "200dp")).open()
-                    return
                 if "project_name" in decoded and decoded["project_name"]:
                     self.filename = decoded["project_name"] + ".boris"
                 else:
@@ -403,13 +419,11 @@ class DownloadProjectForm(BoxLayout):
 
             if os.path.isfile(self.filename):
                 print("file exists!")
-
                 pop = AskForExistingFile(size=("500dp", "200dp"))
-                #pop.content=Label(text="The project '{}'\nalready exists on this device".format(self.filename))
                 pop.bind(on_dismiss=choose_for_existing_file)
                 pop.open()
 
-            else:
+            else: # from site
                 save_project_file(self.filename, self.content)
 
         else:
