@@ -3,7 +3,7 @@
 '''
 BORIS App
 Behavioral Observation Research Interactive Software
-Copyright 2017 Olivier Friard
+Copyright 2017-2018 Olivier Friard
 
 This file is part of BORIS mobile.
 
@@ -23,9 +23,10 @@ This file is part of BORIS mobile.
   www.boris.unito.it
 '''
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
+__version_date__ = "2018-05-14"
 
-__copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, "2017-07-21")
+__copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, __version_date__)
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -115,7 +116,6 @@ class MoreForm(BoxLayout):
         check if installed version is the most recent
         update after user confirmation
         """
-
 
         def confirm_update(instance):
 
@@ -490,7 +490,7 @@ class ViewProjectForm(BoxLayout):
 
         self.clear_widgets()
         a = StartObservationForm()
-        a.obsdate_input.text = "{:%Y-%m-%d %H:%M}".format(datetime.datetime.now())
+        a.obsdate_input.text = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
         self.add_widget(a)
 
 
@@ -566,10 +566,10 @@ class StartObservationForm(BoxLayout):
     iv = {}
 
 
-
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
+
 
     def show_start_observation_form(self):
         self.clear_widgets()
@@ -1037,17 +1037,44 @@ class StartObservationForm(BoxLayout):
             p.open()
             return
 
+        # check if date is correct
+        if not self.obsdate_input.text:
+            p = Popup(title="Error", content=Label(text="The date is empty. Use the YYY-MM-DD HH:MM:SS format"), size_hint=(None, None), size=(400, 200))
+            p.open()
+            return
+
+        try:
+            time.strptime(self.obsdate_input.text, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            p = Popup(title="Error", content=Label(text="The date is not valid. Use the YYY-MM-DD HH:MM:SS format"), size_hint=(None, None), size=(400, 200))
+            p.open()
+            return
+
+        if self.obsdate_input.text in BorisApp.project[OBSERVATIONS]:
+            p = Popup(title="Error", content=Label(text="This observation id already exists."), size_hint=(None, None), size=(400, 200))
+            p.open()
+            return
+
+
         # check if observation id already exists
         if self.obsid_input.text in BorisApp.project[OBSERVATIONS]:
             p = Popup(title="Error", content=Label(text="This observation id already exists."), size_hint=(None, None), size=(400, 200))
             p.open()
             return
 
+
+
         print("obs id:", self.obsid_input.text)
         print("description:", self.obsdescription_input.text)
+        print("observation date:", self.obsdate_input.text)
 
         self.obsId = self.obsid_input.text
-        BorisApp.project[OBSERVATIONS][self.obsId] = {"date": self.obsdate_input.text,
+        # format date with T
+        '''
+        if self.obsdate_input.text[10] == " ":
+            self.obsdate_input.text[10] = "T"
+        '''
+        BorisApp.project[OBSERVATIONS][self.obsId] = {"date": self.obsdate_input.text.replace(" ","T"),
                                                       "close_behaviors_between_videos": False,
                                                       "time offset": 0.0,
                                                       "scan_sampling_time": 0,
@@ -1059,15 +1086,14 @@ class StartObservationForm(BoxLayout):
                                                       "type": "LIVE",
                                                       "independent_variables": {}}
 
+        # independent variables
         for label in self.iv:
             BorisApp.project[OBSERVATIONS][self.obsId]["independent_variables"][label] = self.iv[label].text
         print("indep var\n", BorisApp.project[OBSERVATIONS][self.obsId]["independent_variables"])
 
-
         # create layout with subject buttons
         if BorisApp.project[SUBJECTS]:
             self.subjectsLayout = create_subjects_layout()
-
 
         # create layout with behavior buttons
         self.behaviorsLayout = create_behaviors_layout()

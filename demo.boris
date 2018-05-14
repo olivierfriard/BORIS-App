@@ -1,17 +1,9 @@
 {
- "time_format": "hh:mm:ss", 
- "project_name": "demo", 
- "project_format_version": "1.6", 
- "behavioral_categories": [
-  "Locomotion", 
-  "Physiological", 
-  "Social"
- ], 
  "behaviors_conf": {
   "10": {
    "category": "Social", 
-   "code": "groom", 
    "coding map": "", 
+   "code": "groom", 
    "key": "G", 
    "modifiers": "itself (1),others (2)", 
    "excluded": "", 
@@ -20,8 +12,8 @@
   }, 
   "1": {
    "category": "Locomotion", 
-   "code": "run", 
    "coding map": "", 
+   "code": "run", 
    "key": "R", 
    "modifiers": "", 
    "excluded": "walk,eat,drink", 
@@ -30,8 +22,8 @@
   }, 
   "0": {
    "category": "Locomotion", 
-   "code": "walk", 
    "coding map": "", 
+   "code": "walk", 
    "key": "W", 
    "modifiers": "quadrupedal (Q),bipedal (B)", 
    "excluded": "run,eat,drink", 
@@ -40,8 +32,8 @@
   }, 
   "3": {
    "category": "Social", 
-   "code": "attack", 
    "coding map": "", 
+   "code": "attack", 
    "key": "A", 
    "modifiers": "", 
    "excluded": "", 
@@ -50,8 +42,8 @@
   }, 
   "2": {
    "category": "Social", 
-   "code": "play", 
    "coding map": "", 
+   "code": "play", 
    "key": "P", 
    "modifiers": "", 
    "excluded": "", 
@@ -60,8 +52,8 @@
   }, 
   "5": {
    "category": "Locomotion", 
-   "code": "jump", 
    "coding map": "", 
+   "code": "jump", 
    "key": "J", 
    "modifiers": "", 
    "excluded": "", 
@@ -70,8 +62,8 @@
   }, 
   "4": {
    "category": "Social", 
-   "code": "approach", 
    "coding map": "", 
+   "code": "approach", 
    "key": "A", 
    "modifiers": "", 
    "excluded": "", 
@@ -80,8 +72,8 @@
   }, 
   "7": {
    "category": "Physiological", 
-   "code": "drink", 
    "coding map": "", 
+   "code": "drink", 
    "key": "D", 
    "modifiers": "", 
    "excluded": "walk,run,eat", 
@@ -90,8 +82,8 @@
   }, 
   "6": {
    "category": "Physiological", 
-   "code": "eat", 
    "coding map": "", 
+   "code": "eat", 
    "key": "E", 
    "modifiers": "", 
    "excluded": "walk,run,drink", 
@@ -100,8 +92,8 @@
   }, 
   "9": {
    "category": "Physiological", 
-   "code": "defecate", 
    "coding map": "", 
+   "code": "defecate", 
    "key": "F", 
    "modifiers": "", 
    "excluded": "", 
@@ -110,8 +102,8 @@
   }, 
   "8": {
    "category": "Physiological", 
-   "code": "urinate", 
    "coding map": "", 
+   "code": "urinate", 
    "key": "U", 
    "modifiers": "", 
    "excluded": "", 
@@ -119,9 +111,107 @@
    "description": ""
   }
  }, 
+ "project_name": "demo", 
+ "project_format_version": "1.6", 
+ "behavioral_categories": [
+  "Locomotion", 
+  "Physiological", 
+  "Social"
+ ], 
+ "time_format": "hh:mm:ss", 
  "project_date": "2016-08-25T09:29:34", 
  "project_description": "", 
  "observations": {
+  "test1": {
+   "visualize_spectrogram": false, 
+   "time offset second player": 0.0, 
+   "time offset": 0.0, 
+   "description": "", 
+   "scan_sampling_time": 0, 
+   "file": [], 
+   "date": "2018-05-10 15:19", 
+   "independent_variables": {}, 
+   "type": "LIVE", 
+   "events": [
+    [
+     2.254, 
+     "No focal subject", 
+     "jump", 
+     "", 
+     ""
+    ], 
+    [
+     3.313, 
+     "No focal subject", 
+     "jump", 
+     "", 
+     ""
+    ], 
+    [
+     4.258, 
+     "No focal subject", 
+     "jump", 
+     "", 
+     ""
+    ], 
+    [
+     5.023, 
+     "No focal subject", 
+     "run", 
+     "", 
+     ""
+    ], 
+    [
+     7.936, 
+     "No focal subject", 
+     "run", 
+     "", 
+     ""
+    ], 
+    [
+     7.936, 
+     "No focal subject", 
+     "walk", 
+     "quadrupedal", 
+     ""
+    ], 
+    [
+     13.992, 
+     "No focal subject", 
+     "walk", 
+     "quadrupedal", 
+     ""
+    ], 
+    [
+     18.181, 
+     "No focal subject", 
+     "play", 
+     "", 
+     ""
+    ], 
+    [
+     20.467, 
+     "No focal subject", 
+     "play", 
+     "", 
+     ""
+    ]
+   ], 
+   "close_behaviors_between_videos": false
+  }, 
+  "aaaa": {
+   "visualize_spectrogram": false, 
+   "time offset second player": 0.0, 
+   "time offset": 0.0, 
+   "description": "", 
+   "scan_sampling_time": 0, 
+   "file": [], 
+   "date": "2018-05-14 16:22:23", 
+   "independent_variables": {}, 
+   "type": "LIVE", 
+   "events": [], 
+   "close_behaviors_between_videos": false
+  }, 
   "observation #1": {
    "visualize_spectrogram": false, 
    "time offset second player": 0.0, 
@@ -137,13 +227,12 @@
   }, 
   "observation #2": {
    "visualize_spectrogram": false, 
+   "time offset second player": 0.0, 
    "time offset": 0.0, 
    "description": "", 
+   "scan_sampling_time": 0, 
    "file": [], 
    "date": "2017-03-28 14:37", 
-   "close_behaviors_between_videos": false, 
-   "time offset second player": 0.0, 
-   "scan_sampling_time": 0, 
    "independent_variables": {
     "number of visitors": "1234", 
     "weather": "sun", 
@@ -165,7 +254,76 @@
      "", 
      ""
     ]
-   ]
+   ], 
+   "close_behaviors_between_videos": false
+  }, 
+  "a1": {
+   "visualize_spectrogram": false, 
+   "time offset second player": 0.0, 
+   "time offset": 0.0, 
+   "description": "", 
+   "scan_sampling_time": 0, 
+   "file": [], 
+   "date": "2018-05-14T16:25:32", 
+   "independent_variables": {}, 
+   "type": "LIVE", 
+   "events": [
+    [
+     2.797, 
+     "No focal subject", 
+     "groom", 
+     "None", 
+     ""
+    ], 
+    [
+     5.202, 
+     "No focal subject", 
+     "urinate", 
+     "", 
+     ""
+    ], 
+    [
+     6.085, 
+     "No focal subject", 
+     "urinate", 
+     "", 
+     ""
+    ], 
+    [
+     6.507, 
+     "No focal subject", 
+     "groom", 
+     "None", 
+     ""
+    ]
+   ], 
+   "close_behaviors_between_videos": false
+  }, 
+  "kkk": {
+   "visualize_spectrogram": false, 
+   "time offset second player": 0.0, 
+   "time offset": 0.0, 
+   "description": "", 
+   "scan_sampling_time": 0, 
+   "file": [], 
+   "date": "2018-05-14 16:10:02", 
+   "independent_variables": {}, 
+   "type": "LIVE", 
+   "events": [], 
+   "close_behaviors_between_videos": false
+  }, 
+  "x": {
+   "visualize_spectrogram": false, 
+   "time offset": 0.0, 
+   "description": "", 
+   "file": [], 
+   "date": "2018-05-14T16:42:41", 
+   "close_behaviors_between_videos": false, 
+   "time offset second player": 0.0, 
+   "scan_sampling_time": 0, 
+   "independent_variables": {}, 
+   "type": "LIVE", 
+   "events": []
   }
  }, 
  "independent_variables": {
