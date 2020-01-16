@@ -1,5 +1,3 @@
-#!/usr/bin/python2
-
 '''
 BORIS App
 Behavioral Observation Research Interactive Software
@@ -23,12 +21,6 @@ This file is part of BORIS mobile.
   www.boris.unito.it
 '''
 
-'''
-The kivy.uix.listview is deprecated in Kivy v.>=1.11
-pip install kivy==1.10.0
-
-'''
-
 __version__ = "0.2.3"
 __version_date__ = "2018-05-14"
 
@@ -44,8 +36,9 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
-from kivy.uix.listview import ListView
-from kivy.uix.listview import ListItemButton
+# from kivy.uix.listview import ListView
+#from kivy.uix.listview import ListItemButton
+from kivy.uix.recycleview import RecycleView
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty

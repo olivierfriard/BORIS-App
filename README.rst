@@ -1,8 +1,8 @@
-=========
+=========================
 BORIS App
-=========
+=========================
 
-:Author: `Olivier Friard <http://www.di.unito.it/~friard>`_
+:Author: `Olivier Friard <http://penelope.unito.it/friard>`_
 :Author: Marco Gamba
 
 **BORIS App** is an event logging app for live observations.
@@ -16,9 +16,9 @@ It requires the **Kivy launcher** app (https://play.google.com/store/apps/detail
 It was tested on Android (v. 6) and require Android 2.2+.
 
 Legal
-=====
+=========================
 
-Copyright 2017 Olivier Friard - Marco Gamba
+Copyright 2017-2018 Olivier Friard - Marco Gamba
 
 **BORIS App** is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 
 
 Installation
-=============
+=========================
 
 * Download the last version from the GitHub repository release page:
 
@@ -42,7 +42,7 @@ Installation
 * Copy the extracted directory to the /sdcard/kivy directory (or equivalent) of your mobile device.
 
 Use
-===
+=========================
 
 Launch **Kivy Launcher** and select the **BORIS App** project
 
