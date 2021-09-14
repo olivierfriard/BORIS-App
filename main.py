@@ -198,11 +198,13 @@ class CustomButton(Button):
         super().on_release(**kwargs)
         self.root_widget.btn_callback(self)
 
+
 class RV(RecycleView):
-    def __init__(self, **kwargs):
+    def __init__(self, observations_list):
         print("RV init")
-        super().__init__(**kwargs)
-        self.data = [{'text': str(x), 'root_widget': self} for x in range(10)]
+        super().__init__(observations_list)
+
+        self.data = [{'text': str(x), 'root_widget': self} for x in observations_list]
         print(self.data)
 
     def btn_callback(self, btn):
@@ -499,7 +501,7 @@ class ViewProjectForm(BoxLayout):
         self.clear_widgets()
         #w = SelectObservationToSendForm()
 
-        w = RV()
+        w = RV(sorted(BorisApp.project[OBSERVATIONS].keys()))
 
 
         #w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
