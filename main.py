@@ -1,5 +1,3 @@
-#!/usr/bin/python2
-
 '''
 BORIS App
 Behavioral Observation Research Interactive Software
@@ -25,12 +23,11 @@ This file is part of BORIS mobile.
 
 '''
 The kivy.uix.listview is deprecated in Kivy v.>=1.11
-pip install kivy==1.10.0
 
 '''
 
-__version__ = "0.2.3"
-__version_date__ = "2018-05-14"
+__version__ = "0.3"
+__version_date__ = "2021-09-14"
 
 __copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, __version_date__)
 
@@ -44,14 +41,15 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
-from kivy.uix.listview import ListView
-from kivy.uix.listview import ListItemButton
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+#from kivy.uix.listview import ListItemButton
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
 from kivy.logger import Logger
 from kivy.base import EventLoop
-from kivy.adapters.listadapter import ListAdapter
+#from kivy.adapters.listadapter import ListAdapter
 
 import os
 import sys
@@ -59,7 +57,7 @@ import json
 import time
 import codecs
 import datetime
-import urllib2
+from urllib.request import urlopen
 import socket
 import time
 
@@ -131,7 +129,7 @@ class MoreForm(BoxLayout):
                 try:
                     for url in ["https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/main.py",
                                 "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/boris.kv"]:
-                        response = urllib2.urlopen(url)
+                        response = urlopen(url)
                         content = response.read()
 
                         Logger.info("renaming %s" % url.split("/")[-1])
@@ -159,7 +157,7 @@ class MoreForm(BoxLayout):
             self.add_widget(StartPageForm())
 
         try:
-            new_version = urllib2.urlopen(VERSION_URL).read().strip()
+            new_version = urlopen(VERSION_URL).read().strip()
             print(VERSION_URL)
             Logger.info("local version: {}".format(__version__))
             Logger.info("remote version: {}".format(new_version))
@@ -189,6 +187,26 @@ class MoreForm(BoxLayout):
 
     def ver(self):
         return __copyright__
+
+
+
+class CustomButton(Button):
+    print("CustomButton")
+    root_widget = ObjectProperty()
+
+    def on_release(self, **kwargs):
+        super().on_release(**kwargs)
+        self.root_widget.btn_callback(self)
+
+class RV(RecycleView):
+    def __init__(self, **kwargs):
+        print("RV init")
+        super().__init__(**kwargs)
+        self.data = [{'text': str(x), 'root_widget': self} for x in range(10)]
+        print(self.data)
+
+    def btn_callback(self, btn):
+        print(btn, btn.text)
 
 
 
@@ -375,7 +393,7 @@ class DownloadProjectForm(BoxLayout):
         # from site
         if not self.cb_input.active:
             try:
-                response = urllib2.urlopen(url)
+                response = urlopen(url)
                 self.content = response.read()
             except:
                 popup = Popup(title="Error", content=Label(text="Error: " + str(sys.exc_info()[0])),
@@ -400,7 +418,7 @@ class DownloadProjectForm(BoxLayout):
                 return
 
         if self.content:
-            
+
             # check if BORIS project
             try:
                 decoded = json.loads(self.content)
@@ -414,7 +432,7 @@ class DownloadProjectForm(BoxLayout):
                                                    size_hint=(None, None),
                                                    size=("400dp", "200dp")).open()
                 return
-            
+
             if self.cb_input.active: # from BORIS
                 if "project_name" in decoded and decoded["project_name"]:
                     self.filename = decoded["project_name"] + ".boris"
@@ -439,14 +457,13 @@ class DownloadProjectForm(BoxLayout):
         self.add_widget(StartPageForm())
 
 
+''' 2021-09
 class MyButton(ListItemButton):
     def __init__(self, **kwargs):
         self.font_size = 24
-        #self.size_hint = (.1,.1)
-        #self.text_size = self.size
 
         super(ListItemButton, self).__init__(**kwargs)
-
+'''
 
 class ViewProjectForm(BoxLayout):
 
@@ -470,26 +487,33 @@ class ViewProjectForm(BoxLayout):
         self.add_widget(w)
 
 
-    #ListItemButton
+    # ListItemButton
 
     def send_observations(self):
 
         if not BorisApp.project[OBSERVATIONS]:
-            Popup(title="BORIS", content=Label(text="The current project do not contain observations"), size_hint=(None, None), size=("400dp", "200dp")).open()
+            Popup(title="BORIS", content=Label(text="The current project do not contain observations"),
+                  size_hint=(None, None), size=("400dp", "200dp")).open()
             return
 
         self.clear_widgets()
-        w = SelectObservationToSendForm()
+        #w = SelectObservationToSendForm()
 
-        w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
+        w = RV()
 
-        #w.observations_list.adapter.data = sorted(BorisApp.project[OBSERVATIONS].keys())
 
-        w.observations_list.adapter = ListAdapter(data=sorted(BorisApp.project[OBSERVATIONS].keys()), cls=MyButton, selection_mode="single")
+        #w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
+
+        ''' 2021-09
+        w.observations_list.adapter = ListAdapter(data=sorted(BorisApp.project[OBSERVATIONS].keys()),
+                                                  cls=MyButton,
+                                                  selection_mode="single")
 
         w.observations_list.adapter.bind(on_selection_change=self.selection_changed)
+        '''
 
         self.add_widget(w)
+
 
 
     def new_observation(self):
@@ -547,7 +571,9 @@ class SelectProjectForm(BoxLayout):
         rows.append("Number of subjects: {}".format(len(BorisApp.project[SUBJECTS].keys())))
         rows.append("Number of observations: {}".format(len(BorisApp.project[OBSERVATIONS].keys())))
 
-        w.ids.projectslist.item_strings = rows
+        print(rows)
+
+        w.ids.projectslist.text = "\n".join(rows)
         self.add_widget(w)
 
 
@@ -1147,6 +1173,7 @@ class ConfirmStopPopup(Popup):
 class BorisRoot(BoxLayout):
     pass
 
+
 class BorisApp(App):
 
     project = {}
@@ -1160,8 +1187,7 @@ class BorisApp(App):
         print('on_resume')
 
     def hook_keyboard(self, window, key, *largs):
-        if window == 27:
-            print("27")
+        if window == 27:  # esc pressed
             return True
 
     EventLoop.window.bind(on_keyboard=hook_keyboard)

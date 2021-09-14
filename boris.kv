@@ -21,9 +21,8 @@
 
 
 #: import main main
-#: import ListAdapter kivy.adapters.listadapter.ListAdapter
-#: import lv kivy.uix.listview
-#: import la kivy.adapters.listadapter
+##: import ListAdapter kivy.adapters.listadapter.ListAdapter
+##: import la kivy.adapters.listadapter
 
 BorisRoot:
 
@@ -175,9 +174,9 @@ BorisRoot:
             size_hint_y: 0.1
             font_size: "20dp"
             text: "View project"
-        ListView:
+        Label:
             id: projectslist
-            item_strings: []
+            #item_strings: []
             size_hint_y: 0.9
     BoxLayout:
         orientation: "horizontal"
@@ -205,46 +204,62 @@ BorisRoot:
             on_press: root.new_observation()
 
 
-<SelectObservationToSendForm>
-    observations_list: observations_list_id
+<RV>:
+    viewclass: 'CustomButton' # defines the viewtype for the data items.
     orientation: "vertical"
-    BoxLayout:
-        orientation: "vertical"
-        size_hint_y: 0.9
-        Label:
-            size_hint_y: 0.1
-            id: lbl
-            text: "Observation(s)"
-        ListView:
-            size_hint_y: 0.9
-            id: observations_list_id
+    spacing: 40
+    padding:10, 10
+    space_x: self.size[0]/3
 
-            #adapter:
-            #    la.ListAdapter(
-            #    data=[],
-            #    selection_mode='single',
-            #    allow_empty_selection=False,
-            #    cls=MyLabel)
-            #
-            #    #cls=lv.ListItemButton)
+#    Button:
+#        text: "test"
 
-    BoxLayout:
-        orientation: "horizontal"
-        size_hint_y: 0.1
+    RecycleBoxLayout:
+        color:(0, 0.7, 0.4, 0.8)
+        default_size: None, dp(56)
+        default_size_hint: 0.4, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical' # defines the orientation of data items
 
-        Button:
-            id: btnGoBack
-            text: "Go back"
-            size_hint_x: 0.2
-            font_size: "20dp"
-            on_press: root.go_back()
 
-        Button:
-            id: btnStartObs
-            text: "Send observation"
-            size_hint_x: 0.4
-            font_size: "20dp"
-            on_press: root.send_observation()
+#
+#    <SelectObservationToSendForm>
+#        observations_list: observations_list_id
+#        orientation: "vertical"
+#        BoxLayout:
+#            orientation: "vertical"
+#            size_hint_y: 0.9
+#            Label:
+#                size_hint_y: 0.1
+#                id: lbl
+#                text: "Observation(s)"
+#
+#            RecycleBoxLayout:
+#                id: observations_list_id
+#                default_size: None, dp(56)
+#                default_size_hint: 1, None
+#                size_hint_y: None
+#                height: self.minimum_height
+#                orientation: 'vertical'
+#
+#        BoxLayout:
+#            orientation: "horizontal"
+#            size_hint_y: 0.1
+#
+#            Button:
+#                id: btnGoBack
+#                text: "Go back"
+#                size_hint_x: 0.2
+#                font_size: "20dp"
+#                on_press: root.go_back()
+#
+#            Button:
+#                id: btnStartObs
+#                text: "Send observation"
+#                size_hint_x: 0.4
+#                font_size: "20dp"
+#                on_press: root.send_observation()
 
 
 
