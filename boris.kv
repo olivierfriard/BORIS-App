@@ -25,6 +25,9 @@
 ##: import la kivy.adapters.listadapter
 
 BorisRoot:
+    canvas:
+        Color:
+            rgba: 0.9764705882352941, 0.9764705882352941, 0.9764705882352941, 1
 
 <BorisRoot>:
     StartPageForm
@@ -205,7 +208,7 @@ BorisRoot:
 
 
 <RV>:
-    viewclass: 'CustomButton' # defines the viewtype for the data items.
+    viewclass: 'CustomButton'  # defines the viewtype for the data items.
     orientation: "vertical"
     spacing: 40
     padding:10, 10
@@ -439,3 +442,4 @@ BorisRoot:
                 size_hint_x: 1
                 font_size: "20dp"
                 on_press: root.rename()
+

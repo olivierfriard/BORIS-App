@@ -74,6 +74,7 @@ MULTI_SELECTION = 1
 NUMERIC_MODIFIER = 2
 
 selected_modifiers = {}
+observation_to_send = ""
 
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -200,15 +201,21 @@ class CustomButton(Button):
 
 
 class RV(RecycleView):
-    def __init__(self, observations_list):
+    def __init__(self, **kwargs):
         print("RV init")
-        super().__init__(observations_list)
+        super().__init__(**kwargs)
 
-        self.data = [{'text': str(x), 'root_widget': self} for x in observations_list]
-        print(self.data)
+        print(**kwargs)
+        #self.data = [{'text': str(x), 'root_widget': self} for x in observations_list]
+        #print(self.data)
 
     def btn_callback(self, btn):
         print(btn, btn.text)
+
+        global observation_to_send
+        observation_to_send = btn.text
+        self.clear_widgets()
+        self.add_widget(SendObsForm())
 
 
 
@@ -306,6 +313,7 @@ class SendObsForm(BoxLayout):
 
 
         print(BorisApp.project[OBSERVATIONS])
+
         if BorisApp.project[OBSERVATIONS]:
             if send_to_boris(url, {self.obsId: BorisApp.project[OBSERVATIONS][self.obsId]}):
                 Popup(title="BORIS App - Info", content=Label(text="Observation sent successfully"),
@@ -501,8 +509,8 @@ class ViewProjectForm(BoxLayout):
         self.clear_widgets()
         #w = SelectObservationToSendForm()
 
-        w = RV(sorted(BorisApp.project[OBSERVATIONS].keys()))
-
+        w = RV()
+        w.data = [{'text': str(x), 'root_widget': w} for x in sorted(BorisApp.project[OBSERVATIONS].keys())]
 
         #w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
 
