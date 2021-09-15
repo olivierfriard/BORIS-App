@@ -25,6 +25,9 @@
 ##: import la kivy.adapters.listadapter
 
 BorisRoot:
+    canvas:
+        Color:
+            rgba: 0.9764705882352941, 0.9764705882352941, 0.9764705882352941, 1
 
 <BorisRoot>:
     StartPageForm
@@ -35,66 +38,62 @@ BorisRoot:
     orientation: "vertical"
     Image:
         source: "logo_boris_500px.png"
-    MDLabel:
+    Label:
         id: lbversion
-        halign: "center"
         height: "40dp"
         size_hint_y: None
         text: root.ver()
-    MDBoxLayout:
-        size_hint_y: 0.2
-        #height: self.minimum_height
-        #adaptive_height: True
-        MDRectangleFlatButton:
+    BoxLayout:
+        size_hint_y: .2
+
+        Button:
             text: "Open project"
             size_hint_x: 0.4
-            font_size: "18dp"
+            font_size: "20dp"
             on_press: root.show_SelectProjectForm()
 
-        MDRectangleFlatButton:
+        Button:
             text: "Download project"
             size_hint_x: 0.4
-            font_size: "18dp"
+            font_size: "20dp"
             on_press: root.show_DownloadProject()
 
-        MDRectangleFlatButton:
+        Button:
             text: "more..."
             size_hint_x: 0.2
-            font_size: "18dp"
+            font_size: "15dp"
             on_press: root.more()
 
 <MoreForm>
     orientation: "vertical"
     Image:
         source: "logo_boris_500px.png"
-    MDLabel:
-        halign: "center"
+    Label:
         height: "40dp"
         size_hint_y: None
         text: root.ver()
     BoxLayout:
         size_hint_y: 0.2
-        MDRectangleFlatButton:
-            text: "Home"
-            size_hint_x: .33
+        Button:
+            text: "Go back"
+            size_hint_x: .2
             font_size: "20dp"
             on_press: root.cancel()
-        MDRectangleFlatButton:
+        Button:
             text: "Update"
-            size_hint_x: .33
+            size_hint_x: .4
             font_size: "20dp"
             on_press: root.update()
-        MDRectangleFlatButton:
+        Button:
             text: "Quit"
-            size_hint_x: .33
+            size_hint_x: .4
             font_size: "20dp"
             on_press: root.exit()
 
 
-
 <SelectProjectForm>
     orientation: "vertical"
-    MDLabel:
+    Label:
         size_hint_y: 0.1
         text: "Select a BORIS project file and then press \"Open project\" button"
     FileChooserListView:
@@ -104,12 +103,12 @@ BorisRoot:
         filters: ["*.boris"]
     BoxLayout:
         size_hint_y: 0.2
-        MDRectangleFlatButton:
+        Button:
             text: "Go back"
             size_hint_x: 0.2
             font_size: "20dp"
             on_press: root.cancel()
-        MDRectangleFlatButton:
+        Button:
             text: "Open project"
             size_hint_x: 0.8
             font_size: "20dp"
@@ -170,39 +169,37 @@ BorisRoot:
 
 <ViewProjectForm>
     orientation: "vertical"
-    MDBoxLayout:
+    BoxLayout:
         orientation: "vertical"
         size_hint_y: 0.85
-        MDLabel:
+        Label:
             id: lbl
-            halign: "center"
             size_hint_y: 0.1
             font_size: "20dp"
             text: "View project"
-        MDLabel:
+        Label:
             id: projectslist
-            halign: "center"
             #item_strings: []
             size_hint_y: 0.9
-    MDBoxLayout:
+    BoxLayout:
         orientation: "horizontal"
         size_hint_y: 0.15
 
-        MDRectangleFlatButton:
+        Button:
             id: btnGoBack
             text: "Go back"
             size_hint_x: 0.2
             font_size: "25dp"
             on_press: root.go_back()
 
-        MDRectangleFlatButton:
+        Button:
             id: btnStartObs
             text: "Send observation"
             size_hint_x: 0.4
             font_size: "25dp"
             on_press: root.send_observations()
 
-        MDRectangleFlatButton:
+        Button:
             id: btnStartObs
             text: "New observation"
             size_hint_x: 0.4
@@ -274,13 +271,13 @@ BorisRoot:
     url_input: url
     lb_observation_id: label2_id
 
-    MDBoxLayout:
+    BoxLayout:
         orientation: "vertical"
         size_hint_y: 0.2
-        MDLabel:
-            text: "Send selected observation to BORIS Desktop"
+        Label:
+            text: "Send selected observation to BORIS"
             font_size: "20dp"
-        MDLabel:
+        Label:
             id: label2_id
             text: ""
             font_size: "20dp"
@@ -288,8 +285,12 @@ BorisRoot:
     BoxLayout:
         size_hint_y: 0.2
         BoxLayout:
-            MDTextField:
-                hint_text: "URL (ex. 192.168.1.2:1234)"
+            Label:
+                size_hint_x: 0.1
+                text: "URL"
+                font_size: "30dp"
+            TextInput:
+                size_hint_x: 0.9
                 font_size: "30dp"
                 id: url
                 multiline: False
@@ -300,13 +301,13 @@ BorisRoot:
     BoxLayout:
         size_hint_y: 0.2
 
-        MDRectangleFlatButton:
+        Button:
             text: "Go back"
             size_hint_x: 0.2
             font_size: "20dp"
             on_press: root.cancel()
 
-        MDRectangleFlatButton:
+        Button:
             text: "Send observation"
             size_hint_x: 0.8
             font_size: "20dp"
@@ -325,10 +326,11 @@ BorisRoot:
         size_hint_y: 0.9
         BoxLayout:
             size_hint_y: 0.2
-            MDTextField:
-                hint_text: "Observation id"
-                helper_text: "This field is required and must be unique"
-                helper_text_mode: "on_focus"
+            Label:
+                size_hint_x: 0.2
+                text: "Observation id"
+                font_size: "15dp"
+            TextInput:
                 size_hint_x: 0.8
                 multiline: False
                 font_size: "25dp"
@@ -336,8 +338,11 @@ BorisRoot:
 
         BoxLayout:
             size_hint_y: 0.2
-            MDTextField:
-                hint_text: "Observation date (YYYY-MM-DD HH:MM)"
+            Label:
+                size_hint_x: 0.2
+                text: "Observation date"
+                font_size: "15dp"
+            TextInput:
                 size_hint_x: 0.8
                 id: obsdate
                 multiline: False
@@ -345,29 +350,29 @@ BorisRoot:
 
         BoxLayout:
             size_hint_y: 0.6
-            MDTextField:
-                hint_text: "Description"
+            Label:
+                size_hint_x: 0.2
+                text: "Description"
+                font_size: "15dp"
+            TextInput:
                 size_hint_x: 0.8
                 id: obsdescription
                 multiline: True
                 font_size: "20dp"
     BoxLayout:
         size_hint_y: 0.1
-        MDRectangleFlatButton:
+        Button:
             text: "Go back"
-            size_hint_y: 1
             size_hint_x: 0.2
             font_size: "20dp"
             on_press: root.cancel()
-        MDRectangleFlatButton:
-            text: "Set independent variables"
-            size_hint_y: 1
+        Button:
+            text: "Independent var"
             size_hint_x: 0.4
-            font_size: "15dp"
+            font_size: "20dp"
             on_press: root.indep_var()
-        MDRectangleFlatButton:
+        Button:
             text: "Start observation"
-            size_hint_y: 1
             size_hint_x: 0.4
             font_size: "20dp"
             on_press: root.start()
@@ -379,12 +384,12 @@ BorisRoot:
     font_size: "20dp"
     BoxLayout:
         size_hint_y: None
-        MDRectangleFlatButton:
+        Button:
             text: "Yes"
             size_hint_x: 0.5
             font_size: "20dp"
             on_press: root.yes()
-        MDRectangleFlatButton:
+        Button:
             text: "No"
             size_hint_x: 0.5
             font_size: "20dp"
@@ -396,12 +401,12 @@ BorisRoot:
     font_size: "20dp"
     BoxLayout:
         size_hint_y: None
-        MDRectangleFlatButton:
+        Button:
             text: "Yes"
             size_hint_x: 0.5
             font_size: "20dp"
             on_press: root.yes()
-        MDRectangleFlatButton:
+        Button:
             text: "No"
             size_hint_x: 0.5
             font_size: "20dp"
@@ -411,7 +416,7 @@ BorisRoot:
     title: "BORIS"
     BoxLayout:
         orientation: "vertical"
-        MDLabel:
+        Label:
             size_hint_y: 0.3
             id: lbProjectExists
             font_size: "20dp"
@@ -422,17 +427,17 @@ BorisRoot:
 
         BoxLayout:
             size_hint_y: 0.2
-            MDRectangleFlatButton:
+            Button:
                 text: "Cancel"
                 size_hint_x: 1
                 font_size: "20dp"
                 on_press: root.cancel()
-            MDRectangleFlatButton:
+            Button:
                 text: "Overwrite"
                 size_hint_x: 1
                 font_size: "20dp"
                 on_press: root.overwrite()
-            MDRectangleFlatButton:
+            Button:
                 text: "Rename it"
                 size_hint_x: 1
                 font_size: "20dp"

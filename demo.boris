@@ -472,6 +472,48 @@
    "visualize_spectrogram": false,
    "type": "LIVE",
    "independent_variables": {}
+  },
+  "555": {
+   "date": "2021-09-15T11:44:59",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "time offset second player": 0.0,
+   "description": "hhkjh kjhkjh  kh kjh  kh kkjh kjhk kjk kjhk ",
+   "file": [],
+   "events": [
+    [
+     4.151,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     4.917,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     5.794,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     6.326,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
   }
  },
  "independent_variables": {
