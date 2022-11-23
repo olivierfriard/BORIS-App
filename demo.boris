@@ -514,6 +514,90 @@
    "visualize_spectrogram": false,
    "type": "LIVE",
    "independent_variables": {}
+  },
+  "testID": {
+   "date": "2022-11-23T13:36:51",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "time offset second player": 0.0,
+   "description": "demo descrizione",
+   "file": [],
+   "events": [
+    [
+     2.061,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     3.619,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     5.239,
+     "No focal subject",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     7.909,
+     "No focal subject",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     8.639,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     12.125,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     12.694,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     14.45,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     16.465,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     18.703,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
   }
  },
  "independent_variables": {

@@ -31,14 +31,7 @@ __version_date__ = "2021-09-14"
 
 __copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, __version_date__)
 
-from kivymd.app import MDApp
-from kivymd.uix.button import MDRectangleFlatButton
-from kivymd.uix.textfield import MDTextField
-#from kivymd.uix.label import MDLabel
-from kivymd.uix.boxlayout import MDBoxLayout
-
-
-
+from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
@@ -198,8 +191,8 @@ class MoreForm(BoxLayout):
 
 
 
-class CustomButton(MDRectangleFlatButton):
-
+class CustomButton(Button):
+    print("CustomButton")
     root_widget = ObjectProperty()
 
     def on_release(self, **kwargs):
@@ -555,9 +548,7 @@ class SelectProjectForm(BoxLayout):
 
 
     def open_project(self, path, selection):
-        """
-        Open project from selected file
-        """
+        """open project from selected file"""
 
         if not selection:
             Popup(title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200)).open()
@@ -672,32 +663,22 @@ class StartObservationForm(BoxLayout):
 
         if "independent_variables" in BorisApp.project:
             for idx in BorisApp.project["independent_variables"]:
-                layout1 = MDBoxLayout(orientation="horizontal")
+                layout1 = BoxLayout(orientation="horizontal")
                 s = BorisApp.project["independent_variables"][idx]["label"]
                 if BorisApp.project["independent_variables"][idx]["description"]:
-                    helper_text = BorisApp.project["independent_variables"][idx]["description"]
-                else:
-                    helper_text = ""
+                    s += "\n({})".format(BorisApp.project["independent_variables"][idx]["description"])
+                lb1 = Label(text=s, size_hint_x=1, font_size=20)
+                layout1.add_widget(lb1)
 
-                #lb1 = MDLabel(text=s, size_hint_x=1, font_size=20)
-                #layout1.add_widget(lb1)
-
-                ti = MDTextField(text=BorisApp.project["independent_variables"][idx]["default value"],
-                                 hint_text=s,
-                                 multiline=False,
-                                 size_hint_x=1,
-                                 font_size="25dp",
-                                 helper_text=helper_text,
-                                 helper_text_mode="on_focus")
-
+                ti = TextInput(text=BorisApp.project["independent_variables"][idx]["default value"], multiline=False, size_hint_x=1, font_size="25dp")
                 self.iv[BorisApp.project["independent_variables"][idx]["label"]] = ti
                 layout1.add_widget(ti)
 
                 layout.add_widget(layout1)
 
 
-        layout2 = MDBoxLayout(orientation="vertical", height="40dp", size_hint_y=0.1)
-        btn = MDRectangleFlatButton(text="Go back", size_hint_x=1)
+        layout2 = BoxLayout(orientation="vertical", height="40dp", size_hint_y=None)
+        btn = Button(text="Go back", size_hint_x=1)
         btn.bind(on_release = self.go_back)
         btn.background_color = [1, 1, 1, 1]
         layout2.add_widget(btn)
@@ -1203,7 +1184,7 @@ class BorisRoot(BoxLayout):
     pass
 
 
-class BorisApp(MDApp):
+class BorisApp(App):
 
     project = {}
     projectFileName = ""
