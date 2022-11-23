@@ -1,0 +1,445 @@
+#    BORIS App
+#    Behavioral Observation Research Interactive Software
+#    Copyright 2017 Olivier Friard
+#
+#    This file is part of BORIS mobile.
+#
+#      BORIS is free software; you can redistribute it and/or modify
+#      it under the terms of the GNU General Public License as published by
+#      the Free Software Foundation; either version 3 of the License, or
+#      any later version.
+#
+#      BORIS mobile is distributed in the hope that it will be useful,
+#      but WITHOUT ANY WARRANTY; without even the implied warranty of
+#      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#      GNU General Public License for more details.
+#
+#      You should have received a copy of the GNU General Public License
+#      along with this program; if not see <http://www.gnu.org/licenses/>.
+#
+#      www.boris.unito.it
+
+
+#: import main main
+##: import ListAdapter kivy.adapters.listadapter.ListAdapter
+##: import la kivy.adapters.listadapter
+
+BorisRoot:
+    canvas:
+        Color:
+            rgba: 0.9764705882352941, 0.9764705882352941, 0.9764705882352941, 1
+
+<BorisRoot>:
+    StartPageForm
+
+
+<StartPageForm>:
+    lb_version_input: lbversion
+    orientation: "vertical"
+    Image:
+        source: "logo_boris_500px.png"
+    Label:
+        id: lbversion
+        height: "40dp"
+        size_hint_y: None
+        text: root.ver()
+    BoxLayout:
+        size_hint_y: .2
+
+        Button:
+            text: "Open project"
+            size_hint_x: 0.4
+            font_size: "20dp"
+            on_press: root.show_SelectProjectForm()
+
+        Button:
+            text: "Download project"
+            size_hint_x: 0.4
+            font_size: "20dp"
+            on_press: root.show_DownloadProject()
+
+        Button:
+            text: "more..."
+            size_hint_x: 0.2
+            font_size: "15dp"
+            on_press: root.more()
+
+<MoreForm>
+    orientation: "vertical"
+    Image:
+        source: "logo_boris_500px.png"
+    Label:
+        height: "40dp"
+        size_hint_y: None
+        text: root.ver()
+    BoxLayout:
+        size_hint_y: 0.2
+        Button:
+            text: "Go back"
+            size_hint_x: .2
+            font_size: "20dp"
+            on_press: root.cancel()
+        Button:
+            text: "Update"
+            size_hint_x: .4
+            font_size: "20dp"
+            on_press: root.update()
+        Button:
+            text: "Quit"
+            size_hint_x: .4
+            font_size: "20dp"
+            on_press: root.exit()
+
+
+<SelectProjectForm>
+    orientation: "vertical"
+    Label:
+        size_hint_y: 0.1
+        text: "Select a BORIS project file and then press \"Open project\" button"
+    FileChooserListView:
+        size_hint_y: 0.7
+        id: projectfilechooser
+        path: "."
+        filters: ["*.boris"]
+    BoxLayout:
+        size_hint_y: 0.2
+        Button:
+            text: "Go back"
+            size_hint_x: 0.2
+            font_size: "20dp"
+            on_press: root.cancel()
+        Button:
+            text: "Open project"
+            size_hint_x: 0.8
+            font_size: "20dp"
+            on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
+
+
+<DownloadProjectForm>
+    orientation: "vertical"
+    url_input: url
+    cb_input: cb
+
+    BoxLayout:
+        size_hint_y: 0.2
+        Label:
+            text: "Insert the URL of the project"
+            font_size: "20dp"
+
+    BoxLayout:
+        size_hint_y: 0.2
+
+        BoxLayout:
+            Label:
+                size_hint_x: 0.1
+                font_size: "20dp"
+                text: "URL"
+            TextInput:
+                size_hint_x: 0.9
+                font_size: "30dp"
+                id: url
+
+    BoxLayout:
+        size_hint_y: 0.2
+        CheckBox:
+            active: True
+            id: cb
+            size_hint_x: 0.2
+        Label:
+            size_hint_x: 0.8
+            text: "Download from BORIS program"
+            font_size: 20
+
+    BoxLayout:
+        size_hint_y: 0.4
+
+    BoxLayout:
+        size_hint_y: 0.2
+        Button:
+            text: "Go back"
+            size_hint_x: 0.2
+            font_size: "20dp"
+            on_press: root.cancel()
+
+        Button:
+            text: "Download project"
+            size_hint_x: .8
+            font_size: "20dp"
+            on_press: root.download_project()
+
+<ViewProjectForm>
+    orientation: "vertical"
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.85
+        Label:
+            id: lbl
+            size_hint_y: 0.1
+            font_size: "20dp"
+            text: "View project"
+        Label:
+            id: projectslist
+            #item_strings: []
+            size_hint_y: 0.9
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: 0.15
+
+        Button:
+            id: btnGoBack
+            text: "Go back"
+            size_hint_x: 0.2
+            font_size: "25dp"
+            on_press: root.go_back()
+
+        Button:
+            id: btnStartObs
+            text: "Send observation"
+            size_hint_x: 0.4
+            font_size: "25dp"
+            on_press: root.send_observations()
+
+        Button:
+            id: btnStartObs
+            text: "New observation"
+            size_hint_x: 0.4
+            font_size: "25dp"
+            on_press: root.new_observation()
+
+
+<RV>:
+    viewclass: 'CustomButton'  # defines the viewtype for the data items.
+    orientation: "vertical"
+    spacing: 40
+    padding:10, 10
+    space_x: self.size[0]/3
+
+#    Button:
+#        text: "test"
+
+    RecycleBoxLayout:
+        color:(0, 0.7, 0.4, 0.8)
+        default_size: None, dp(56)
+        default_size_hint: 0.4, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical' # defines the orientation of data items
+
+
+#
+#    <SelectObservationToSendForm>
+#        observations_list: observations_list_id
+#        orientation: "vertical"
+#        BoxLayout:
+#            orientation: "vertical"
+#            size_hint_y: 0.9
+#            Label:
+#                size_hint_y: 0.1
+#                id: lbl
+#                text: "Observation(s)"
+#
+#            RecycleBoxLayout:
+#                id: observations_list_id
+#                default_size: None, dp(56)
+#                default_size_hint: 1, None
+#                size_hint_y: None
+#                height: self.minimum_height
+#                orientation: 'vertical'
+#
+#        BoxLayout:
+#            orientation: "horizontal"
+#            size_hint_y: 0.1
+#
+#            Button:
+#                id: btnGoBack
+#                text: "Go back"
+#                size_hint_x: 0.2
+#                font_size: "20dp"
+#                on_press: root.go_back()
+#
+#            Button:
+#                id: btnStartObs
+#                text: "Send observation"
+#                size_hint_x: 0.4
+#                font_size: "20dp"
+#                on_press: root.send_observation()
+
+
+
+<SendObsForm>
+    orientation: "vertical"
+    url_input: url
+    lb_observation_id: label2_id
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.2
+        Label:
+            text: "Send selected observation to BORIS"
+            font_size: "20dp"
+        Label:
+            id: label2_id
+            text: ""
+            font_size: "20dp"
+
+    BoxLayout:
+        size_hint_y: 0.2
+        BoxLayout:
+            Label:
+                size_hint_x: 0.1
+                text: "URL"
+                font_size: "30dp"
+            TextInput:
+                size_hint_x: 0.9
+                font_size: "30dp"
+                id: url
+                multiline: False
+
+    BoxLayout:
+        size_hint_y: 0.4
+
+    BoxLayout:
+        size_hint_y: 0.2
+
+        Button:
+            text: "Go back"
+            size_hint_x: 0.2
+            font_size: "20dp"
+            on_press: root.cancel()
+
+        Button:
+            text: "Send observation"
+            size_hint_x: 0.8
+            font_size: "20dp"
+            on_press: root.send_obs()
+
+
+
+<StartObservationForm>
+    orientation: "vertical"
+    obsid_input: obsid
+    obsdate_input: obsdate
+    obsdescription_input: obsdescription
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.9
+        BoxLayout:
+            size_hint_y: 0.2
+            Label:
+                size_hint_x: 0.2
+                text: "Observation id"
+                font_size: "15dp"
+            TextInput:
+                size_hint_x: 0.8
+                multiline: False
+                font_size: "25dp"
+                id: obsid
+
+        BoxLayout:
+            size_hint_y: 0.2
+            Label:
+                size_hint_x: 0.2
+                text: "Observation date"
+                font_size: "15dp"
+            TextInput:
+                size_hint_x: 0.8
+                id: obsdate
+                multiline: False
+                font_size: "25dp"
+
+        BoxLayout:
+            size_hint_y: 0.6
+            Label:
+                size_hint_x: 0.2
+                text: "Description"
+                font_size: "15dp"
+            TextInput:
+                size_hint_x: 0.8
+                id: obsdescription
+                multiline: True
+                font_size: "20dp"
+    BoxLayout:
+        size_hint_y: 0.1
+        Button:
+            text: "Go back"
+            size_hint_x: 0.2
+            font_size: "20dp"
+            on_press: root.cancel()
+        Button:
+            text: "Independent var"
+            size_hint_x: 0.4
+            font_size: "20dp"
+            on_press: root.indep_var()
+        Button:
+            text: "Start observation"
+            size_hint_x: 0.4
+            font_size: "20dp"
+            on_press: root.start()
+
+
+<ConfirmStopPopup>
+    title: "Are you sure you want to stop the current observation?"
+    title_size: "20dp"
+    font_size: "20dp"
+    BoxLayout:
+        size_hint_y: None
+        Button:
+            text: "Yes"
+            size_hint_x: 0.5
+            font_size: "20dp"
+            on_press: root.yes()
+        Button:
+            text: "No"
+            size_hint_x: 0.5
+            font_size: "20dp"
+            on_press: root.no()
+
+<ConfirmUpdatePopup>
+    title: "Are you sure you want to update BORIS App?"
+    title_size: "30dp"
+    font_size: "20dp"
+    BoxLayout:
+        size_hint_y: None
+        Button:
+            text: "Yes"
+            size_hint_x: 0.5
+            font_size: "20dp"
+            on_press: root.yes()
+        Button:
+            text: "No"
+            size_hint_x: 0.5
+            font_size: "20dp"
+            on_press: root.no()
+
+<AskForExistingFile>
+    title: "BORIS"
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            size_hint_y: 0.3
+            id: lbProjectExists
+            font_size: "20dp"
+            size_hint_y: None
+            text: "A project with the same file name already exists on this device"
+        BoxLayout:
+            size_hint_y: 0.5
+
+        BoxLayout:
+            size_hint_y: 0.2
+            Button:
+                text: "Cancel"
+                size_hint_x: 1
+                font_size: "20dp"
+                on_press: root.cancel()
+            Button:
+                text: "Overwrite"
+                size_hint_x: 1
+                font_size: "20dp"
+                on_press: root.overwrite()
+            Button:
+                text: "Rename it"
+                size_hint_x: 1
+                font_size: "20dp"
+                on_press: root.rename()
+
