@@ -31,6 +31,7 @@ __version_date__ = "2021-09-14"
 
 __copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, __version_date__)
 
+from kivy.utils import platform
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.textfield import MDTextField
@@ -88,8 +89,6 @@ NUMERIC_MODIFIER = 2
 
 selected_modifiers = {}
 observation_to_send = ""
-
-import platform
 
 
 def get_ip_address():
@@ -153,22 +152,23 @@ class StartPageForm(BoxLayout):
     def exit_manager(self, *args):
         """Called when the user reaches the root of the directory tree."""
 
+        print("exit_manager")
+
         self.manager_open = False
         self.file_manager.close()
 
-    def path_selected(self, path: str):
+    def path_selected(self, selected_path: str):
         """
         It will be called when you click on the file name
         or the catalog selection button.
 
         :param path: path to the selected directory or file;
         """
-
-        print(path)
+        print("selected_path", selected_path)
 
         self.exit_manager()
 
-        self.load_project(path)
+        self.load_project(selected_path)
         # toast(path)
 
     def select_project(self):
@@ -182,11 +182,22 @@ class StartPageForm(BoxLayout):
             import android
             from android.permissions import request_permissions, Permission
 
+            print("request permission")
+
             request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
 
-            path = os.path.join(os.getenv("EXTERNAL_STORAGE"), "Downloads")
+            from android.storage import primary_external_storage_path
 
-            self.file_manager.show(path)
+            primary_storage_dir = primary_external_storage_path()
+
+            print("primary_storage_dir", primary_storage_dir)
+            print('os.getenv("EXTERNAL_STORAGE")', os.getenv("EXTERNAL_STORAGE"))
+
+            # path = os.path.join(os.getenv("EXTERNAL_STORAGE"), "")
+
+            # print("path", path)
+            # self.file_manager.show(path)
+            self.file_manager.show(primary_storage_dir)
         else:
             self.file_manager.show(os.path.expanduser("~"))
 

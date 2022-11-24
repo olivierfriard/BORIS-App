@@ -51,7 +51,7 @@ presplash.filename = %(source.dir)s/logo_boris_500px_white.png
 icon.filename = %(source.dir)s/logo_eye.128px.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
-orientation = landscape
+orientation = all
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -94,6 +94,7 @@ fullscreen = 0
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
+android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 #android.permissions = INTERNET
 
 # (list) features (adds uses-feature -tags to manifest)
