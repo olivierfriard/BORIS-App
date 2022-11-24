@@ -21,11 +21,10 @@ This file is part of BORIS mobile.
   www.boris.unito.it
 """
 
-"""
-The kivy.uix.listview is deprecated in Kivy v.>=1.11
 
-Material design
-"""
+# The kivy.uix.listview is deprecated in Kivy v.>=1.11
+
+# Material design
 
 __version__ = "0.3"
 __version_date__ = "2021-09-14"
@@ -51,6 +50,7 @@ from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivymd.uix.filemanager import MDFileManager
 
 # from kivy.uix.listview import ListItemButton
 from kivy.uix.textinput import TextInput
@@ -58,6 +58,9 @@ from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
 from kivy.logger import Logger
 from kivy.base import EventLoop
+
+
+from kivy_garden.zbarcam import ZBarCam
 
 # from kivy.adapters.listadapter import ListAdapter
 
@@ -86,6 +89,8 @@ NUMERIC_MODIFIER = 2
 selected_modifiers = {}
 observation_to_send = ""
 
+import platform
+
 
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -94,17 +99,106 @@ def get_ip_address():
 
 
 class StartPageForm(BoxLayout):
-    def show_SelectProjectForm(self):
+    def load_project(self, file_path):
+        """
+        Load project from path
+        """
+
+        if not file_path:
+            Popup(
+                title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200)
+            ).open()
+            return
+
+        try:
+            BorisApp.projectFileName = file_path
+            BorisApp.project = json.loads(open(BorisApp.projectFileName, "r").read())
+        except:
+            Popup(
+                title="Error",
+                content=Label(text="The selected file is not a BORIS behaviors file!"),
+                size_hint=(None, None),
+                size=(400, 200),
+            ).open()
+            return
+
+        if not BorisApp.project[ETHOGRAM]:
+            Popup(
+                title="Error",
+                content=Label(text="The ethogram of this project is empty!"),
+                size_hint=(None, None),
+                size=(400, 200),
+            ).open()
+            return
+
         self.clear_widgets()
-        self.add_widget(SelectProjectForm())
+        w = ViewProjectForm()
+        w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
+
+        rows = []
+        rows.append("project name: {}".format(BorisApp.project["project_name"]))
+        rows.append("project date: {}".format(BorisApp.project["project_date"].replace("T", " ")))
+        rows.append("project description: {}".format(BorisApp.project["project_description"]))
+        rows.append("Number of behaviors: {}".format(len(BorisApp.project[ETHOGRAM].keys())))
+        if "behavioral_categories" in BorisApp.project:
+            rows.append("Number of behavior categories: {}".format(len(BorisApp.project["behavioral_categories"])))
+        rows.append("Number of subjects: {}".format(len(BorisApp.project[SUBJECTS].keys())))
+        rows.append("Number of observations: {}".format(len(BorisApp.project[OBSERVATIONS].keys())))
+
+        print(rows)
+
+        w.ids.projectslist.text = "\n".join(rows)
+        self.add_widget(w)
+
+    def exit_manager(self, *args):
+        """Called when the user reaches the root of the directory tree."""
+
+        self.manager_open = False
+        self.file_manager.close()
+
+    def path_selected(self, path: str):
+        """
+        It will be called when you click on the file name
+        or the catalog selection button.
+
+        :param path: path to the selected directory or file;
+        """
+
+        print(path)
+
+        self.exit_manager()
+
+        self.load_project(path)
+        # toast(path)
+
+    def select_project(self):
+        """
+        open file mnanager
+        """
+        self.file_manager = MDFileManager(exit_manager=self.exit_manager, select_path=self.path_selected)
+
+        if platform == "android":
+            # https://stackoverflow.com/questions/63379152/kivymd-mdfilemanager-not-loading
+            import android
+            from android.permissions import request_permissions, Permission
+
+            request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
+
+            path = os.path.join(os.getenv("EXTERNAL_STORAGE"), "Downloads")
+
+            self.file_manager.show(path)
+        else:
+            self.file_manager.show(os.path.expanduser("~"))
 
     def show_DownloadProject(self):
 
         w = DownloadProjectForm()
+        """
         if os.path.isfile("server_url.config"):
             w.url_input.text = open("server_url.config").read().strip()
         else:
             w.url_input.text = ""
+        """
 
         self.clear_widgets()
         self.add_widget(w)
@@ -607,57 +701,6 @@ class SelectProjectForm(BoxLayout):
     def cancel(self):
         self.clear_widgets()
         self.add_widget(StartPageForm())
-
-    def open_project(self, path, selection):
-        """
-        Open project from selected file
-        """
-
-        if not selection:
-            Popup(
-                title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 200)
-            ).open()
-            return
-
-        try:
-            BorisApp.projectFileName = selection[0]
-            BorisApp.project = json.loads(open(BorisApp.projectFileName, "r").read())
-        except:
-            Popup(
-                title="Error",
-                content=Label(text="The selected file is not a BORIS behaviors file!"),
-                size_hint=(None, None),
-                size=(400, 200),
-            ).open()
-            return
-
-        if not BorisApp.project[ETHOGRAM]:
-            Popup(
-                title="Error",
-                content=Label(text="The ethogram of this project is empty!"),
-                size_hint=(None, None),
-                size=(400, 200),
-            ).open()
-            return
-
-        self.clear_widgets()
-        w = ViewProjectForm()
-        w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
-
-        rows = []
-        rows.append("project name: {}".format(BorisApp.project["project_name"]))
-        rows.append("project date: {}".format(BorisApp.project["project_date"].replace("T", " ")))
-        rows.append("project description: {}".format(BorisApp.project["project_description"]))
-        rows.append("Number of behaviors: {}".format(len(BorisApp.project[ETHOGRAM].keys())))
-        if "behavioral_categories" in BorisApp.project:
-            rows.append("Number of behavior categories: {}".format(len(BorisApp.project["behavioral_categories"])))
-        rows.append("Number of subjects: {}".format(len(BorisApp.project[SUBJECTS].keys())))
-        rows.append("Number of observations: {}".format(len(BorisApp.project[OBSERVATIONS].keys())))
-
-        print(rows)
-
-        w.ids.projectslist.text = "\n".join(rows)
-        self.add_widget(w)
 
 
 def behaviorType(ethogram, behavior):
@@ -1375,6 +1418,8 @@ class BorisApp(MDApp):
 
     project = {}
     projectFileName = ""
+
+    print("BORIS started")
 
     def on_pause(self):
         print("on_pause")

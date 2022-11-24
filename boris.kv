@@ -21,6 +21,9 @@
 
 
 #: import main main
+#:import ZBarCam kivy_garden.zbarcam.ZBarCam
+#:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+
 ##: import ListAdapter kivy.adapters.listadapter.ListAdapter
 ##: import la kivy.adapters.listadapter
 
@@ -49,7 +52,7 @@ BorisRoot:
             text: "Open project"
             size_hint_x: 0.4
             font_size: "18dp"
-            on_press: root.show_SelectProjectForm()
+            on_press: root.select_project()
 
         MDRectangleFlatButton:
             text: "Download project"
@@ -117,56 +120,74 @@ BorisRoot:
 
 
 <DownloadProjectForm>
-    orientation: "vertical"
-    url_input: url
-    cb_input: cb
+
 
     BoxLayout:
-        size_hint_y: 0.2
+        orientation: 'vertical'
+        ZBarCam:
+            id: zbarcam
+            # optional, by default checks all types
+            code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
         Label:
-            text: "Insert the URL of the project"
-            font_size: "20dp"
-
-    BoxLayout:
-        size_hint_y: 0.2
-
-        BoxLayout:
-            Label:
-                size_hint_x: 0.1
-                font_size: "20dp"
-                text: "URL"
-            TextInput:
-                size_hint_x: 0.9
-                font_size: "30dp"
-                id: url
-
-    BoxLayout:
-        size_hint_y: 0.2
-        CheckBox:
-            active: True
-            id: cb
-            size_hint_x: 0.2
-        Label:
-            size_hint_x: 0.8
-            text: "Download from BORIS program"
-            font_size: 20
-
-    BoxLayout:
-        size_hint_y: 0.4
-
-    BoxLayout:
-        size_hint_y: 0.2
-        Button:
-            text: "Go back"
-            size_hint_x: 0.2
+            size_hint: None, None
+            size: self.texture_size[0], 50
+            text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols])
+        MDRectangleFlatButton:
+            text: "Cancel"
+            size_hint_x: 1
             font_size: "20dp"
             on_press: root.cancel()
-
-        Button:
-            text: "Download project"
-            size_hint_x: .8
-            font_size: "20dp"
-            on_press: root.download_project()
+#
+#    orientation: "vertical"
+#    url_input: url
+#    cb_input: cb
+#
+#    BoxLayout:
+#        size_hint_y: 0.2
+#        Label:
+#            text: "Insert the URL of the project"
+#            font_size: "20dp"
+#
+#    BoxLayout:
+#        size_hint_y: 0.2
+#
+#        BoxLayout:
+#            Label:
+#                size_hint_x: 0.1
+#                font_size: "20dp"
+#                text: "URL"
+#            TextInput:
+#                size_hint_x: 0.9
+#                font_size: "30dp"
+#                id: url
+#
+#    BoxLayout:
+#        size_hint_y: 0.2
+#        CheckBox:
+#            active: True
+#            id: cb
+#            size_hint_x: 0.2
+#        Label:
+#            size_hint_x: 0.8
+#            text: "Download from BORIS program"
+#            font_size: 20
+#
+#    BoxLayout:
+#        size_hint_y: 0.4
+#
+#    BoxLayout:
+#        size_hint_y: 0.2
+#        Button:
+#            text: "Go back"
+#            size_hint_x: 0.2
+#            font_size: "20dp"
+#            on_press: root.cancel()
+#
+#        Button:
+#            text: "Download project"
+#            size_hint_x: .8
+#            font_size: "20dp"
+#            on_press: root.download_project()
 
 <ViewProjectForm>
     orientation: "vertical"

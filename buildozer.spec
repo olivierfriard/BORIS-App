@@ -37,14 +37,14 @@ version = 0.3
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd
+requirements = python3,kivy,kivymd,pillow,kivy-garden.xcamera,kivy-garden.zbarcam,opencv-python,xcamera,pyzbar,android
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/logo_boris_500px.png
+presplash.filename = %(source.dir)s/logo_boris_500px_white.png
 
 # (str) Icon of the application
 #icon.filename = %(source.dir)s/data/icon.png
