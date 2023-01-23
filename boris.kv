@@ -21,11 +21,9 @@
 
 
 #: import main main
-#:import ZBarCam kivy_garden.zbarcam.ZBarCam
-#:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+##:import ZBarCam kivy_garden.zbarcam.ZBarCam
+##:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
 
-##: import ListAdapter kivy.adapters.listadapter.ListAdapter
-##: import la kivy.adapters.listadapter
 
 BorisRoot:
 
@@ -124,14 +122,14 @@ BorisRoot:
 
     BoxLayout:
         orientation: 'vertical'
-        ZBarCam:
-            id: zbarcam
-            # optional, by default checks all types
-            code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
-        Label:
-            size_hint: None, None
-            size: self.texture_size[0], 50
-            text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols])
+#        ZBarCam:
+#            id: zbarcam
+#            # optional, by default checks all types
+#            code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
+#        Label:
+#            size_hint: None, None
+#            size: self.texture_size[0], 50
+#            text: ', '.join([str(symbol.data) for symbol in zbarcam.symbols])
         MDRectangleFlatButton:
             text: "Cancel"
             size_hint_x: 1
