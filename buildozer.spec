@@ -10,7 +10,9 @@ package.name = boris
 package.domain = it.unito.boris
 
 # (str) Source code where the main.py live
-source.dir = .
+#source.dir = .
+#source.dir=kivy
+source.dir=file_manager
 
 # (list) Source files to include (let empty to include all the files)
 source.include_exts = py,png,jpg,kv,atlas
