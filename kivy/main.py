@@ -1,7 +1,7 @@
 """
 BORIS App
 Behavioral Observation Research Interactive Software
-Copyright 2017-2018 Olivier Friard
+Copyright 2017-2023 Olivier Friard
 
 This file is part of BORIS mobile.
 
@@ -26,10 +26,10 @@ The kivy.uix.listview is deprecated in Kivy v.>=1.11
 
 """
 
-__version__ = "0.3"
-__version_date__ = "2021-09-14"
+__version__ = "0.4"
+__version_date__ = "2023-02-23"
 
-__copyright__ = "Olivier Friard - Marco Gamba - v. {} ({}) ALPHA".format(__version__, __version_date__)
+__copyright__ = f"Olivier Friard - Marco Gamba - v. {__version__} ({__version_date__}) ALPHA"
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -62,6 +62,7 @@ import datetime
 from urllib.request import urlopen
 import socket
 import time
+from decimal import Decimal
 
 NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
