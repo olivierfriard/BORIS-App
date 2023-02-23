@@ -24,6 +24,7 @@
 ##: import ListAdapter kivy.adapters.listadapter.ListAdapter
 ##: import la kivy.adapters.listadapter
 
+
 BorisRoot:
     canvas:
         Color:
@@ -36,6 +37,7 @@ BorisRoot:
 <StartPageForm>:
     lb_version_input: lbversion
     orientation: "vertical"
+    
     Image:
         source: "logo_boris_500px.png"
     Label:
@@ -43,6 +45,7 @@ BorisRoot:
         height: "40dp"
         size_hint_y: None
         text: root.ver()
+
     BoxLayout:
         size_hint_y: .2
 
@@ -94,12 +97,14 @@ BorisRoot:
 <SelectProjectForm>
     orientation: "vertical"
     Label:
+        id: title
         size_hint_y: 0.1
         text: "Select a BORIS project file and then press \"Open project\" button"
     FileChooserListView:
         size_hint_y: 0.7
         id: projectfilechooser
-        path: "."
+        rootpath: app.primary_storage_dir
+        #path: '/data'
         filters: ["*.boris"]
     BoxLayout:
         size_hint_y: 0.2
