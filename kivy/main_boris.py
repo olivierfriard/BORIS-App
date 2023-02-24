@@ -29,7 +29,7 @@ The kivy.uix.listview is deprecated in Kivy v.>=1.11
 __version__ = "0.4"
 __version_date__ = "2023-02-23"
 
-__copyright__ = f"Olivier Friard - Marco Gamba - v. {__version__} ({__version_date__}) ALPHA"
+__copyright__ = f"{__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
 
 from kivy.app import App
 from kivy.utils import platform
@@ -53,8 +53,8 @@ from kivy.properties import StringProperty
 from kivy.logger import Logger
 from kivy.base import EventLoop
 
+from kivy.core.window import Window
 
-# from kivy.adapters.listadapter import ListAdapter
 
 import os
 import sys
@@ -108,98 +108,39 @@ class StartPageForm(BoxLayout):
 
 class MoreForm(BoxLayout):
     def cancel(self):
-
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
-    def update(self):
+    def about(self):
         """
         check if installed version is the most recent
         update after user confirmation
         """
-
-        def confirm_update(instance):
-
-            if instance.title == "y":
-
-                Logger.info("updating...")
-                try:
-                    for url in [
-                        "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/main.py",
-                        "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/boris.kv",
-                    ]:
-                        response = urlopen(url)
-                        content = response.read()
-
-                        Logger.info("renaming %s" % url.split("/")[-1])
-                        if os.path.isfile(url.split("/")[-1]):
-                            os.rename(
-                                url.split("/")[-1], url.split("/")[-1] + "." + datetime.datetime.now().isoformat()
-                            )
-                            Logger.info("renamed %s" % url.split("/")[-1])
-
-                        if content:
-                            with open(url.split("/")[-1], "w") as f:
-                                f.write(content)
-
-                    if os.path.isfile("main.pyo"):
-                        Logger.info("removing main.pyo")
-                        os.remove("main.pyo")
-                        Logger.info("removed main.pyo")
-
-                    Popup(
-                        title="BORIS",
-                        content=Label(
-                            text="The BORIS App was updated succesfully to v. {}.\nYou should restart it now.".format(
-                                new_version
-                            )
-                        ),
-                        size_hint=(None, None),
-                        size=("600dp", "200dp"),
-                    ).open()
-                    Logger.info("BORIS App updated successfully")
-
-                except:
-                    Popup(
-                        title="Error",
-                        content=Label(text="An error occured during update..."),
-                        size_hint=(None, None),
-                        size=("400dp", "200dp"),
-                    ).open()
-
-            self.clear_widgets()
-            self.add_widget(StartPageForm())
-
-        try:
-            new_version = urlopen(VERSION_URL).read().strip()
-            print(VERSION_URL)
-            Logger.info("local version: {}".format(__version__))
-            Logger.info("remote version: {}".format(new_version))
-        except:
-            Popup(
-                title="BORIS - Error",
-                content=Label(text="The last version can not be checked"),
-                size_hint=(None, None),
-                size=("500dp", "200dp"),
-            ).open()
-            self.clear_widgets()
-            self.add_widget(StartPageForm())
-            return
-
-        if tuple(map(int, (new_version.split(".")))) > tuple(map(int, (__version__.split(".")))):
-            Logger.info("new version available %s > %s" % (__version__, new_version))
-
-            pop = ConfirmUpdatePopup()
-            pop.bind(on_dismiss=confirm_update)
-            pop.open()
-        else:
-            Popup(
-                title="BORIS",
-                content=Label(text="Your version is up to date (v. {})".format(__version__)),
-                size_hint=(None, None),
-                size=("400dp", "200dp"),
-            ).open()
-            Logger.info("version up to date")
+        info_text = (
+            f"BORIS App v. {__version__} - {__version_date__}\n\n"
+            f"Copyright (C) {__copyright__}\n"
+            "Department of Life Sciences and Systems Biology\n"
+            "University of Torino - Italy\n"
+            "\n"
+            "BORIS is released under the GNU General Public License v.3\n"
+            "See www.boris.unito.it for details.\n"
+            "\n"
+            "The authors would like to acknowledge Valentina Matteucci for her precious help.\n"
+            "\n"
+            "How to cite BORIS:\n"
+            "Friard, O. and Gamba, M. (2016),\nBORIS: a free, versatile open-source event-logging software\n"
+            "for video/audio coding and live observations.\n"
+            "Methods Ecol Evol, 7: 1325–1330.\n"
+            "DOI:10.1111/2041-210X.12584"
+        )
+        close_button = Button(text=info_text)
+        popup = Popup(
+            title="About BORIS",
+            content=close_button,  # Label(text=info_text),
+            size_hint=(1, 1),
+        )
+        close_button.bind(on_press=popup.dismiss)
+        popup.open()
 
         self.clear_widgets()
         self.add_widget(StartPageForm())
@@ -672,7 +613,7 @@ class SelectProjectForm(BoxLayout):
 
         self.clear_widgets()
         w = ViewProjectForm()
-        w.ids.lbl.text = "project file name: {}".format(BorisApp.projectFileName)
+        w.ids.lbl.text = f"project file path: {BorisApp.projectFileName}"
 
         rows = []
         rows.append("project name: {}".format(BorisApp.project["project_name"]))
@@ -684,9 +625,7 @@ class SelectProjectForm(BoxLayout):
         rows.append("Number of subjects: {}".format(len(BorisApp.project[SUBJECTS].keys())))
         rows.append("Number of observations: {}".format(len(BorisApp.project[OBSERVATIONS].keys())))
 
-        print(rows)
-
-        w.ids.projectslist.text = "\n".join(rows)
+        w.ids.project_info.text = "\n".join(rows)
         self.add_widget(w)
 
 
@@ -1411,11 +1350,11 @@ class BorisApp(App):
     project = {}
     projectFileName = ""
 
+    Window.clearcolor = (1, 1, 1, 1)
+
     if platform == "android":
 
-        from android.storage import primary_external_storage_path
-
-        # from android.storage import secondary_external_storage_path
+        from android.storage import primary_external_storage_path  # secondary_external_storage_path
 
         primary_storage_dir = StringProperty(primary_external_storage_path())
 

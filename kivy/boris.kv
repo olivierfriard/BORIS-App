@@ -37,7 +37,14 @@ BorisRoot:
 <StartPageForm>:
     lb_version_input: lbversion
     orientation: "vertical"
-    
+
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     Image:
         source: "logo_boris_500px.png"
     Label:
@@ -51,15 +58,9 @@ BorisRoot:
 
         Button:
             text: "Open project"
-            size_hint_x: 0.4
+            size_hint_x: 0.8
             font_size: "20dp"
             on_press: root.show_SelectProjectForm()
-
-        Button:
-            text: "Download project"
-            size_hint_x: 0.4
-            font_size: "20dp"
-            on_press: root.show_DownloadProject()
 
         Button:
             text: "more..."
@@ -83,10 +84,10 @@ BorisRoot:
             font_size: "20dp"
             on_press: root.cancel()
         Button:
-            text: "Update"
+            text: "About BORIS"
             size_hint_x: .4
             font_size: "20dp"
-            on_press: root.update()
+            on_press: root.about()
         Button:
             text: "Quit"
             size_hint_x: .4
@@ -96,6 +97,14 @@ BorisRoot:
 
 <SelectProjectForm>
     orientation: "vertical"
+
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     Label:
         id: title
         size_hint_y: 0.1
@@ -120,57 +129,6 @@ BorisRoot:
             on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
 
 
-<DownloadProjectForm>
-    orientation: "vertical"
-    url_input: url
-    cb_input: cb
-
-    BoxLayout:
-        size_hint_y: 0.2
-        Label:
-            text: "Insert the URL of the project"
-            font_size: "20dp"
-
-    BoxLayout:
-        size_hint_y: 0.2
-
-        BoxLayout:
-            Label:
-                size_hint_x: 0.1
-                font_size: "20dp"
-                text: "URL"
-            TextInput:
-                size_hint_x: 0.9
-                font_size: "30dp"
-                id: url
-
-    BoxLayout:
-        size_hint_y: 0.2
-        CheckBox:
-            active: True
-            id: cb
-            size_hint_x: 0.2
-        Label:
-            size_hint_x: 0.8
-            text: "Download from BORIS program"
-            font_size: 20
-
-    BoxLayout:
-        size_hint_y: 0.4
-
-    BoxLayout:
-        size_hint_y: 0.2
-        Button:
-            text: "Go back"
-            size_hint_x: 0.2
-            font_size: "20dp"
-            on_press: root.cancel()
-
-        Button:
-            text: "Download project"
-            size_hint_x: .8
-            font_size: "20dp"
-            on_press: root.download_project()
 
 <ViewProjectForm>
     orientation: "vertical"
@@ -183,8 +141,7 @@ BorisRoot:
             font_size: "20dp"
             text: "View project"
         Label:
-            id: projectslist
-            #item_strings: []
+            id: project_info
             size_hint_y: 0.9
     BoxLayout:
         orientation: "horizontal"
@@ -196,13 +153,6 @@ BorisRoot:
             size_hint_x: 0.2
             font_size: "25dp"
             on_press: root.go_back()
-
-        Button:
-            id: btnStartObs
-            text: "Send observation"
-            size_hint_x: 0.4
-            font_size: "25dp"
-            on_press: root.send_observations()
 
         Button:
             id: btnStartObs
