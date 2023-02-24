@@ -70,6 +70,9 @@ SINGLE_SELECTION = 0
 MULTI_SELECTION = 1
 NUMERIC_MODIFIER = 2
 
+YES = "yes"
+NO = "no"
+
 RED = [1, 0, 0, 1]
 GRAY = [0.5, 0.5, 0.5, 1]
 
@@ -88,6 +91,12 @@ FONT_MIN_SIZE_SUBJECT = 12
 
 selected_modifiers = {}
 observation_to_send = ""
+
+"""
+pop = InfoPopup()
+pop.ids.label.text = f""
+pop.open()
+"""
 
 
 if platform == "android":
@@ -110,13 +119,6 @@ def dynamic_font_size(n: int) -> int:
 
 class StartPageForm(BoxLayout):
     def show_SelectProjectForm(self):
-
-        Popup(
-            title="Storage",
-            content=Label(text=primary_storage_dir),
-            size_hint=(None, None),
-            size=(400, 400),
-        ).open()
 
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
@@ -215,30 +217,26 @@ class SelectProjectForm(BoxLayout):
         """
 
         if not selection:
-            Popup(
-                title="Error", content=Label(text="No project file selected!"), size_hint=(None, None), size=(400, 400)
-            ).open()
+
+            pop = InfoPopup()
+            pop.ids.label.text = f"No project file selected!"
+            pop.open()
             return
 
         try:
             BorisApp.projectFileName = selection[0]
             BorisApp.project = json.loads(open(BorisApp.projectFileName, "r").read())
-        except:
-            Popup(
-                title="Error",
-                content=Label(text="The selected file is not a BORIS behaviors file!"),
-                size_hint=(None, None),
-                size=(400, 200),
-            ).open()
+        except Exception:
+            pop = InfoPopup()
+            pop.ids.label.text = "The selected file is not a BORIS behaviors file!"
+            pop.open()
             return
 
         if not BorisApp.project[ETHOGRAM]:
-            Popup(
-                title="Error",
-                content=Label(text="The ethogram of this project is empty!"),
-                size_hint=(None, None),
-                size=(400, 200),
-            ).open()
+
+            pop = InfoPopup()
+            pop.ids.label.text = "The ethogram of this project is empty!"
+            pop.open()
             return
 
         self.clear_widgets()
@@ -776,31 +774,21 @@ class StartObservationForm(BoxLayout):
 
         def btnStopPressed(obj):
             def my_callback(instance):
-                if instance.title == "y":
+                if instance.title == YES:
                     try:
                         with open(BorisApp.projectFileName, "w") as f:
                             f.write(json.dumps(BorisApp.project, indent=1))
 
-                        close_button = Button(text=f"Observation saved in {BorisApp.projectFileName}")
-                        popup = Popup(
-                            title="Observation saved",
-                            content=close_button,
-                            size_hint=(1, 1),
-                        )
-                        close_button.bind(on_press=popup.dismiss)
-                        popup.open()
+                        pop = InfoPopup()
+                        pop.ids.label.text = f"Observation saved in\n{BorisApp.projectFileName}"
+                        pop.open()
 
                     except Exception:
-                        print("The observation {} can not be saved!".format(self.obsId))
+                        print(f"The observation {self.obsId} can not be saved!")
 
-                        close_button = Button(text=f"The observation {self.obsId} can not be saved!")
-                        popup = Popup(
-                            title="Error saving the observation",
-                            content=close_button,
-                            size_hint=(1, 1),
-                        )
-                        close_button.bind(on_press=popup.dismiss)
-                        popup.open()
+                        pop = InfoPopup()
+                        pop.ids.label.text = f"The observation {self.obsId} can not be saved!"
+                        pop.open()
 
                     self.clear_widgets()
                     self.add_widget(StartPageForm())
@@ -811,46 +799,32 @@ class StartObservationForm(BoxLayout):
 
         # check if observation id field is empty
         if not self.obsid_input.text:
-            p = Popup(
-                title="Error",
-                content=Label(text="The observation id is empty"),
-                size_hint=(None, None),
-                size=(400, 200),
-            )
-            p.open()
+            pop = InfoPopup()
+            pop.ids.label.text = "The observation id is empty"
+            pop.open()
             return
 
-        if self.obsid_input.text in BorisApp.project[OBSERVATIONS]:
-            p = Popup(
-                title="Error",
-                content=Label(text="This observation id already exists."),
-                size_hint=(None, None),
-                size=(400, 200),
-            )
-            p.open()
+        if self.obsid_input.text.upper() in (x.upper() for x in BorisApp.project[OBSERVATIONS]):
+
+            pop = InfoPopup()
+            pop.ids.label.text = f"This observation id ({self.obsid_input.text}) already exists."
+            pop.open()
             return
 
         # check if date is correct
         if not self.obsdate_input.text:
-            p = Popup(
-                title="Error",
-                content=Label(text="The date is empty. Use the YYYY-MM-DD HH:MM:SS format"),
-                size_hint=(None, None),
-                size=(400, 200),
-            )
-            p.open()
+            pop = InfoPopup()
+            pop.ids.label.text = "The date is empty. Use the YYYY-MM-DD HH:MM:SS format"
+            pop.open()
             return
 
         try:
             time.strptime(self.obsdate_input.text, "%Y-%m-%d %H:%M:%S")
         except ValueError:
-            p = Popup(
-                title="Error",
-                content=Label(text="The date is not valid. Use the YYYY-MM-DD HH:MM:SS format"),
-                size_hint=(None, None),
-                size=(400, 200),
-            )
-            p.open()
+
+            pop = InfoPopup()
+            pop.ids.label.text = "The date is not valid. Use the YYYY-MM-DD HH:MM:SS format"
+            pop.open()
             return
 
         print("obs id:", self.obsid_input.text)
@@ -912,11 +886,16 @@ class AskForExistingFile(Popup):
 
 class ConfirmStopPopup(Popup):
     def yes(self):
-        self.title = "y"
+        self.title = YES
         self.dismiss()
 
     def no(self):
-        self.title = "n"
+        self.title = NO
+        self.dismiss()
+
+
+class InfoPopup(Popup):
+    def close(self):
         self.dismiss()
 
 
@@ -938,7 +917,7 @@ class BorisApp(App):
 
     app_primary_storage_dir = StringProperty(primary_storage_dir)
 
-    # Window.clearcolor = (1, 1, 1, 1)
+    Window.clearcolor = (1, 1, 1, 1)
 
     def on_pause(self):
         print("on_pause")

@@ -225,21 +225,28 @@ BorisRoot:
 
 
 <ConfirmStopPopup>
-    title: "Are you sure you want to stop the current observation?"
+    title: "BORIS"
     title_size: "20dp"
     font_size: "20dp"
     BoxLayout:
-        size_hint_y: None
-        Button:
-            text: "Yes"
-            size_hint_x: 0.5
+        orientation: "vertical"
+        Label:
+            id: label
+            size_hint_y: 0.8
             font_size: "20dp"
-            on_press: root.yes()
-        Button:
-            text: "No"
-            size_hint_x: 0.5
-            font_size: "20dp"
-            on_press: root.no()
+            text: "Are you sure you want to stop the current observation?"
+        BoxLayout:
+            size_hint_y: .2
+            Button:
+                text: "Yes"
+                size_hint_x: 0.5
+                font_size: "20dp"
+                on_press: root.yes()
+            Button:
+                text: "No"
+                size_hint_x: 0.5
+                font_size: "20dp"
+                on_press: root.no()
 
 <ConfirmUpdatePopup>
     title: "Are you sure you want to update BORIS App?"
@@ -289,3 +296,24 @@ BorisRoot:
                 font_size: "20dp"
                 on_press: root.rename()
 
+
+
+<InfoPopup>
+    title: "BORIS"
+    title_size: "20dp"
+    font_size: "20dp"
+    id: info_popup
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            id: label
+            size_hint_y: 0.8
+            font_size: "20dp"
+            text: "Are you sure you want to stop the current observation?"
+        BoxLayout:
+            size_hint_y: .2
+            Button:
+                text: "Close"
+                size_hint_x: 0.5
+                font_size: "20dp"
+                on_press: root.close()
