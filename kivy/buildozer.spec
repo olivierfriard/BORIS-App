@@ -11,8 +11,6 @@ package.domain = it.unito.boris
 
 # (str) Source code where the main.py live
 source.dir = .
-#source.dir=kivy
-#source.dir=file_manager
 
 # (list) Source files to include (let empty to include all the files)
 source.include_exts = py,png,jpg,kv,boris
@@ -48,7 +46,7 @@ requirements = python3,kivy,android,pyjnius,plyer
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-#presplash.filename = %(source.dir)s/logo_boris_500px.png
+presplash.filename = %(source.dir)s/logo_boris_500px.png
 
 # (str) Icon of the application
 #icon.filename = %(source.dir)s/data/icon.png
@@ -99,8 +97,8 @@ android.presplash_color = #FFFFFF
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-#android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
-android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,INTERNET,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION
+android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
+#android.permissions = WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,INTERNET,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION
 
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host

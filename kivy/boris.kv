@@ -20,9 +20,6 @@
 #      www.boris.unito.it
 
 
-#: import main main
-##: import ListAdapter kivy.adapters.listadapter.ListAdapter
-##: import la kivy.adapters.listadapter
 
 
 BorisRoot:
@@ -38,12 +35,12 @@ BorisRoot:
     lb_version_input: lbversion
     orientation: "vertical"
 
-    canvas.before:
-        Color:
-            rgba: 1, 1, 1, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+    # canvas.before:
+    #     Color:
+    #         rgba: 1, 1, 1, 1
+    #     Rectangle:
+    #         pos: self.pos
+    #         size: self.size
 
     Image:
         source: "logo_boris_500px.png"
@@ -98,12 +95,13 @@ BorisRoot:
 <SelectProjectForm>
     orientation: "vertical"
 
-    canvas.before:
-        Color:
-            rgba: 0, 0, 0, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+    
+    # canvas.before:
+    #     Color:
+    #         rgba: 0, 0, 0, 1
+    #     Rectangle:
+    #         pos: self.pos
+    #         size: self.size
 
     Label:
         id: title
@@ -112,7 +110,7 @@ BorisRoot:
     FileChooserListView:
         size_hint_y: 0.7
         id: projectfilechooser
-        rootpath: app.primary_storage_dir
+        rootpath: app.app_primary_storage_dir
         #path: '/data'
         filters: ["*.boris"]
     BoxLayout:
@@ -160,113 +158,6 @@ BorisRoot:
             size_hint_x: 0.4
             font_size: "25dp"
             on_press: root.new_observation()
-
-
-<RV>:
-    viewclass: 'CustomButton'  # defines the viewtype for the data items.
-    orientation: "vertical"
-    spacing: 40
-    padding:10, 10
-    space_x: self.size[0]/3
-
-#    Button:
-#        text: "test"
-
-    RecycleBoxLayout:
-        color:(0, 0.7, 0.4, 0.8)
-        default_size: None, dp(56)
-        default_size_hint: 0.4, None
-        size_hint_y: None
-        height: self.minimum_height
-        orientation: 'vertical' # defines the orientation of data items
-
-
-#
-#    <SelectObservationToSendForm>
-#        observations_list: observations_list_id
-#        orientation: "vertical"
-#        BoxLayout:
-#            orientation: "vertical"
-#            size_hint_y: 0.9
-#            Label:
-#                size_hint_y: 0.1
-#                id: lbl
-#                text: "Observation(s)"
-#
-#            RecycleBoxLayout:
-#                id: observations_list_id
-#                default_size: None, dp(56)
-#                default_size_hint: 1, None
-#                size_hint_y: None
-#                height: self.minimum_height
-#                orientation: 'vertical'
-#
-#        BoxLayout:
-#            orientation: "horizontal"
-#            size_hint_y: 0.1
-#
-#            Button:
-#                id: btnGoBack
-#                text: "Go back"
-#                size_hint_x: 0.2
-#                font_size: "20dp"
-#                on_press: root.go_back()
-#
-#            Button:
-#                id: btnStartObs
-#                text: "Send observation"
-#                size_hint_x: 0.4
-#                font_size: "20dp"
-#                on_press: root.send_observation()
-
-
-
-<SendObsForm>
-    orientation: "vertical"
-    url_input: url
-    lb_observation_id: label2_id
-
-    BoxLayout:
-        orientation: "vertical"
-        size_hint_y: 0.2
-        Label:
-            text: "Send selected observation to BORIS"
-            font_size: "20dp"
-        Label:
-            id: label2_id
-            text: ""
-            font_size: "20dp"
-
-    BoxLayout:
-        size_hint_y: 0.2
-        BoxLayout:
-            Label:
-                size_hint_x: 0.1
-                text: "URL"
-                font_size: "30dp"
-            TextInput:
-                size_hint_x: 0.9
-                font_size: "30dp"
-                id: url
-                multiline: False
-
-    BoxLayout:
-        size_hint_y: 0.4
-
-    BoxLayout:
-        size_hint_y: 0.2
-
-        Button:
-            text: "Go back"
-            size_hint_x: 0.2
-            font_size: "20dp"
-            on_press: root.cancel()
-
-        Button:
-            text: "Send observation"
-            size_hint_x: 0.8
-            font_size: "20dp"
-            on_press: root.send_obs()
 
 
 
