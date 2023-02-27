@@ -16,7 +16,7 @@ It was tested on Android (v. 8.1).
 Legal
 =========================
 
-Copyright 2017-2023 Olivier Friard - Marco Gamba
+Copyright 2023 Olivier Friard - Marco Gamba
 
 **BORIS App** is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
