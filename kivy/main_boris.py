@@ -23,9 +23,9 @@ This file is part of BORIS mobile.
 
 
 __version__ = "0.4"
-__version_date__ = "2023-02-23"
+__version_date__ = "2023-02-27"
 
-__copyright__ = f"{__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
+__copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
 
 from kivy.app import App
 from kivy.utils import platform
@@ -34,15 +34,8 @@ from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.button import Button
-from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
-from kivy.uix.recycleview import RecycleView
-from kivy.uix.recycleboxlayout import RecycleBoxLayout
-from kivy.uix.filechooser import FileChooserListView
-
-# from kivy.uix.listview import ListItemButton
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.properties import StringProperty
@@ -128,7 +121,7 @@ class StartPageForm(BoxLayout):
         self.add_widget(MoreForm())
 
     def ver(self):
-        return __copyright__
+        return f"v.{__version__ } {__copyright__}"
 
 
 class MoreForm(BoxLayout):

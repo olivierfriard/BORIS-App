@@ -11,14 +11,12 @@ BORIS App project is the BORIS version for mobile devices (www.boris.unito.it).
 
 This release is an alpha version. **USE IT ONLY FOR TESTING** and reporting bug and suggestions.
 
-It requires the **Kivy launcher** app (https://play.google.com/store/apps/details?id=org.kivy.pygame&hl=en)
-
-It was tested on Android (v. 6) and require Android 2.2+.
+It was tested on Android (v. 8.1).
 
 Legal
 =========================
 
-Copyright 2017-2018 Olivier Friard - Marco Gamba
+Copyright 2017-2023 Olivier Friard - Marco Gamba
 
 **BORIS App** is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,17 +31,14 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 Installation
 =========================
 
-* Download the last version from the GitHub repository release page:
+* Download the last version of the APK file from the GitHub repository release page:
 
 `https://github.com/olivierfriard/BORIS-App/releases <https://github.com/olivierfriard/BORIS-App/releases>`_
 
-* Extract the zip / tar.gz archive to your computer
+* Follow `How to Install APK on Android <https://www.lifewire.com/install-apk-on-android-4177185>`_ to install
 
-* Copy the extracted directory to the /sdcard/kivy directory (or equivalent) of your mobile device.
 
 Use
 =========================
-
-Launch **Kivy Launcher** and select the **BORIS App** project
 
 The BORIS App user guide is available at http://boris-app.readthedocs.io
