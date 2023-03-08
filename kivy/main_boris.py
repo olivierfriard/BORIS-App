@@ -3,7 +3,7 @@ BORIS App
 Behavioral Observation Research Interactive Software
 Copyright 2017-2023 Olivier Friard
 
-This file is part of BORIS mobile.
+This file is part of BORIS App.
 
   BORIS App is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@ This file is part of BORIS mobile.
   www.boris.unito.it
 """
 
-
-__version__ = "0.4"
-__version_date__ = "2023-02-27"
+__app_name__ = "BORIS"
+__version__ = "0.5"
+__version_date__ = "2023-03-08"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
 
@@ -47,7 +47,7 @@ from kivy.core.window import Window
 import sys
 import json
 import time
-import datetime
+import datetime as dt
 import time
 from decimal import Decimal
 
@@ -85,21 +85,12 @@ FONT_MIN_SIZE_SUBJECT = 12
 selected_modifiers = {}
 observation_to_send = ""
 
-"""
-pop = InfoPopup()
-pop.ids.label.text = f""
-pop.open()
-"""
-
 
 if platform == "android":
-
     from android.storage import primary_external_storage_path  # secondary_external_storage_path
 
     primary_storage_dir = primary_external_storage_path()
-
 else:
-
     primary_storage_dir = "."
 
 
@@ -191,7 +182,7 @@ class ViewProjectForm(BoxLayout):
 
         self.clear_widgets()
         a = StartObservationForm()
-        a.obsdate_input.text = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S}"
+        a.obsdate_input.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}"
         self.add_widget(a)
 
     def go_back(self):
@@ -210,7 +201,6 @@ class SelectProjectForm(BoxLayout):
         """
 
         if not selection:
-
             pop = InfoPopup()
             pop.ids.label.text = f"No project file selected!"
             pop.open()
@@ -431,7 +421,7 @@ class StartObservationForm(BoxLayout):
                 print("self.current_modifiers", self.current_modifiers)
 
             def on_goback_button_release(obj):
-                print("self.current_modifiers", self.current_modifiers)
+
                 modifiers = ""
                 behavior, _, _ = self.modifier_buttons[obj]
                 for idx in sorted([int(k) for k in self.current_modifiers[behavior]]):
@@ -450,6 +440,8 @@ class StartObservationForm(BoxLayout):
             font_size = 24
 
             self.current_modifiers[behavior] = {}
+
+            Logger.info(f"self.modifiers[behavior]: {self.modifiers[behavior]}")
 
             for iidx in sorted([int(x) for x in self.modifiers[behavior].keys()]):
                 idx = str(iidx)
@@ -549,26 +541,32 @@ class StartObservationForm(BoxLayout):
 
             behaviorsLayout = BoxLayout(orientation="vertical", spacing=3)
 
-            behaviorsLayout.add_widget(Label(text=f"Observation: {self.obsId}", size_hint_y=0.1))
+            # header with obs id
+            obsid_time = BoxLayout(orientation="horizontal", size_hint_y=0.1)
+
+            self.obsid_header = Label(text=f"Observation: {self.obsId}")
+            self.time_header = Label(text=f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}")
+            obsid_time.add_widget(self.obsid_header)
+            obsid_time.add_widget(self.time_header)
+
+            behaviorsLayout.add_widget(obsid_time)
 
             gdrid_layout = GridLayout(
                 cols=int((len(BorisApp.project[ETHOGRAM]) + 1) ** 0.5), size_hint=(1, 1), spacing=3
             )
 
-            behaviorsList = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM]])
+            behaviors_list = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM]])
             # check modifiers
             self.modifiers_layout = {}
             for idx in BorisApp.project[ETHOGRAM]:
                 self.modifiers[BorisApp.project[ETHOGRAM][idx]["code"]] = BorisApp.project[ETHOGRAM][idx]["modifiers"]
 
-            print("modifiers", self.modifiers)
-
             # font size
-            behaviors_font_size = dynamic_font_size(len(behaviorsList))
+            behaviors_font_size = dynamic_font_size(len(behaviors_list))
 
             if BEHAV_CAT in BorisApp.project:
                 colors_list = BEHAV_CAT_COLORS
-                categoriesList = set(
+                categories_list = set(
                     [
                         BorisApp.project[ETHOGRAM][k]["category"]
                         for k in BorisApp.project[ETHOGRAM].keys()
@@ -576,7 +574,7 @@ class StartObservationForm(BoxLayout):
                     ]
                 )
 
-                for idx, category in enumerate(sorted(categoriesList)):
+                for idx, category in enumerate(sorted(categories_list)):
                     behav_list_category = sorted(
                         [
                             BorisApp.project[ETHOGRAM][k]["code"]
@@ -602,7 +600,7 @@ class StartObservationForm(BoxLayout):
                             self.modifiers_layout[behavior] = create_modifiers_layout(behavior)
 
             else:
-                for behavior in behaviorsList:
+                for behavior in behaviors_list:
                     btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
                     btn.background_normal = ""
                     btn.background_color = [0.5, 0.5, 0.5, 1]  # gray
@@ -647,8 +645,6 @@ class StartObservationForm(BoxLayout):
 
             if self.focal_subject in self.currentStates:
 
-                print(self.currentStates[self.focal_subject])
-
                 for cs in self.currentStates[self.focal_subject]:
                     self.btnList[cs].background_color = [1, 0, 0, 1]  # red
 
@@ -668,6 +664,10 @@ class StartObservationForm(BoxLayout):
             self.add_widget(self.modifiers_layout[behavior])
 
         def write_event(event):
+            """
+            record event in observation
+            change button color if STATE event
+            """
 
             t, newState, modifier = event
 
@@ -717,9 +717,8 @@ class StartObservationForm(BoxLayout):
                     [round(t - self.t0, 3), self.focal_subject, newState, modifier, ""]
                 )
 
-            print("current state", self.currentStates)
-
-            print(BorisApp.project[OBSERVATIONS][self.obsId]["events"][-1])
+            Logger.info(f"{__app_name__}: current state {self.currentStates}")
+            Logger.info(f"{__app_name__}: event {BorisApp.project[OBSERVATIONS][self.obsId]['events'][-1]}")
 
         def btnBehaviorPressed(obj):
             """
@@ -766,6 +765,10 @@ class StartObservationForm(BoxLayout):
             view_behaviors_layout(None)
 
         def btnStopPressed(obj):
+            """
+            stop current observation
+            """
+
             def my_callback(instance):
                 if instance.title == YES:
                     try:
@@ -783,12 +786,16 @@ class StartObservationForm(BoxLayout):
                         pop.ids.label.text = f"The observation {self.obsId} can not be saved!"
                         pop.open()
 
+                    self.clock_timer.cancel()
                     self.clear_widgets()
                     self.add_widget(StartPageForm())
 
             pop = ConfirmStopPopup()
             pop.bind(on_dismiss=my_callback)
             pop.open()
+
+        def clock(delta_time):
+            self.time_header.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}"
 
         # check if observation id field is empty
         if not self.obsid_input.text:
@@ -857,6 +864,8 @@ class StartObservationForm(BoxLayout):
 
         self.t0 = time.time()
 
+        self.clock_timer = Clock.schedule_interval(clock, 1)
+
         # start timer
         """
         Clock.schedule_interval(clock_callback, 60)
@@ -905,12 +914,34 @@ class BorisApp(App):
     font_size: app.font_size
     """
 
+    def request_android_permissions(self):
+        from android.permissions import request_permissions, Permission
+
+        def callback(permissions, results):
+            """
+            Defines the callback to be fired when runtime permission
+            has been granted or denied. This is not strictly required,
+            but added for the sake of completeness.
+            """
+            if all([res for res in results]):
+                Logger.info(f"{__app_name__}: All permissions granted.")
+            else:
+                Logger.info(f"{__app_name__}: Some permissions refused.")
+
+        request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE], callback)
+        # MANAGE_EXTERNAL_STORAGE ?
+
     project = {}
     projectFileName = ""
 
     app_primary_storage_dir = StringProperty(primary_storage_dir)
 
     Window.clearcolor = (1, 1, 1, 1)
+
+    def build(self):
+        if platform == "android":
+            Logger.info(f"{__app_name__}: Android detected. Requesting permissions")
+            self.request_android_permissions()
 
     def on_pause(self):
         print("on_pause")
@@ -927,5 +958,5 @@ class BorisApp(App):
 
 
 if __name__ == "__main__":
-    Logger.info("Starting BORIS App")
+    Logger.info(f"{__app_name__}: Starting BORIS App")
     BorisApp().run()

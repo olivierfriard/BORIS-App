@@ -94,7 +94,6 @@ BorisRoot:
 
 <SelectProjectForm>
     orientation: "vertical"
-
     
     canvas.before:
         Color:
@@ -106,7 +105,7 @@ BorisRoot:
     Label:
         id: title
         size_hint_y: 0.1
-        text: "Select a BORIS project file and then press \"Open project\" button"
+        text: "Select a BORIS project file and then press \"Open project\" button\nCurrent storage: " + app.app_primary_storage_dir
     FileChooserListView:
         size_hint_y: 0.7
         id: projectfilechooser
