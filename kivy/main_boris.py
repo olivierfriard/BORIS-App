@@ -37,7 +37,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.uix.textinput import TextInput
-from kivy.uix.dropdown import DropDown
+
+"""from kivy.uix.dropdown import DropDown"""
 from kivy.properties import StringProperty
 from kivy.logger import Logger
 from kivy.base import EventLoop
@@ -49,6 +50,7 @@ import json
 import time
 import datetime as dt
 import time
+
 from decimal import Decimal
 
 NO_FOCAL_SUBJECT = "No focal subject"
@@ -79,8 +81,8 @@ BEHAV_CAT_COLORS = [
     [0.4, 0.2, 0.6, 1],
 ]
 
-FONT_MAX_SIZE_SUBJECT = 32
-FONT_MIN_SIZE_SUBJECT = 12
+FONT_MAX_SIZE_SUBJECT = 40
+FONT_MIN_SIZE_SUBJECT = 20
 
 selected_modifiers = {}
 observation_to_send = ""
@@ -95,10 +97,16 @@ else:
 
 
 def dynamic_font_size(n: int) -> int:
+    """
+    return font size adapted to the number of item
+    """
+
+    # return "20dp"
+
     if n >= 20:
-        return FONT_MIN_SIZE_SUBJECT
+        return f"{FONT_MIN_SIZE_SUBJECT}dp"
     else:
-        return int((FONT_MIN_SIZE_SUBJECT - FONT_MAX_SIZE_SUBJECT) / 20 * n + FONT_MAX_SIZE_SUBJECT)
+        return f"{int((FONT_MIN_SIZE_SUBJECT - FONT_MAX_SIZE_SUBJECT) / 20 * n + FONT_MAX_SIZE_SUBJECT)}dp"
 
 
 class StartPageForm(BoxLayout):
@@ -440,8 +448,6 @@ class StartObservationForm(BoxLayout):
             font_size = 24
 
             self.current_modifiers[behavior] = {}
-
-            Logger.info(f"self.modifiers[behavior]: {self.modifiers[behavior]}")
 
             for iidx in sorted([int(x) for x in self.modifiers[behavior].keys()]):
                 idx = str(iidx)
