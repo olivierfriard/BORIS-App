@@ -185,13 +185,18 @@ class ViewProjectForm(BoxLayout):
         self.selected_item = args[0].selection[0].text
 
     def new_observation(self):
-
+        """
+        start a new observation
+        """
         self.clear_widgets()
         a = StartObservationForm()
         a.obsdate_input.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}"
         self.add_widget(a)
 
     def go_back(self):
+        """
+        go to the start page
+        """
         self.clear_widgets()
         self.add_widget(StartPageForm())
 
@@ -680,6 +685,18 @@ class StartObservationForm(BoxLayout):
             change button color if STATE event
             """
 
+            def seconds_of_day(time_) -> float:
+                """
+                return the number of seconds since start of the day
+                """
+
+                print(time_.date())
+                print(dt.time(0))
+
+                return round((time_ - dt.datetime.combine(time_.date(), dt.time(0))).total_seconds(), 3)
+
+                # return dec((dt - datetime.datetime.combine(dt.date(), datetime.time(0))).total_seconds()).quantize(dec("0.001"))
+
             time_, newState, modifier = event
 
             if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
@@ -721,9 +738,19 @@ class StartObservationForm(BoxLayout):
 
             # point event
             if "Point" in behaviorType(BorisApp.project[ETHOGRAM], newState):
+                # add event
+                if BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_time"]:
+                    time_output = seconds_of_day(dt.datetime.now())
+                    print(f"{time_output}")
+                elif BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_epoch_time"]:
+                    time_output = round(time_, 3)
+                else:
+                    time_output = round(time_ - self.time0, 3)
+
+                print([time_output, self.focal_subject, newState, modifier, ""])
 
                 BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                    [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
+                    [time_output, self.focal_subject, newState, modifier, ""]
                 )
 
             Logger.info(f"{__app_name__}: current state {self.currentStates}")
@@ -871,11 +898,13 @@ class StartObservationForm(BoxLayout):
             "close_behaviors_between_videos": False,
             "time offset": 0.0,
             "scan_sampling_time": 0,
-            "time offset second player": 0.0,
             "description": self.obsdescription_input.text,
             "file": [],
             "events": [],
             "visualize_spectrogram": False,
+            "visualize_waveform": False,
+            "start_from_current_time": self.day_time_input.active,
+            "start_from_current_epoch_time": self.epoch_time_input.active,
             "type": "LIVE",
             INDEP_VAR: {},
         }
