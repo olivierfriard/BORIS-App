@@ -128,6 +128,7 @@ BorisRoot:
 
 
 <ViewProjectForm>
+# display summary of project
     orientation: "vertical"
     BoxLayout:
         orientation: "vertical"
@@ -159,12 +160,13 @@ BorisRoot:
             on_press: root.new_observation()
 
 
-
 <StartObservationForm>
     orientation: "vertical"
     obsid_input: obsid
     obsdate_input: obsdate
     obsdescription_input: obsdescription
+    day_time_input: day_time
+    epoch_time_input: epoch_time
 
     BoxLayout:
         orientation: "vertical"
@@ -174,7 +176,7 @@ BorisRoot:
             Label:
                 size_hint_x: 0.2
                 text: "Observation id"
-                font_size: "15dp"
+                font_size: "20dp"
             TextInput:
                 size_hint_x: 0.8
                 multiline: False
@@ -186,24 +188,53 @@ BorisRoot:
             Label:
                 size_hint_x: 0.2
                 text: "Observation date"
-                font_size: "15dp"
+                font_size: "20dp"
             TextInput:
-                size_hint_x: 0.8
+                size_hint_x: 0.6
                 id: obsdate
                 multiline: False
                 font_size: "25dp"
+            Button:
+                text: "set now"
+                size_hint_x: 0.2
+                font_size: "20dp"
+                on_press: root.set_date_to_now()
 
         BoxLayout:
             size_hint_y: 0.6
             Label:
                 size_hint_x: 0.2
                 text: "Description"
-                font_size: "15dp"
+                font_size: "20dp"
             TextInput:
                 size_hint_x: 0.8
                 id: obsdescription
                 multiline: True
                 font_size: "20dp"
+
+        BoxLayout:
+            size_hint_y: 0.2
+            BoxLayout:
+                Label:
+                    size_hint_x: 0.8
+                    text: "Start from day time (HH:MM:SS)"
+                    font_size: "20dp"
+                CheckBox:
+                    size_hint_x: 0.2
+                    id: day_time
+
+        BoxLayout:
+            size_hint_y: 0.2
+            BoxLayout:
+                Label:
+                    size_hint_x: 0.8
+                    text: "Epoch time"
+                    font_size: "20dp"
+                CheckBox:
+                    size_hint_x: 0.2
+                    id: epoch_time
+
+
     BoxLayout:
         size_hint_y: 0.1
         Button:
@@ -247,33 +278,18 @@ BorisRoot:
                 font_size: "20dp"
                 on_press: root.no()
 
-<ConfirmUpdatePopup>
-    title: "Are you sure you want to update BORIS App?"
-    title_size: "30dp"
-    font_size: "20dp"
-    BoxLayout:
-        size_hint_y: None
-        Button:
-            text: "Yes"
-            size_hint_x: 0.5
-            font_size: "20dp"
-            on_press: root.yes()
-        Button:
-            text: "No"
-            size_hint_x: 0.5
-            font_size: "20dp"
-            on_press: root.no()
 
-<AskForExistingFile>
-    title: "BORIS"
+<AskExistingObservation>
+    title: "BORIS - Warning!"
     BoxLayout:
         orientation: "vertical"
         Label:
             size_hint_y: 0.3
-            id: lbProjectExists
+            id: lb_obs_exists
             font_size: "20dp"
             size_hint_y: None
-            text: "A project with the same file name already exists on this device"
+            text: "An observation with the same id already exists"
+
         BoxLayout:
             size_hint_y: 0.5
 
@@ -289,11 +305,38 @@ BorisRoot:
                 size_hint_x: 1
                 font_size: "20dp"
                 on_press: root.overwrite()
-            Button:
-                text: "Rename it"
-                size_hint_x: 1
-                font_size: "20dp"
-                on_press: root.rename()
+
+
+# <AskForExistingFile>
+#     title: "BORIS"
+#     BoxLayout:
+#         orientation: "vertical"
+#         Label:
+#             size_hint_y: 0.3
+#             id: lbProjectExists
+#             font_size: "20dp"
+#             size_hint_y: None
+#             text: "A project with the same file name already exists on this device"
+#         BoxLayout:
+#             size_hint_y: 0.5
+
+#         BoxLayout:
+#             size_hint_y: 0.2
+#             Button:
+#                 text: "Cancel"
+#                 size_hint_x: 1
+#                 font_size: "20dp"
+#                 on_press: root.cancel()
+#             Button:
+#                 text: "Overwrite"
+#                 size_hint_x: 1
+#                 font_size: "20dp"
+#                 on_press: root.overwrite()
+#             Button:
+#                 text: "Rename it"
+#                 size_hint_x: 1
+#                 font_size: "20dp"
+#                 on_press: root.rename()
 
 
 

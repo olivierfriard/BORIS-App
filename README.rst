@@ -13,6 +13,10 @@ This release is an alpha version. **USE IT ONLY FOR TESTING** and reporting bug 
 
 It was tested on Android (v. 8.1).
 
+
+
+
+
 Legal
 =========================
 
@@ -28,6 +32,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 `GNU General Public License <http://www.gnu.org/copyleft/gpl.html>`_ for more details.
 
 
+
+
+
 Installation
 =========================
 
@@ -36,6 +43,9 @@ Installation
 `https://github.com/olivierfriard/BORIS-App/releases <https://github.com/olivierfriard/BORIS-App/releases>`_
 
 * Follow `How to Install APK on Android <https://www.lifewire.com/install-apk-on-android-4177185>`_ to install
+
+
+
 
 
 Use

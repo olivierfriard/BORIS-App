@@ -101,8 +101,6 @@ def dynamic_font_size(n: int) -> int:
     return font size adapted to the number of item
     """
 
-    # return "20dp"
-
     if n >= 20:
         return f"{FONT_MIN_SIZE_SUBJECT}dp"
     else:
@@ -260,7 +258,7 @@ def behaviorExcluded(ethogram, behavior):
 
 class StartObservationForm(BoxLayout):
 
-    t0 = 0  # initial time
+    time0 = 0  # initial time
     focal_subject = NO_FOCAL_SUBJECT
     btnList, btnSubjectsList, mem, behavior_color, currentStates, modifiers = {}, {}, {}, {}, {}, {}
     fileName, obsId, behaviorsLayout, subjectsLayout = "", "", "", ""
@@ -282,6 +280,9 @@ class StartObservationForm(BoxLayout):
         w.obsid_input.text = self.mem["obsId"]
         w.obsdate_input.text = self.mem["obsDate"]
         w.obsdescription_input.text = self.mem["obsDescription"]
+        w.day_time_input.active = self.mem["day_time"]
+        w.epoch_time_input.active = self.mem["epoch_time"]
+
         self.add_widget(w)
 
     def go_back(self, obj):
@@ -311,6 +312,12 @@ class StartObservationForm(BoxLayout):
                             return
 
         self.show_start_observation_form()
+
+    def set_date_to_now(self):
+        """
+        set date to now
+        """
+        self.obsdate_input.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}"
 
     def indep_var(self):
         """
@@ -425,8 +432,6 @@ class StartObservationForm(BoxLayout):
 
                 if type_ == NUMERIC_MODIFIER:
                     self.current_modifiers[behavior][idx] = [obj.text]
-
-                print("self.current_modifiers", self.current_modifiers)
 
             def on_goback_button_release(obj):
 
@@ -675,18 +680,16 @@ class StartObservationForm(BoxLayout):
             change button color if STATE event
             """
 
-            t, newState, modifier = event
+            time_, newState, modifier = event
 
             if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
 
                 # deselect
                 if self.focal_subject in self.currentStates and newState in self.currentStates[self.focal_subject]:
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                        [round(t - self.t0, 3), self.focal_subject, newState, modifier, ""]
+                        [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
                     )
-
                     self.btnList[newState].background_color = self.behavior_color[newState]
-
                     self.currentStates[self.focal_subject].remove(newState)
 
                 # select
@@ -694,12 +697,11 @@ class StartObservationForm(BoxLayout):
                     # test if state is exclusive
                     if behaviorExcluded(BorisApp.project[ETHOGRAM], newState) != [""]:
                         statesToStop = []
-
                         if self.focal_subject in self.currentStates:
                             for cs in self.currentStates[self.focal_subject]:
                                 if cs in behaviorExcluded(BorisApp.project[ETHOGRAM], newState):
                                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                                        [round(t - self.t0, 3), self.focal_subject, cs, "", ""]
+                                        [round(time_ - self.time0, 3), self.focal_subject, cs, "", ""]
                                     )
                                     statesToStop.append(cs)
                                     self.btnList[cs].background_color = self.behavior_color[cs]
@@ -708,7 +710,7 @@ class StartObservationForm(BoxLayout):
                                 self.currentStates[self.focal_subject].remove(s)
 
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                        [round(t - self.t0, 3), self.focal_subject, newState, modifier, ""]
+                        [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
                     )
 
                     self.btnList[newState].background_color = [1, 0, 0, 1]  # red
@@ -719,8 +721,9 @@ class StartObservationForm(BoxLayout):
 
             # point event
             if "Point" in behaviorType(BorisApp.project[ETHOGRAM], newState):
+
                 BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                    [round(t - self.t0, 3), self.focal_subject, newState, modifier, ""]
+                    [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
                 )
 
             Logger.info(f"{__app_name__}: current state {self.currentStates}")
@@ -734,17 +737,14 @@ class StartObservationForm(BoxLayout):
             global selected_modifier
             selected_modifier = {}
 
-            t = time.time()
-            new_behavior = obj.text
-
-            self.time_ = t
-            self.behav_ = new_behavior
+            self.time_ = time.time()  # epoch time
+            self.behav_ = obj.text
 
             # check if modifiers
-            if self.modifiers[new_behavior]:
-                view_modifiers_layout(new_behavior)
+            if self.modifiers[self.behav_]:
+                view_modifiers_layout(self.behav_)
             else:
-                write_event([self.time_, new_behavior, ""])
+                write_event((self.time_, self.behav_, ""))
 
         def btnSubjectPressed(obj):
             """
@@ -775,7 +775,7 @@ class StartObservationForm(BoxLayout):
             stop current observation
             """
 
-            def my_callback(instance):
+            def stop_obs_callback(instance):
                 if instance.title == YES:
                     try:
                         with open(BorisApp.projectFileName, "w") as f:
@@ -797,11 +797,29 @@ class StartObservationForm(BoxLayout):
                     self.add_widget(StartPageForm())
 
             pop = ConfirmStopPopup()
-            pop.bind(on_dismiss=my_callback)
+            pop.bind(on_dismiss=stop_obs_callback)
             pop.open()
 
         def clock(delta_time):
-            self.time_header.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}"
+            self.time_header.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S} | {time.time() - self.time0:.3f} s"
+
+        def obs_exists(nb_events):
+            def obs_exists_callback(instance):
+                if instance.title == "cancel":
+                    self.show_start_observation_form()
+
+            pop = AskExistingObservation()
+            if nb_events:
+                pop.ids.lb_obs_exists.text = (
+                    f"An observation with the same id and {nb_events} coded events already exists"
+                )
+            else:
+                pop.ids.lb_obs_exists.text = f"An observation with the same id already exists. No events were coded"
+
+            pop.bind(on_dismiss=obs_exists_callback)
+            pop.open()
+            print("end popup")
+            # print(pop.result)
 
         # check if observation id field is empty
         if not self.obsid_input.text:
@@ -811,11 +829,21 @@ class StartObservationForm(BoxLayout):
             return
 
         if self.obsid_input.text.upper() in (x.upper() for x in BorisApp.project[OBSERVATIONS]):
-
-            pop = InfoPopup()
-            pop.ids.label.text = f"This observation id ({self.obsid_input.text}) already exists."
-            pop.open()
-            return
+            self.mem["obsId"] = self.obsid_input.text
+            self.mem["obsDate"] = self.obsdate_input.text
+            self.mem["obsDescription"] = self.obsdescription_input.text
+            self.mem["day_time"] = self.day_time_input.active
+            self.mem["epoch_time"] = self.epoch_time_input.active
+            # number of events in existing obs
+            nb_events = [
+                len(BorisApp.project[OBSERVATIONS][x]["events"])
+                for x in BorisApp.project[OBSERVATIONS]
+                if x.upper() == self.obsid_input.text.upper()
+            ][0]
+            obs_exists(nb_events)
+            # pop.ids.label.text = f"This observation id ({self.obsid_input.text}) already exists."
+            # pop.open()
+            # return
 
         # check if date is correct
         if not self.obsdate_input.text:
@@ -827,15 +855,14 @@ class StartObservationForm(BoxLayout):
         try:
             time.strptime(self.obsdate_input.text, "%Y-%m-%d %H:%M:%S")
         except ValueError:
-
             pop = InfoPopup()
             pop.ids.label.text = "The date is not valid. Use the YYYY-MM-DD HH:MM:SS format"
             pop.open()
             return
 
-        print("obs id:", self.obsid_input.text)
-        print("description:", self.obsdescription_input.text)
-        print("observation date:", self.obsdate_input.text)
+        Logger.info(f"{__app_name__}: observation id {self.obsid_input.text}")
+        Logger.info(f"{__app_name__}: description {self.obsdescription_input.text}")
+        Logger.info(f"{__app_name__}: observation date {self.obsdate_input.text}")
 
         self.obsId = self.obsid_input.text
 
@@ -857,7 +884,7 @@ class StartObservationForm(BoxLayout):
         for label in self.iv:
             BorisApp.project[OBSERVATIONS][self.obsId][INDEP_VAR][label] = self.iv[label].text
 
-        print("indep var\n", BorisApp.project[OBSERVATIONS][self.obsId][INDEP_VAR])
+        Logger.info(f"{__app_name__}: indep var {BorisApp.project[OBSERVATIONS][self.obsId][INDEP_VAR]}")
 
         # create layout with subject buttons
         if BorisApp.project[SUBJECTS]:
@@ -868,14 +895,10 @@ class StartObservationForm(BoxLayout):
 
         view_behaviors_layout(None)
 
-        self.t0 = time.time()
-
-        self.clock_timer = Clock.schedule_interval(clock, 1)
+        self.time0 = time.time()
 
         # start timer
-        """
-        Clock.schedule_interval(clock_callback, 60)
-        """
+        self.clock_timer = Clock.schedule_interval(clock, 1)
 
 
 class AskForExistingFile(Popup):
@@ -899,6 +922,16 @@ class ConfirmStopPopup(Popup):
 
     def no(self):
         self.title = NO
+        self.dismiss()
+
+
+class AskExistingObservation(Popup):
+    def cancel(self):
+        self.title = "cancel"
+        self.dismiss()
+
+    def overwrite(self):
+        self.title = "overwrite"
         self.dismiss()
 
 
