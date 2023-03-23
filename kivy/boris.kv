@@ -56,7 +56,7 @@ BorisRoot:
         Button:
             text: "Open project"
             size_hint_x: 0.8
-            font_size: "20dp"
+            font_size: "25dp"
             on_press: root.show_SelectProjectForm()
 
         Button:
@@ -101,30 +101,28 @@ BorisRoot:
         Rectangle:
             pos: self.pos
             size: self.size
-
     Label:
         id: title
         size_hint_y: 0.1
         text: "Select a BORIS project file and then press \"Open project\" button\nCurrent storage: " + app.app_primary_storage_dir
     FileChooserListView:
-        size_hint_y: 0.7
+        size_hint_y: 0.75
         id: projectfilechooser
         rootpath: app.app_primary_storage_dir
         #path: '/data'
         filters: ["*.boris"]
     BoxLayout:
-        size_hint_y: 0.2
+        size_hint_y: 0.15
         Button:
             text: "Go back"
             size_hint_x: 0.2
-            font_size: "20dp"
+            font_size: "25dp"
             on_press: root.cancel()
         Button:
             text: "Open project"
             size_hint_x: 0.8
-            font_size: "20dp"
+            font_size: "25dp"
             on_press: root.open_project(projectfilechooser.path, projectfilechooser.selection)
-
 #
 
 <ViewProjectForm>
