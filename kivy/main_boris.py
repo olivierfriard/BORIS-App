@@ -22,8 +22,8 @@ This file is part of BORIS App.
 """
 
 __app_name__ = "BORIS"
-__version__ = "0.5"
-__version_date__ = "2023-03-08"
+__version__ = "0.6"
+__version_date__ = "2023-03-09"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
 
@@ -38,7 +38,6 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.uix.textinput import TextInput
 
-"""from kivy.uix.dropdown import DropDown"""
 from kivy.properties import StringProperty
 from kivy.logger import Logger
 from kivy.base import EventLoop
@@ -50,6 +49,7 @@ import json
 import time
 import datetime as dt
 import time
+import pathlib as pl
 
 from decimal import Decimal
 
@@ -181,8 +181,73 @@ class ViewProjectForm(BoxLayout):
 
     selected_item = StringProperty("no selection")
 
+    def show(self):
+        self.ids.lbl.text = f"project file: {pl.Path(BorisApp.projectFileName).name}"
+        rows = []
+        rows.append(f"project name: {BorisApp.project['project_name']}")
+        rows.append(f"project date: {BorisApp.project['project_date'].replace('T', ' ')}")
+        rows.append(f"project description: {BorisApp.project['project_description']}")
+        rows.append(f"Number of behaviors: {len(BorisApp.project[ETHOGRAM])}")
+        rows.append(f"Number of behavioral categories: {len(BorisApp.project.get(BEHAV_CAT, []))}")
+        rows.append(f"Number of subjects: {len(BorisApp.project[SUBJECTS])}")
+        rows.append(f"Number of observations: {len(BorisApp.project[OBSERVATIONS])}")
+
+        self.ids.project_info.text = "\n".join(rows)
+
     def selection_changed(self, *args):
         self.selected_item = args[0].selection[0].text
+
+    def view_ethogram(self):
+        """
+        display ethogram
+        """
+        self.clear_widgets()
+        w = ViewEthogramForm()
+        self.add_widget(w)
+        w.show()
+
+    def new_observation(self):
+        """
+        start a new observation
+        """
+        self.clear_widgets()
+        a = StartObservationForm()
+        a.obsdate_input.text = f"{dt.datetime.now():%Y-%m-%d %H:%M:%S}"
+        self.add_widget(a)
+
+    def go_back(self):
+        """
+        go to the start page
+        """
+        self.clear_widgets()
+        self.add_widget(StartPageForm())
+
+
+class ViewEthogramForm(BoxLayout):
+    """
+    display ethogram details
+    """
+
+    def show(self):
+        self.ids.lbl.text = f"The ethogram contains {len(BorisApp.project[ETHOGRAM])} behavior{'s.' if len(BorisApp.project[ETHOGRAM]) > 1 else '.'}"
+        rows = []
+        for idx in BorisApp.project[ETHOGRAM]:
+            rows.append(BorisApp.project[ETHOGRAM][idx]["code"])
+            rows.append(f"Type of behavior: {BorisApp.project[ETHOGRAM][idx]['type']}")
+            rows.append(f"Description: {BorisApp.project[ETHOGRAM][idx]['description']}")
+            rows.append(
+                f"Behavioral category: {BorisApp.project[ETHOGRAM][idx]['category'] if BorisApp.project[ETHOGRAM][idx]['category'] else 'None'}"
+            )
+            rows.append(f"Modifiers: {'Yes' if BorisApp.project[ETHOGRAM][idx]['modifiers'] else 'No'}")
+            rows.append("")
+
+        self.ids.project_info.text = "\n".join(rows)
+
+    def view_project(self):
+        self.clear_widgets()
+        w = ViewProjectForm()
+        self.add_widget(w)
+        w.show()
 
     def new_observation(self):
         """
@@ -227,7 +292,6 @@ class SelectProjectForm(BoxLayout):
             return
 
         if not BorisApp.project[ETHOGRAM]:
-
             pop = InfoPopup()
             pop.ids.label.text = "The ethogram of this project is empty!"
             pop.open()
@@ -235,19 +299,8 @@ class SelectProjectForm(BoxLayout):
 
         self.clear_widgets()
         w = ViewProjectForm()
-        w.ids.lbl.text = f"project file path: {BorisApp.projectFileName}"
-
-        rows = []
-        rows.append("project name: {}".format(BorisApp.project["project_name"]))
-        rows.append("project date: {}".format(BorisApp.project["project_date"].replace("T", " ")))
-        rows.append("project description: {}".format(BorisApp.project["project_description"]))
-        rows.append("Number of behaviors: {}".format(len(BorisApp.project[ETHOGRAM].keys())))
-        rows.append(f"Number of behavior categories: {len(BorisApp.project.get(BEHAV_CAT, []))}")
-        rows.append("Number of subjects: {}".format(len(BorisApp.project[SUBJECTS].keys())))
-        rows.append("Number of observations: {}".format(len(BorisApp.project[OBSERVATIONS].keys())))
-
-        w.ids.project_info.text = "\n".join(rows)
         self.add_widget(w)
+        w.show()
 
 
 def behaviorType(ethogram: dict, behavior: str) -> str:
