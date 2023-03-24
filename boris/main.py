@@ -69,7 +69,9 @@ YES = "yes"
 NO = "no"
 
 RED = [1, 0, 0, 1]
+DARKRED = [0.9, 0.1, 0.1, 1]
 GRAY = [0.5, 0.5, 0.5, 1]
+GREEN = [0.1, 0.9, 0.1, 1]
 
 BEHAV_CAT = "behavioral_categories"
 BEHAV_CAT_COLORS = [
@@ -104,6 +106,40 @@ def dynamic_font_size(n: int) -> int:
         return f"{FONT_MIN_SIZE_SUBJECT}dp"
     else:
         return f"{int((FONT_MIN_SIZE_SUBJECT - FONT_MAX_SIZE_SUBJECT) / 20 * n + FONT_MAX_SIZE_SUBJECT)}dp"
+
+
+def contrasted_color(c):
+    def luminance(s: str) -> float:
+        def conv(c):
+            if c <= 0.03928:
+                return c / 12.92
+            else:
+                return ((c + 0.055) / 1.055) ** 2.4
+
+        s = s.replace("#", "")
+        r = int(s[:2], 16) / 255
+        g = int(s[2:4], 16) / 255
+        b = int(s[4:], 16) / 255
+
+        return 0.2126 * conv(r) + 0.7152 * conv(g) + 0.0722 * conv(b)
+
+    def contrast(c1, c2):
+        r = (luminance(c1) + 0.05) / (luminance(c2) + 0.05)
+        if r < 1:
+            return 1 / r
+        else:
+            return r
+
+    black = "#000000"
+    white = "#ffffff"
+
+    if not isinstance(c, str):
+        c = "#%02x%02x%02x" % tuple((int(x * 255) for x in c[:3]))
+
+    if contrast(c, black) > 4.5:
+        return black
+    else:
+        return white
 
 
 class StartPageForm(BoxLayout):
@@ -309,7 +345,7 @@ def behaviorType(ethogram: dict, behavior: str) -> str:
     return [ethogram[k]["type"] for k in ethogram.keys() if ethogram[k]["code"] == behavior][0]
 
 
-def behaviorExcluded(ethogram, behavior):
+def behaviorExcluded(ethogram, behavior) -> list:
     return [ethogram[k]["excluded"] for k in ethogram.keys() if ethogram[k]["code"] == behavior][0].split(",")
 
 
@@ -435,8 +471,8 @@ class StartObservationForm(BoxLayout):
         """
         start new observation
         """
-        self.modifier_buttons = {}
-        self.current_modifiers = {}
+        self.modifier_buttons: dict = {}
+        self.current_modifiers: dict = {}
 
         def create_modifiers_layout(behavior):
             """
@@ -456,7 +492,7 @@ class StartObservationForm(BoxLayout):
                         for o in self.modifier_buttons
                         if self.modifier_buttons[o][0] == behavior and self.modifier_buttons[o][1] == idx
                     ]:
-                        o.background_color = [0.5, 0.5, 0.5, 1]
+                        o.background_color = GRAY
 
                     if idx in self.current_modifiers[behavior]:
                         if (
@@ -464,13 +500,13 @@ class StartObservationForm(BoxLayout):
                             or modifier not in self.current_modifiers[behavior][idx]
                         ):
                             self.current_modifiers[behavior][idx] = [modifier]
-                            obj.background_color = [0.9, 0.1, 0.1, 1]  # red
+                            obj.background_color = DARKRED
                         else:
                             self.current_modifiers[behavior][idx] = []
-                            obj.background_color = [0.5, 0.5, 0.5, 1]
+                            obj.background_color = GRAY
                     else:
                         self.current_modifiers[behavior][idx] = [modifier]
-                        obj.background_color = [0.9, 0.1, 0.1, 1]  # red
+                        obj.background_color = DARKRED
 
                 if type_ == MULTI_SELECTION:
                     if idx in self.current_modifiers[behavior]:
@@ -479,13 +515,13 @@ class StartObservationForm(BoxLayout):
                             or modifier not in self.current_modifiers[behavior][idx]
                         ):
                             self.current_modifiers[behavior][idx].append(modifier)
-                            obj.background_color = [0.9, 0.1, 0.1, 1]  # red
+                            obj.background_color = DARKRED
                         else:
                             self.current_modifiers[behavior][idx].remove(modifier)
-                            obj.background_color = [0.5, 0.5, 0.5, 1]
+                            obj.background_color = GRAY
                     else:
                         self.current_modifiers[behavior][idx] = [modifier]
-                        obj.background_color = [0.9, 0.1, 0.1, 1]  # red
+                        obj.background_color = DARKRED
 
                 if type_ == NUMERIC_MODIFIER:
                     self.current_modifiers[behavior][idx] = [obj.text]
@@ -623,16 +659,16 @@ class StartObservationForm(BoxLayout):
                 cols=int((len(BorisApp.project[ETHOGRAM]) + 1) ** 0.5), size_hint=(1, 1), spacing=3
             )
 
-            behaviors_list = sorted([BorisApp.project[ETHOGRAM][k]["code"] for k in BorisApp.project[ETHOGRAM]])
             # check modifiers
-            self.modifiers_layout = {}
+            self.modifiers_layout: dict = {}
             for idx in BorisApp.project[ETHOGRAM]:
                 self.modifiers[BorisApp.project[ETHOGRAM][idx]["code"]] = BorisApp.project[ETHOGRAM][idx]["modifiers"]
 
             # font size
-            behaviors_font_size = dynamic_font_size(len(behaviors_list))
+            behaviors_font_size = dynamic_font_size(len(BorisApp.project[ETHOGRAM]))
 
-            if BEHAV_CAT in BorisApp.project:
+            """
+            # if BEHAV_CAT in BorisApp.project:
                 colors_list = BEHAV_CAT_COLORS
                 categories_list = set(
                     [
@@ -666,36 +702,48 @@ class StartObservationForm(BoxLayout):
                         # create modifiers layout
                         if self.modifiers[behavior]:
                             self.modifiers_layout[behavior] = create_modifiers_layout(behavior)
+            """
 
-            else:
-                for behavior in behaviors_list:
-                    btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
-                    btn.background_normal = ""
-                    btn.background_color = [0.5, 0.5, 0.5, 1]  # gray
+            # for behavior in behaviors_list:
+            for idx in BorisApp.project[ETHOGRAM]:
+                behavior = BorisApp.project[ETHOGRAM][idx]["code"]
+                behav_col = BorisApp.project[ETHOGRAM][idx].get("color", None)
+                btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
+                btn.background_normal = ""
+                if behav_col is not None:
+                    btn.background_color = behav_col
+                    btn.color = contrasted_color(behav_col)
+                    self.behavior_color[behavior] = behav_col
+
+                else:
+                    btn.background_color = GRAY
+                    btn.color = contrasted_color("#808080")
                     self.behavior_color[behavior] = btn.background_color
-                    btn.bind(on_release=btnBehaviorPressed)
-                    self.btnList[behavior] = btn
-                    gdrid_layout.add_widget(btn)
 
-                    # create modifiers layout
-                    if self.modifiers[behavior]:
-                        self.modifiers_layout[behavior] = create_modifiers_layout(behavior)
+                btn.bind(on_release=btnBehaviorPressed)
+                self.btnList[behavior] = btn
+                gdrid_layout.add_widget(btn)
+
+                # create modifiers layout
+                if self.modifiers[behavior]:
+                    self.modifiers_layout[behavior] = create_modifiers_layout(behavior)
 
             behaviorsLayout.add_widget(gdrid_layout)
 
             hlayout = BoxLayout(orientation="horizontal", size_hint_y=0.1)
+
             # add subject button
             if BorisApp.project[SUBJECTS]:
                 self.btnSelSubj = Button(text="Select focal subject", size_hint_x=1, font_size="24dp")
                 self.btnSelSubj.background_normal = ""
-                self.btnSelSubj.background_color = [0.1, 0.9, 0.1, 1]  # green
+                self.btnSelSubj.background_color = [0.1, 0.1, 0.9, 1]  # blue
                 self.btnSelSubj.bind(on_release=view_subjects_layout)
                 hlayout.add_widget(self.btnSelSubj)
 
             # add stop button
             btn = Button(text="Stop obs", size_hint_x=1, font_size="24dp")
             btn.background_normal = ""
-            btn.background_color = [0.9, 0.1, 0.1, 1]  # red
+            btn.background_color = DARKRED
             btn.bind(on_release=btnStopPressed)
             hlayout.add_widget(btn)
 
@@ -759,6 +807,8 @@ class StartObservationForm(BoxLayout):
                         [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
                     )
                     self.btnList[newState].background_color = self.behavior_color[newState]
+                    print(self.behavior_color[newState])
+                    self.btnList[newState].color = contrasted_color(self.behavior_color[newState])
                     self.currentStates[self.focal_subject].remove(newState)
 
                 # select
@@ -774,6 +824,7 @@ class StartObservationForm(BoxLayout):
                                     )
                                     statesToStop.append(cs)
                                     self.btnList[cs].background_color = self.behavior_color[cs]
+                                    self.btnList[cs].color = contrasted_color(self.behavior_color[cs])
 
                             for s in statesToStop:
                                 self.currentStates[self.focal_subject].remove(s)
@@ -805,6 +856,9 @@ class StartObservationForm(BoxLayout):
                     [time_output, self.focal_subject, newState, modifier, ""]
                 )
 
+            with open(BorisApp.projectFileName, "w") as f:
+                f.write(json.dumps(BorisApp.project, indent=0))
+
             Logger.info(f"{__app_name__}: current state {self.currentStates}")
             Logger.info(f"{__app_name__}: event {BorisApp.project[OBSERVATIONS][self.obsId]['events'][-1]}")
 
@@ -834,13 +888,13 @@ class StartObservationForm(BoxLayout):
 
             # deselect already selected subject
             if obj.text == self.focal_subject:
-                self.btnSubjectsList[self.focal_subject].background_color = [0.5, 0.5, 0.5, 1]  # gray
+                self.btnSubjectsList[self.focal_subject].background_color = GRAY
                 self.focal_subject = NO_FOCAL_SUBJECT
             else:
                 if self.focal_subject != NO_FOCAL_SUBJECT:
-                    self.btnSubjectsList[self.focal_subject].background_color = [0.5, 0.5, 0.5, 1]  # gray
+                    self.btnSubjectsList[self.focal_subject].background_color = GRAY
                 self.focal_subject = obj.text
-                self.btnSubjectsList[self.focal_subject].background_color = [1, 0, 0, 1]  # red
+                self.btnSubjectsList[self.focal_subject].background_color = RED
 
             print("new focal subject:", self.focal_subject)
             self.btnSelSubj.text = self.focal_subject
@@ -858,7 +912,7 @@ class StartObservationForm(BoxLayout):
                 if instance.title == YES:
                     try:
                         with open(BorisApp.projectFileName, "w") as f:
-                            f.write(json.dumps(BorisApp.project, indent=1))
+                            f.write(json.dumps(BorisApp.project, indent=0))
 
                         pop = InfoPopup()
                         pop.ids.label.text = f"Observation saved in\n{BorisApp.projectFileName}"

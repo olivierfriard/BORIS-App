@@ -179,14 +179,15 @@ BorisRoot:
             font_size: "20dp"
             text: "Ethogram"
         
-        TextInput:
-            id: project_info
-            size_hint_y: 0.9
-            font_size: "20dp"
-            #readonly: True
-            scroll_from_swipe: True
-            do_scroll_y: True
-            do_scroll_x: True
+        ScrollView:
+            do_scroll_x:True
+            do_scroll_y:True
+            TextInput:
+                id: project_info
+                font_size: "20dp"
+                size_hint: .8, None
+                height: self.minimum_height
+                readonly: True
 
     BoxLayout:  # taskbar
         orientation: "horizontal"

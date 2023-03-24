@@ -14,10 +14,10 @@ package.domain = it.unito.dev
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv
+source.include_exts = py,png,jpg,kv,boris
 
 # (list) List of inclusions using pattern matching
-#source.include_patterns = demo.boris
+source.include_patterns = demo.boris
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec
@@ -52,7 +52,7 @@ requirements = python3,kivy,android
 #icon.filename = %(source.dir)s/logo_eye.128px.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
-orientation = portrait
+orientation = vertical
 
 
 # (list) List of service to declare
@@ -96,7 +96,7 @@ android.presplash_color = white
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-#android.permissions = CAMERA
+android.permissions = CAMERA
 
 
 

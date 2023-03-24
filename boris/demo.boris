@@ -4,6 +4,7 @@
    "category": "Social",
    "coding map": "",
    "code": "groom",
+   "color": "#ffff00",
    "key": "g",
    "modifiers": {
     "0": {
@@ -23,6 +24,7 @@
    "category": "Locomotion",
    "coding map": "",
    "code": "run",
+   "color": "#00ff00",
    "key": "r",
    "modifiers": {},
    "excluded": "walk,eat,drink",
@@ -33,6 +35,7 @@
    "category": "Locomotion",
    "coding map": "",
    "code": "walk",
+   "color": "#0000ff",
    "key": "w",
    "modifiers": {
     "0": {
@@ -748,6 +751,234 @@
    "file": [],
    "events": [],
    "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
+  },
+  "222": {
+   "date": "2023-03-24T15:24:55",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "description": "",
+   "file": [],
+   "events": [
+    [
+     35.547,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     36.366,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     37.123,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     40.547,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "visualize_waveform": false,
+   "start_from_current_time": false,
+   "start_from_current_epoch_time": false,
+   "type": "LIVE",
+   "independent_variables": {}
+  },
+  "xxx": {
+   "date": "2023-03-24T15:41:51",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "description": "",
+   "file": [],
+   "events": [
+    [
+     1.029,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     2.094,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     3.669,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     4.536,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     5.516,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     6.323,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     6.757,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     7.241,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     7.637,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     8.146,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     8.568,
+     "No focal subject",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     9.027,
+     "No focal subject",
+     "drink",
+     "",
+     ""
+    ],
+    [
+     9.399,
+     "No focal subject",
+     "urinate",
+     "",
+     ""
+    ],
+    [
+     9.858,
+     "No focal subject",
+     "urinate",
+     "",
+     ""
+    ],
+    [
+     10.205,
+     "No focal subject",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     10.639,
+     "No focal subject",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     12.5,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     13.033,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     13.603,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     14.136,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     14.868,
+     "No focal subject",
+     "eat",
+     "",
+     ""
+    ],
+    [
+     15.637,
+     "No focal subject",
+     "eat",
+     "",
+     ""
+    ],
+    [
+     16.554,
+     "No focal subject",
+     "groom",
+     "itself",
+     ""
+    ],
+    [
+     28.213,
+     "No focal subject",
+     "groom",
+     "None",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "visualize_waveform": false,
+   "start_from_current_time": false,
+   "start_from_current_epoch_time": false,
    "type": "LIVE",
    "independent_variables": {}
   }
