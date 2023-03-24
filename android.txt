@@ -1,3 +1,0 @@
-title=BORIS App
-author=Olivier Friard - Marco Gamba
-orientation=all
