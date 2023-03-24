@@ -1,0 +1,3628 @@
+{
+	"time_format": "hh:mm:ss",
+	"project_date": "2021-10-03T23:53:16",
+	"project_name": "test 5",
+	"project_description": "",
+	"project_format_version": "8.6",
+	"subjects_conf": {
+		"0": {
+			"key": "1",
+			"name": "s1",
+			"description": ""
+		},
+		"1": {
+			"key": "2",
+			"name": "s2",
+			"description": ""
+		}
+	},
+	"behaviors_conf": {
+		"0": {
+			"type": "Point event",
+			"key": "p",
+			"code": "p",
+			"description": "",
+			"category": "",
+			"modifiers": "",
+			"excluded": "",
+			"coding map": ""
+		},
+		"1": {
+			"type": "State event",
+			"key": "a",
+			"code": "a",
+			"description": "",
+			"category": "",
+			"modifiers": {
+				"0": {
+					"name": "x",
+					"type": 0,
+					"values": [
+						"1 (1)",
+						"2 (2)",
+						"3 (3)"
+					],
+					"description": "prova descrizione"
+				}
+			},
+			"excluded": "b",
+			"coding map": ""
+		},
+		"2": {
+			"type": "State event",
+			"key": "b",
+			"code": "b",
+			"description": "",
+			"category": "",
+			"modifiers": "",
+			"excluded": "a",
+			"coding map": ""
+		},
+		"3": {
+			"type": "State event",
+			"key": "z",
+			"code": "z",
+			"description": "",
+			"category": "",
+			"modifiers": "",
+			"excluded": "x",
+			"coding map": ""
+		},
+		"4": {
+			"type": "State event",
+			"key": "x",
+			"code": "x",
+			"description": "",
+			"category": "",
+			"modifiers": "",
+			"excluded": "z",
+			"coding map": ""
+		}
+	},
+	"observations": {
+		"live1": {
+			"file": {},
+			"type": "LIVE",
+			"date": "2021-10-03T23:54:56",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					0.5,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					1.0,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					5.612,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					5.612,
+					"",
+					"b",
+					"",
+					""
+				],
+				[
+					18.38,
+					"",
+					"a",
+					"2",
+					""
+				],
+				[
+					18.38,
+					"",
+					"b",
+					"",
+					""
+				],
+				[
+					36.996,
+					"",
+					"a",
+					"2",
+					""
+				],
+				[
+					59.068,
+					"",
+					"a",
+					"3",
+					""
+				],
+				[
+					72.133,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					72.133,
+					"",
+					"a",
+					"3",
+					""
+				],
+				[
+					94.483,
+					"",
+					"a",
+					"1",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"scan_sampling_time": 0,
+			"start_from_current_time": false,
+			"start_from_current_epoch_time": false
+		},
+		"3": {
+			"file": {
+				"1": [
+					"/tmp/ramdisk4/video_360.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-04-21T12:22:29",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/tmp/ramdisk4/video_360.mp4": 236.24
+				},
+				"fps": {
+					"/tmp/ramdisk4/video_360.mp4": 23.98
+				},
+				"hasVideo": {
+					"/tmp/ramdisk4/video_360.mp4": true
+				},
+				"hasAudio": {
+					"/tmp/ramdisk4/video_360.mp4": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"rel": {
+			"file": {
+				"1": [
+					"external_data/video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-04-21T17:43:48",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"external_data/video1.mp4": 179.96
+				},
+				"fps": {
+					"external_data/video1.mp4": 25.0
+				},
+				"hasVideo": {
+					"external_data/video1.mp4": true
+				},
+				"hasAudio": {
+					"external_data/video1.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"rel2": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/ecg_4columns.tsv",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-04-21T17:51:38",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/ecg_4columns.tsv": 12586.85,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": 179.96
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/ecg_4columns.tsv": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": 25.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/ecg_4columns.tsv": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/ecg_4columns.tsv": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"3videos": {
+			"file": {
+				"1": [
+					"video1.mp4"
+				],
+				"2": [
+					"video2.mp4"
+				],
+				"3": [
+					"video3.mp4"
+				],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-05-10T10:28:38",
+			"description": "3 video\neach video loaded in a different player\n(3 players)",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.44,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					2.16,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					2.84,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					7.08,
+					"",
+					"a",
+					"None",
+					""
+				],
+				[
+					11.16,
+					"",
+					"a",
+					"None",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"video1.mp4": 179.96,
+					"video2.mp4": 179.96,
+					"video3.mp4": 179.96
+				},
+				"fps": {
+					"video1.mp4": 25.0,
+					"video2.mp4": 25.0,
+					"video3.mp4": 25.0
+				},
+				"hasVideo": {
+					"video1.mp4": true,
+					"video2.mp4": true,
+					"video3.mp4": true
+				},
+				"hasAudio": {
+					"video1.mp4": false,
+					"video2.mp4": false,
+					"video3.mp4": false
+				},
+				"offset": {
+					"1": 0.0,
+					"2": 0.0,
+					"3": 0.0
+				}
+			}
+		},
+		"indri": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/lemurs_catta.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-05-12T15:28:57",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.335,
+					"s1",
+					"p",
+					"",
+					""
+				],
+				[
+					1.835,
+					"s1",
+					"p",
+					"",
+					""
+				],
+				[
+					2.202,
+					"s1",
+					"p",
+					"",
+					""
+				],
+				[
+					5.0,
+					"s1",
+					"z",
+					"",
+					""
+				],
+				[
+					10.0,
+					"s1",
+					"z",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": true,
+			"visualize_waveform": true,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/lemurs_catta.mp4": 60.35
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/lemurs_catta.mp4": 29.97
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/lemurs_catta.mp4": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/lemurs_catta.mp4": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"123": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-05-16T15:29:28",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					0.0,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					0.6,
+					"",
+					"p",
+					"",
+					"",
+					16
+				],
+				[
+					0.76,
+					"",
+					"p",
+					"",
+					"",
+					20
+				],
+				[
+					1.04,
+					"",
+					"p",
+					"",
+					"",
+					27
+				],
+				[
+					1.32,
+					"",
+					"p",
+					"",
+					"",
+					34
+				],
+				[
+					2.48,
+					"",
+					"p",
+					"",
+					"",
+					63
+				],
+				[
+					3.04,
+					"",
+					"p",
+					"",
+					"",
+					77
+				],
+				[
+					3.96,
+					"",
+					"p",
+					"",
+					"",
+					100
+				],
+				[
+					26.679,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					26.68,
+					"",
+					"b",
+					"",
+					""
+				],
+				[
+					28.64,
+					"",
+					"b",
+					"",
+					""
+				],
+				[
+					28.641,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					30.279,
+					"",
+					"a",
+					"1",
+					""
+				],
+				[
+					30.28,
+					"",
+					"b",
+					"",
+					""
+				],
+				[
+					32.12,
+					"",
+					"b",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": 179.96
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": 25.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/external_data/video1.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				},
+				"video overlay": {
+					"1": {
+						"file name": "/home/olivier/gdrive_perso/sync/doc-perso/alice_dorme.png",
+						"overlay position": "",
+						"transparency": 98
+					}
+				}
+			}
+		},
+		"MXF video": {
+			"file": {
+				"1": [
+					"/home/olivier/A014C002_220429QK_CANON.MXF"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-06-06T11:45:33",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": 1717.92
+				},
+				"fps": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": 25.0
+				},
+				"hasVideo": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": true
+				},
+				"hasAudio": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"wav": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-06-06T14:45:23",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": true,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": 3600.0
+				},
+				"fps": {
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": 0.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": false
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"video1 no audio": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2021-10-04T00:00:32",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.72,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					3.52,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					4.44,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					12.44,
+					"s1",
+					"a",
+					"None",
+					""
+				],
+				[
+					13.32,
+					"s1",
+					"p",
+					"",
+					""
+				],
+				[
+					15.88,
+					"s1",
+					"p",
+					"",
+					""
+				],
+				[
+					16.84,
+					"s1",
+					"p",
+					"",
+					""
+				],
+				[
+					21.64,
+					"s2",
+					"b",
+					"",
+					""
+				],
+				[
+					28.2,
+					"s1",
+					"a",
+					"None",
+					""
+				],
+				[
+					28.2,
+					"s1",
+					"b",
+					"",
+					""
+				],
+				[
+					35.2,
+					"s1",
+					"b",
+					"",
+					""
+				],
+				[
+					36.44,
+					"s1",
+					"a",
+					"None",
+					""
+				],
+				[
+					50.28,
+					"s2",
+					"b",
+					"",
+					""
+				],
+				[
+					60.0,
+					"s1",
+					"a",
+					"None",
+					""
+				],
+				[
+					61.52,
+					"s1",
+					"a",
+					"1",
+					""
+				],
+				[
+					63.28,
+					"s1",
+					"a",
+					"1",
+					""
+				],
+				[
+					63.28,
+					"s1",
+					"a",
+					"None",
+					""
+				],
+				[
+					71.12,
+					"s1",
+					"a",
+					"None",
+					""
+				],
+				[
+					79.96,
+					"s1",
+					"a",
+					"1",
+					""
+				],
+				[
+					84.6,
+					"s1",
+					"a",
+					"1",
+					""
+				],
+				[
+					111.72,
+					"s2",
+					"a",
+					"3",
+					""
+				],
+				[
+					119.88,
+					"s2",
+					"a",
+					"3",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "456",
+				"var2": "2000-01-13T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 179.96,
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": 3600.0
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 25.0,
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": 0.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": true,
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": false
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": false,
+					"/home/olivier/gdrive/occam/acoustic/sounds_long/PF001_20200223_070000.wav": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"photos": {
+			"file": {},
+			"type": "IMAGES",
+			"date": "2022-06-07T14:52:52",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					1,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0944.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					2,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0945.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					3,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0946.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					4,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0947.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					5,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0948.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					6,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0949.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					7,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0950.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					8,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0951.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					9,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0952.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					10,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0953.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					11,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0954.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					12,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0955.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					13,
+					"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON/DSCN0956.JPG"
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"directories_list": [
+				"/media/olivier/T7 Touch/google_drive_unito2/perso/100NIKON"
+			],
+			"use_exif_date": true
+		},
+		"fototrappola": {
+			"file": {},
+			"type": "IMAGES",
+			"date": "2022-06-07T16:45:44",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					0.0,
+					"",
+					"p",
+					"",
+					"",
+					1,
+					"/data/tmp/Fototrappole/PICT0006.JPG"
+				],
+				[
+					6309431.0,
+					"",
+					"p",
+					"",
+					"",
+					2,
+					"/data/tmp/Fototrappole/PICT0022 (1).JPG"
+				],
+				[
+					3555921.0,
+					"",
+					"p",
+					"",
+					"",
+					3,
+					"/data/tmp/Fototrappole/PICT0022.JPG"
+				],
+				[
+					3555922.0,
+					"",
+					"p",
+					"",
+					"",
+					4,
+					"/data/tmp/Fototrappole/PICT0023.JPG"
+				],
+				[
+					5062583.0,
+					"",
+					"p",
+					"",
+					"",
+					5,
+					"/data/tmp/Fototrappole/PICT0039.JPG"
+				],
+				[
+					10068672.0,
+					"",
+					"p",
+					"",
+					"",
+					6,
+					"/data/tmp/Fototrappole/PICT0362.JPG"
+				],
+				[
+					38008171.0,
+					"",
+					"p",
+					"",
+					"",
+					7,
+					"/data/tmp/Fototrappole/PICT0996.JPG"
+				],
+				[
+					43401088.0,
+					"",
+					"p",
+					"",
+					"",
+					8,
+					"/data/tmp/Fototrappole/PICT1411.JPG"
+				],
+				[
+					3555922.0,
+					"",
+					"p",
+					"",
+					"",
+					10,
+					"/data/tmp/Fototrappole2/PICT0023.JPG"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					15,
+					"/data/tmp/Fototrappole2/bf798cb871e71e991309b4a414165cf6.jpg"
+				],
+				[
+					NaN,
+					"s2",
+					"a",
+					"None",
+					"",
+					20,
+					""
+				],
+				[
+					NaN,
+					"s2",
+					"a",
+					"None",
+					"",
+					30,
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"directories_list": [
+				"/data/tmp/Fototrappole",
+				"/data/tmp/Fototrappole2"
+			],
+			"use_exif_date": true
+		},
+		"offset": {
+			"file": {
+				"1": [
+					"video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-06-09T15:01:34",
+			"description": "",
+			"time offset": 120.0,
+			"events": [
+				[
+					121.2,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					130.24,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					150.16,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					227.0,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					247.96,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					257.44,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					720.0,
+					"",
+					"b",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"video1.mp4": 179.96
+				},
+				"fps": {
+					"video1.mp4": 25.0
+				},
+				"hasVideo": {
+					"video1.mp4": true
+				},
+				"hasAudio": {
+					"video1.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"images time lapse": {
+			"file": {},
+			"type": "IMAGES",
+			"date": "2022-06-10T14:02:52",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.0,
+					"",
+					"p",
+					"",
+					"",
+					25,
+					"/data/tmp/img/img_0025.jpg"
+				],
+				[
+					1.679,
+					"s1",
+					"a",
+					"None",
+					"",
+					42,
+					"/data/tmp/img/img_0043.jpg"
+				],
+				[
+					2.76,
+					"s1",
+					"a",
+					"None",
+					"",
+					69,
+					"/data/tmp/img/img_0069.jpg"
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"directories_list": [
+				"/data/tmp/img"
+			],
+			"use_exif_date": true,
+			"time_lapse_delay": 0
+		},
+		"live exclude": {
+			"file": {},
+			"type": "LIVE",
+			"date": "2022-06-13T09:39:11",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"scan_sampling_time": 0,
+			"start_from_current_time": false,
+			"start_from_current_epoch_time": false
+		},
+		"images NO TIME": {
+			"file": {},
+			"type": "IMAGES",
+			"date": "2022-05-27T12:09:21",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					1,
+					"/tmp/ramdisk/img_0001.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					2,
+					"/tmp/ramdisk/img_0002.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					3,
+					"/tmp/ramdisk/img_0003.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					4,
+					"/tmp/ramdisk/img_0004.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					5,
+					"/tmp/ramdisk/img_0005.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					6,
+					"/tmp/ramdisk/img_0006.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					7,
+					"/tmp/ramdisk/img_0007.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					8,
+					"/tmp/ramdisk/img_0008.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					9,
+					"/tmp/ramdisk/img_0009.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					10,
+					"/data/tmp/img/2022-06-27_123919.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					11,
+					"/data/tmp/img/2022-06-27_134436.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					12,
+					"/data/tmp/img/2022-06-27_154839.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					13,
+					"/data/tmp/img/2022-06-27_174332.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					14,
+					"/data/tmp/img/2022-06-27_174333.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					15,
+					"/data/tmp/img/2022-06-27_204338.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					16,
+					"/data/tmp/img/2022-06-27_204402.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					17,
+					"/data/tmp/img/2022-06-27_204406.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					18,
+					"/data/tmp/img/2022-06-27_205157.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					19,
+					"/data/tmp/img/2022-06-27_205230.jpg"
+				],
+				[
+					NaN,
+					"s2",
+					"p",
+					"",
+					"",
+					20,
+					"/data/tmp/img/img_0021.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					20,
+					"/data/tmp/img/2022-06-27_211623.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					21,
+					"/data/tmp/img/2022-06-27_211636.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					22,
+					"/data/tmp/img/2022-06-27_211642.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					23,
+					"/data/tmp/img/2022-06-27_211702.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					24,
+					"/data/tmp/img/2022-06-27_211710.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					25,
+					"/data/tmp/img/2022-06-27_230213.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					26,
+					"/data/tmp/img/2022-06-27_230230a.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					27,
+					"/data/tmp/img/2022-06-28_115217.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					28,
+					"/data/tmp/img/2022-06-28_115220.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					29,
+					"/data/tmp/img/2022-06-28_135335.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					30,
+					"/data/tmp/img/2022-06-28_143328.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					31,
+					"/data/tmp/img/2022-06-28_144705.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					32,
+					"/data/tmp/img/2022-06-28_144708.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					33,
+					"/data/tmp/img/2022-06-28_144727.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					34,
+					"/data/tmp/img/2022-06-28_170937.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					35,
+					"/data/tmp/img/2022-06-28_170948.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					36,
+					"/data/tmp/img/2022-06-28_173147.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					37,
+					"/data/tmp/img/2022-06-28_173151.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					38,
+					"/data/tmp/img/2022-06-28_173156.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					39,
+					"/data/tmp/img/2022-06-28_173222.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					40,
+					"/data/tmp/img/2022-06-28_173227.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					41,
+					"/data/tmp/img/2022-06-28_181032.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					42,
+					"/data/tmp/img/2022-06-28_181036.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					43,
+					"/data/tmp/img/2022-06-28_183340.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					44,
+					"/data/tmp/img/2022-06-28_183346.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					45,
+					"/data/tmp/img/2022-06-29_092426.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					46,
+					"/data/tmp/img/2022-06-29_095221.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					47,
+					"/data/tmp/img/2022-06-29_095224.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					48,
+					"/data/tmp/img/2022-06-29_095233.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					49,
+					"/data/tmp/img/2022-06-29_095321.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					50,
+					"/data/tmp/img/2022-06-29_095514.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					51,
+					"/data/tmp/img/2022-06-29_095521.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					52,
+					"/data/tmp/img/2022-06-29_095522.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					53,
+					"/data/tmp/img/2022-06-29_101550.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					54,
+					"/data/tmp/img/2022-06-29_105550.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					55,
+					"/data/tmp/img/2022-06-29_105602.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					56,
+					"/data/tmp/img/2022-06-29_105758.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					57,
+					"/data/tmp/img/2022-06-29_105817.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					58,
+					"/data/tmp/img/2022-06-29_105847.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					59,
+					"/data/tmp/img/2022-06-29_123447.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					60,
+					"/data/tmp/img/2022-06-29_140742.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					61,
+					"/data/tmp/img/2022-06-29_140803.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					62,
+					"/data/tmp/img/2022-06-29_201843.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					63,
+					"/data/tmp/img/2022-06-29_201919.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					64,
+					"/data/tmp/img/2022-06-29_201940.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					65,
+					"/data/tmp/img/2022-06-29_201946.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					66,
+					"/data/tmp/img/2022-06-29_220602.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					67,
+					"/data/tmp/img/2022-06-29_220632.jpg"
+				],
+				[
+					NaN,
+					"",
+					"p",
+					"",
+					"",
+					72,
+					"/tmp/ramdisk/img/img_0072.jpg"
+				],
+				[
+					NaN,
+					"",
+					"a",
+					"None",
+					"",
+					75,
+					"/data/tmp/img/img_0075.jpg"
+				],
+				[
+					NaN,
+					"",
+					"a",
+					"None",
+					"",
+					84,
+					"/data/tmp/img/img_0084.jpg"
+				],
+				[
+					NaN,
+					"s1",
+					"b",
+					"",
+					"",
+					103,
+					"/data/tmp/img/img_0103.jpg"
+				],
+				[
+					NaN,
+					"s1",
+					"b",
+					"",
+					"",
+					106,
+					"/data/tmp/img/img_0106.jpg"
+				],
+				[
+					NaN,
+					"s1",
+					"b",
+					"",
+					"",
+					109,
+					"/data/tmp/img/img_0109.jpg"
+				],
+				[
+					NaN,
+					"s1",
+					"b",
+					"",
+					"",
+					112,
+					"/data/tmp/img/img_0112.jpg"
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"directories_list": [
+				"/data/tmp/img"
+			],
+			"use_exif_date": false,
+			"time_lapse_delay": 0
+		},
+		"video queued": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video2.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2022-08-03T11:43:33",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					179.96,
+					"",
+					"p",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 179.96,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video2.mp4": 179.96
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video2.mp4": 25.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video2.mp4": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video2.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"external data": {
+			"file": {
+				"1": [
+					"video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-01-26T11:49:45",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.2,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					3.96,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					5.52,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					7.56,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					12.76,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					17.76,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					19.56,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					179.92,
+					"",
+					"p",
+					"",
+					""
+				],
+				[
+					179.96,
+					"",
+					"p",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"plot_data": {
+				"0": {
+					"file_path": "data_0-60.csv",
+					"columns": "1,2",
+					"title": "",
+					"variable_name": "",
+					"converters": {},
+					"time_interval": "60",
+					"time_offset": "0",
+					"substract_first_value": "True",
+					"color": "b-"
+				}
+			},
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"video1.mp4": 179.96
+				},
+				"fps": {
+					"video1.mp4": 25.0
+				},
+				"hasVideo": {
+					"video1.mp4": true
+				},
+				"hasAudio": {
+					"video1.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"mxf": {
+			"file": {
+				"1": [
+					"/home/olivier/A014C002_220429QK_CANON.MXF"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-02-02T17:29:33",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1717.92,
+					"",
+					"p",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": 1717.92
+				},
+				"fps": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": 25.0
+				},
+				"hasVideo": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": true
+				},
+				"hasAudio": {
+					"/home/olivier/A014C002_220429QK_CANON.MXF": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"wav + video": {
+			"file": {
+				"1": [
+					"first_obs_1.wav"
+				],
+				"2": [
+					"video1.mp4"
+				],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-02-06T10:20:48",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					14.998,
+					"",
+					"p",
+					"",
+					"",
+					"NA"
+				],
+				[
+					18.169,
+					"",
+					"p",
+					"",
+					"",
+					"NA"
+				],
+				[
+					22.103,
+					"",
+					"p",
+					"",
+					"",
+					"NA"
+				],
+				[
+					23.922,
+					"",
+					"p",
+					"",
+					"",
+					"NA"
+				],
+				[
+					25.184,
+					"",
+					"p",
+					"",
+					"",
+					"NA"
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": true,
+			"visualize_waveform": true,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"video1.mp4": 179.96,
+					"first_obs_1.wav": 250.98449
+				},
+				"fps": {
+					"video1.mp4": 25.0,
+					"first_obs_1.wav": 0.0
+				},
+				"hasVideo": {
+					"seq.wav": false,
+					"video1.mp4": true,
+					"first_obs_1.wav": false
+				},
+				"hasAudio": {
+					"seq.wav": true,
+					"video1.mp4": false,
+					"first_obs_1.wav": true
+				},
+				"offset": {
+					"2": 0.0,
+					"1": 0.0
+				}
+			}
+		},
+		"big video": {
+			"file": {
+				"1": [
+					"/data/tmp/A014C002_220429QK_CANON.MXF"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-02-09T18:02:05",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					11.881,
+					"",
+					"p",
+					"",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/data/tmp/A014C002_220429QK_CANON.MXF": 1717.92
+				},
+				"fps": {
+					"/data/tmp/A014C002_220429QK_CANON.MXF": 25.0
+				},
+				"hasVideo": {
+					"/data/tmp/A014C002_220429QK_CANON.MXF": true
+				},
+				"hasAudio": {
+					"/data/tmp/A014C002_220429QK_CANON.MXF": true
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"ER-FFL": {
+			"file": {},
+			"type": "IMAGES",
+			"date": "2023-02-10T17:19:33",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"directories_list": [
+				"/home/olivier/gdrive/ownCloud/projects/davide-cora/ER-FFL"
+			],
+			"use_exif_date": false,
+			"time_lapse_delay": 0
+		},
+		"tmp": {
+			"file": {},
+			"type": "IMAGES",
+			"date": "2023-02-10T17:23:39",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"directories_list": [
+				"/tmp"
+			],
+			"use_exif_date": false,
+			"time_lapse_delay": 0
+		},
+		"external data with header": {
+			"file": {
+				"1": [
+					"video1.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-02-20T14:36:22",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.48,
+					"",
+					"p",
+					"",
+					"",
+					38
+				],
+				[
+					33.88,
+					"",
+					"p",
+					"",
+					"",
+					848
+				],
+				[
+					34.76,
+					"",
+					"p",
+					"",
+					"",
+					870
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"plot_data": {
+				"0": {
+					"file_path": "data_0-60_with_header.csv",
+					"columns": "1,2",
+					"title": "",
+					"variable_name": "",
+					"converters": {},
+					"time_interval": "60",
+					"time_offset": "0",
+					"substract_first_value": "True",
+					"color": "b-"
+				}
+			},
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"video1.mp4": 179.96
+				},
+				"fps": {
+					"video1.mp4": 25.0
+				},
+				"hasVideo": {
+					"video1.mp4": true
+				},
+				"hasAudio": {
+					"video1.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"external data 2": {
+			"file": {
+				"1": [
+					"video5.mp4"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-02-20T14:48:07",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"plot_data": {
+				"0": {
+					"file_path": "/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#577/02-09-2023-Fluffy.txt",
+					"columns": "2,6",
+					"title": "",
+					"variable_name": "",
+					"converters": {},
+					"time_interval": "60",
+					"time_offset": "0",
+					"substract_first_value": "True",
+					"color": "b-"
+				}
+			},
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"video5.mp4": 179.96
+				},
+				"fps": {
+					"video5.mp4": 25.0
+				},
+				"hasVideo": {
+					"video5.mp4": true
+				},
+				"hasAudio": {
+					"video5.mp4": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"image and video": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4",
+					"/data/tmp/img/2022-06-26_174025.jpg",
+					"/data/tmp/img/2022-06-27_115915.jpg",
+					"/data/tmp/img/2022-06-27_115920.jpg",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video3.mp4",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-03-01T14:41:43",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					1.0,
+					"",
+					"p",
+					"",
+					"",
+					26
+				],
+				[
+					2.08,
+					"",
+					"p",
+					"",
+					"",
+					53
+				],
+				[
+					3.2,
+					"",
+					"p",
+					"",
+					"",
+					81
+				],
+				[
+					179.96,
+					"",
+					"a",
+					"None",
+					"",
+					1
+				],
+				[
+					179.96,
+					"",
+					"p",
+					"",
+					"",
+					1
+				],
+				[
+					180.0,
+					"",
+					"p",
+					"",
+					"",
+					1
+				],
+				[
+					180.04,
+					"",
+					"p",
+					"",
+					"",
+					1
+				],
+				[
+					181.28,
+					"",
+					"p",
+					"",
+					"",
+					31
+				],
+				[
+					186.08,
+					"",
+					"p",
+					"",
+					"",
+					151
+				],
+				[
+					187.0,
+					"",
+					"p",
+					"",
+					"",
+					174
+				],
+				[
+					188.88,
+					"",
+					"p",
+					"",
+					"",
+					221
+				],
+				[
+					195.56,
+					"",
+					"p",
+					"",
+					"",
+					388
+				],
+				[
+					198.88,
+					"",
+					"p",
+					"",
+					"",
+					471
+				],
+				[
+					200.0,
+					"",
+					"p",
+					"",
+					"",
+					499
+				],
+				[
+					200.68,
+					"",
+					"p",
+					"",
+					"",
+					516
+				],
+				[
+					201.04,
+					"",
+					"p",
+					"",
+					"",
+					525
+				],
+				[
+					201.24,
+					"",
+					"p",
+					"",
+					"",
+					530
+				],
+				[
+					201.44,
+					"",
+					"p",
+					"",
+					"",
+					535
+				],
+				[
+					201.6,
+					"",
+					"p",
+					"",
+					"",
+					539
+				],
+				[
+					201.72,
+					"",
+					"p",
+					"",
+					"",
+					542
+				],
+				[
+					201.96,
+					"",
+					"p",
+					"",
+					"",
+					548
+				],
+				[
+					202.16,
+					"",
+					"p",
+					"",
+					"",
+					553
+				],
+				[
+					202.36,
+					"",
+					"p",
+					"",
+					"",
+					558
+				],
+				[
+					202.52,
+					"",
+					"p",
+					"",
+					"",
+					562
+				],
+				[
+					202.72,
+					"",
+					"p",
+					"",
+					"",
+					567
+				],
+				[
+					202.88,
+					"",
+					"p",
+					"",
+					"",
+					571
+				],
+				[
+					203.08,
+					"",
+					"p",
+					"",
+					"",
+					576
+				],
+				[
+					203.28,
+					"",
+					"p",
+					"",
+					"",
+					581
+				],
+				[
+					203.44,
+					"",
+					"p",
+					"",
+					"",
+					585
+				],
+				[
+					203.68,
+					"",
+					"p",
+					"",
+					"",
+					591
+				],
+				[
+					203.88,
+					"",
+					"p",
+					"",
+					"",
+					596
+				],
+				[
+					204.08,
+					"",
+					"p",
+					"",
+					"",
+					601
+				],
+				[
+					204.28,
+					"",
+					"p",
+					"",
+					"",
+					606
+				],
+				[
+					204.44,
+					"",
+					"p",
+					"",
+					"",
+					610
+				],
+				[
+					204.64,
+					"",
+					"p",
+					"",
+					"",
+					615
+				],
+				[
+					205.0,
+					"",
+					"p",
+					"",
+					"",
+					624
+				],
+				[
+					205.2,
+					"",
+					"p",
+					"",
+					"",
+					629
+				],
+				[
+					205.4,
+					"",
+					"p",
+					"",
+					"",
+					634
+				],
+				[
+					205.6,
+					"",
+					"p",
+					"",
+					"",
+					639
+				],
+				[
+					205.76,
+					"",
+					"p",
+					"",
+					"",
+					643
+				],
+				[
+					206.0,
+					"",
+					"p",
+					"",
+					"",
+					649
+				],
+				[
+					206.16,
+					"",
+					"p",
+					"",
+					"",
+					653
+				],
+				[
+					206.4,
+					"",
+					"p",
+					"",
+					"",
+					659
+				],
+				[
+					206.6,
+					"",
+					"p",
+					"",
+					"",
+					664
+				],
+				[
+					206.76,
+					"",
+					"p",
+					"",
+					"",
+					668
+				],
+				[
+					206.96,
+					"",
+					"p",
+					"",
+					"",
+					673
+				],
+				[
+					207.0,
+					"",
+					"p",
+					"",
+					"",
+					674
+				],
+				[
+					207.68,
+					"",
+					"p",
+					"",
+					"",
+					691
+				],
+				[
+					208.12,
+					"",
+					"p",
+					"",
+					"",
+					702
+				],
+				[
+					208.52,
+					"",
+					"p",
+					"",
+					"",
+					712
+				],
+				[
+					209.12,
+					"",
+					"p",
+					"",
+					"",
+					727
+				],
+				[
+					209.44,
+					"",
+					"p",
+					"",
+					"",
+					735
+				],
+				[
+					210.24,
+					"",
+					"p",
+					"",
+					"",
+					755
+				],
+				[
+					210.44,
+					"",
+					"p",
+					"",
+					"",
+					760
+				],
+				[
+					210.64,
+					"",
+					"p",
+					"",
+					"",
+					765
+				],
+				[
+					210.84,
+					"",
+					"p",
+					"",
+					"",
+					770
+				],
+				[
+					210.96,
+					"",
+					"p",
+					"",
+					"",
+					773
+				],
+				[
+					211.0,
+					"",
+					"p",
+					"",
+					"",
+					774
+				],
+				[
+					211.4,
+					"",
+					"p",
+					"",
+					"",
+					784
+				],
+				[
+					211.8,
+					"",
+					"p",
+					"",
+					"",
+					794
+				],
+				[
+					212.2,
+					"",
+					"p",
+					"",
+					"",
+					804
+				],
+				[
+					212.96,
+					"",
+					"p",
+					"",
+					"",
+					823
+				],
+				[
+					213.12,
+					"",
+					"p",
+					"",
+					"",
+					827
+				],
+				[
+					213.32,
+					"",
+					"p",
+					"",
+					"",
+					832
+				],
+				[
+					213.52,
+					"",
+					"p",
+					"",
+					"",
+					837
+				],
+				[
+					213.72,
+					"",
+					"p",
+					"",
+					"",
+					842
+				],
+				[
+					214.08,
+					"",
+					"p",
+					"",
+					"",
+					851
+				],
+				[
+					214.44,
+					"",
+					"p",
+					"",
+					"",
+					860
+				],
+				[
+					214.84,
+					"",
+					"p",
+					"",
+					"",
+					870
+				],
+				[
+					14400.0,
+					"",
+					"a",
+					"None",
+					""
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 179.96,
+					"/data/tmp/img/2022-06-26_174025.jpg": 0.04,
+					"/data/tmp/img/2022-06-27_115915.jpg": 0.04,
+					"/data/tmp/img/2022-06-27_115920.jpg": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video3.mp4": 179.96,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": 0.04
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 25.0,
+					"/data/tmp/img/2022-06-26_174025.jpg": 0.0,
+					"/data/tmp/img/2022-06-27_115915.jpg": 0.0,
+					"/data/tmp/img/2022-06-27_115920.jpg": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video3.mp4": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": 0.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": true,
+					"/data/tmp/img/2022-06-26_174025.jpg": true,
+					"/data/tmp/img/2022-06-27_115915.jpg": true,
+					"/data/tmp/img/2022-06-27_115920.jpg": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video3.mp4": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": false,
+					"/data/tmp/img/2022-06-26_174025.jpg": false,
+					"/data/tmp/img/2022-06-27_115915.jpg": false,
+					"/data/tmp/img/2022-06-27_115920.jpg": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video3.mp4": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			},
+			"image_display_duration": 3
+		},
+		"img video img": {
+			"file": {
+				"1": [
+					"/data/tmp/img/2022-06-27_134436.jpg",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video4.mp4",
+					"/data/tmp/img/2022-06-27_230213.jpg",
+					"/data/tmp/img/2022-06-27_211623.jpg",
+					"/data/tmp/img/2022-06-27_211636.jpg",
+					"/data/tmp/img/2022-06-27_211642.jpg",
+					"/data/tmp/img/2022-06-27_211702.jpg"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-03-01T14:49:43",
+			"description": "",
+			"time offset": 0.0,
+			"events": [],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/data/tmp/img/2022-06-27_134436.jpg": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video4.mp4": 179.96,
+					"/data/tmp/img/2022-06-27_230213.jpg": 0.04,
+					"/data/tmp/img/2022-06-27_211623.jpg": 0.04,
+					"/data/tmp/img/2022-06-27_211636.jpg": 0.04,
+					"/data/tmp/img/2022-06-27_211642.jpg": 0.04,
+					"/data/tmp/img/2022-06-27_211702.jpg": 0.04
+				},
+				"fps": {
+					"/data/tmp/img/2022-06-27_134436.jpg": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video4.mp4": 25.0,
+					"/data/tmp/img/2022-06-27_230213.jpg": 0.0,
+					"/data/tmp/img/2022-06-27_211623.jpg": 0.0,
+					"/data/tmp/img/2022-06-27_211636.jpg": 0.0,
+					"/data/tmp/img/2022-06-27_211642.jpg": 0.0,
+					"/data/tmp/img/2022-06-27_211702.jpg": 0.0
+				},
+				"hasVideo": {
+					"/data/tmp/img/2022-06-27_134436.jpg": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video4.mp4": true,
+					"/data/tmp/img/2022-06-27_230213.jpg": true,
+					"/data/tmp/img/2022-06-27_211623.jpg": true,
+					"/data/tmp/img/2022-06-27_211636.jpg": true,
+					"/data/tmp/img/2022-06-27_211642.jpg": true,
+					"/data/tmp/img/2022-06-27_211702.jpg": true
+				},
+				"hasAudio": {
+					"/data/tmp/img/2022-06-27_134436.jpg": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video4.mp4": false,
+					"/data/tmp/img/2022-06-27_230213.jpg": false,
+					"/data/tmp/img/2022-06-27_211623.jpg": false,
+					"/data/tmp/img/2022-06-27_211636.jpg": false,
+					"/data/tmp/img/2022-06-27_211642.jpg": false,
+					"/data/tmp/img/2022-06-27_211702.jpg": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"img video img video": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-03-01T17:33:19",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					0.932,
+					"",
+					"p",
+					"",
+					"",
+					2
+				],
+				[
+					1.56,
+					"",
+					"p",
+					"",
+					"",
+					39
+				],
+				[
+					2.08,
+					"",
+					"p",
+					"",
+					"",
+					52
+				],
+				[
+					2.48,
+					"",
+					"p",
+					"",
+					"",
+					62
+				],
+				[
+					2.92,
+					"",
+					"p",
+					"",
+					"",
+					73
+				],
+				[
+					180.0,
+					"",
+					"p",
+					"",
+					"",
+					1
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 179.96,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": 0.04
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": 0.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": 0.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/testing/video1.mp4": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		},
+		"only img": {
+			"file": {
+				"1": [
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG",
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG"
+				],
+				"2": [],
+				"3": [],
+				"4": [],
+				"5": [],
+				"6": [],
+				"7": [],
+				"8": []
+			},
+			"type": "MEDIA",
+			"date": "2023-03-01T20:32:37",
+			"description": "",
+			"time offset": 0.0,
+			"events": [
+				[
+					0.08,
+					"",
+					"p",
+					"",
+					"",
+					1
+				],
+				[
+					0.12,
+					"",
+					"p",
+					"",
+					"",
+					1
+				],
+				[
+					0.16,
+					"",
+					"p",
+					"",
+					"",
+					1
+				]
+			],
+			"observation time interval": [
+				0,
+				0
+			],
+			"independent_variables": {
+				"var1": "",
+				"var2": "2000-01-01T00:00:00"
+			},
+			"visualize_spectrogram": false,
+			"visualize_waveform": false,
+			"image_display_duration": 6,
+			"close_behaviors_between_videos": false,
+			"media_info": {
+				"length": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": 0.04,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": 0.04
+				},
+				"fps": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": 25.0,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": 25.0
+				},
+				"hasVideo": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": true,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": true
+				},
+				"hasAudio": {
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0059.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0061.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0063.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0065.JPG": false,
+					"/home/olivier/gdrive/src/python/pyobserver/boris_projects/boris_projects_from_users/bug#585/DSCF0067/DSCF0067.JPG": false
+				},
+				"offset": {
+					"1": 0.0
+				}
+			}
+		}
+	},
+	"behavioral_categories": [],
+	"independent_variables": {
+		"0": {
+			"label": "var1",
+			"description": "",
+			"type": "numeric",
+			"default value": "",
+			"possible values": ""
+		},
+		"1": {
+			"label": "var2",
+			"description": "",
+			"type": "timestamp",
+			"default value": "2000-01-01T00:00:00",
+			"possible values": ""
+		}
+	},
+	"coding_map": {},
+	"behaviors_coding_map": [],
+	"converters": {}
+}

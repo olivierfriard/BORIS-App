@@ -1,0 +1,788 @@
+{
+ "behaviors_conf": {
+  "10": {
+   "category": "Social",
+   "coding map": "",
+   "code": "groom",
+   "key": "g",
+   "modifiers": {
+    "0": {
+     "name": "",
+     "type": 0,
+     "values": [
+      "itself (1)",
+      "others (2)"
+     ]
+    }
+   },
+   "excluded": "",
+   "type": "State event",
+   "description": ""
+  },
+  "1": {
+   "category": "Locomotion",
+   "coding map": "",
+   "code": "run",
+   "key": "r",
+   "modifiers": {},
+   "excluded": "walk,eat,drink",
+   "type": "State event",
+   "description": ""
+  },
+  "0": {
+   "category": "Locomotion",
+   "coding map": "",
+   "code": "walk",
+   "key": "w",
+   "modifiers": {
+    "0": {
+     "name": "",
+     "type": 0,
+     "values": [
+      "quadrupedal (q)",
+      "bipedal (b)"
+     ]
+    }
+   },
+   "excluded": "run,eat,drink",
+   "type": "State event",
+   "description": ""
+  },
+  "3": {
+   "category": "Social",
+   "coding map": "",
+   "code": "attack",
+   "key": "a",
+   "modifiers": {},
+   "excluded": "",
+   "type": "State event",
+   "description": ""
+  },
+  "2": {
+   "category": "Social",
+   "coding map": "",
+   "code": "play",
+   "key": "p",
+   "modifiers": {},
+   "excluded": "",
+   "type": "State event",
+   "description": ""
+  },
+  "5": {
+   "category": "Locomotion",
+   "coding map": "",
+   "code": "jump",
+   "key": "j",
+   "modifiers": {},
+   "excluded": "",
+   "type": "Point event",
+   "description": ""
+  },
+  "4": {
+   "category": "Social",
+   "coding map": "",
+   "code": "approach",
+   "key": "a",
+   "modifiers": {},
+   "excluded": "",
+   "type": "State event",
+   "description": ""
+  },
+  "7": {
+   "category": "Physiological",
+   "coding map": "",
+   "code": "drink",
+   "key": "d",
+   "modifiers": {},
+   "excluded": "walk,run,eat",
+   "type": "State event",
+   "description": ""
+  },
+  "6": {
+   "category": "Physiological",
+   "coding map": "",
+   "code": "eat",
+   "key": "e",
+   "modifiers": {},
+   "excluded": "walk,run,drink",
+   "type": "State event",
+   "description": ""
+  },
+  "9": {
+   "category": "Physiological",
+   "coding map": "",
+   "code": "defecate",
+   "key": "f",
+   "modifiers": {},
+   "excluded": "",
+   "type": "State event",
+   "description": ""
+  },
+  "8": {
+   "category": "Physiological",
+   "coding map": "",
+   "code": "urinate",
+   "key": "u",
+   "modifiers": {},
+   "excluded": "",
+   "type": "State event",
+   "description": ""
+  }
+ },
+ "project_name": "demo",
+ "project_format_version": "7.0",
+ "behavioral_categories": [
+  "Locomotion",
+  "Physiological",
+  "Social"
+ ],
+ "time_format": "hh:mm:ss",
+ "project_date": "2016-08-25T09:29:34",
+ "project_description": "",
+ "observations": {
+  "test1": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2018-05-10 15:19",
+   "independent_variables": {},
+   "type": "LIVE",
+   "events": [
+    [
+     2.254,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     3.313,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     4.258,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     5.023,
+     "No focal subject",
+     "run",
+     "",
+     ""
+    ],
+    [
+     7.936,
+     "No focal subject",
+     "run",
+     "",
+     ""
+    ],
+    [
+     7.936,
+     "No focal subject",
+     "walk",
+     "quadrupedal",
+     ""
+    ],
+    [
+     13.992,
+     "No focal subject",
+     "walk",
+     "quadrupedal",
+     ""
+    ],
+    [
+     18.181,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     20.467,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ]
+   ],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "aaaa": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2018-05-14 16:22:23",
+   "independent_variables": {},
+   "type": "LIVE",
+   "events": [],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "observation #1": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "demo",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2017-03-28 14:31",
+   "independent_variables": {},
+   "type": "LIVE",
+   "events": [],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "observation #2": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2017-03-28 14:37",
+   "independent_variables": {
+    "number of visitors": "1234",
+    "weather": "sun",
+    "group": "10"
+   },
+   "type": "LIVE",
+   "events": [
+    [
+     1994.297,
+     "bobo",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     1996.722,
+     "bobo",
+     "run",
+     "",
+     ""
+    ]
+   ],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "id2": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "file": [],
+   "date": "2019-01-30T14:28:25",
+   "close_behaviors_between_videos": false,
+   "scan_sampling_time": 0,
+   "independent_variables": {
+    "number of visitors": "",
+    "weather": "sun",
+    "group": "10"
+   },
+   "type": "LIVE",
+   "events": [
+    [
+     3.348,
+     "No focal subject",
+     "run",
+     "",
+     ""
+    ],
+    [
+     14.237,
+     "No focal subject",
+     "run",
+     "",
+     ""
+    ],
+    [
+     16.074,
+     "No focal subject",
+     "walk",
+     "quadrupedal",
+     ""
+    ],
+    [
+     36.489,
+     "No focal subject",
+     "walk",
+     "None",
+     ""
+    ],
+    [
+     75.378,
+     "bobo",
+     "walk",
+     "quadrupedal",
+     ""
+    ],
+    [
+     77.763,
+     "bobo",
+     "walk",
+     "None",
+     ""
+    ]
+   ],
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "id1": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "d2",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2019-01-30T13:59:50",
+   "independent_variables": {
+    "number of visitors": "123",
+    "weather": "sun",
+    "group": "10"
+   },
+   "type": "LIVE",
+   "events": [
+    [
+     1.563,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     2.799,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     4.075,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     5.388,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ]
+   ],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "a1": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2018-05-14T16:25:32",
+   "independent_variables": {},
+   "type": "LIVE",
+   "events": [
+    [
+     2.797,
+     "No focal subject",
+     "groom",
+     "None",
+     ""
+    ],
+    [
+     5.202,
+     "No focal subject",
+     "urinate",
+     "",
+     ""
+    ],
+    [
+     6.085,
+     "No focal subject",
+     "urinate",
+     "",
+     ""
+    ],
+    [
+     6.507,
+     "No focal subject",
+     "groom",
+     "None",
+     ""
+    ]
+   ],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "kkk": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2018-05-14 16:10:02",
+   "independent_variables": {},
+   "type": "LIVE",
+   "events": [],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "x": {
+   "visualize_spectrogram": false,
+   "time offset": 0.0,
+   "description": "",
+   "scan_sampling_time": 0,
+   "file": [],
+   "date": "2018-05-14T16:42:41",
+   "independent_variables": {},
+   "type": "LIVE",
+   "events": [],
+   "close_behaviors_between_videos": false,
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "test": {
+   "date": "2021-09-14T14:26:10",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "description": "descrizione",
+   "file": [],
+   "events": [
+    [
+     1.717,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     2.718,
+     "No focal subject",
+     "run",
+     "",
+     ""
+    ],
+    [
+     3.942,
+     "No focal subject",
+     "run",
+     "",
+     ""
+    ],
+    [
+     3.942,
+     "No focal subject",
+     "walk",
+     "quadrupedal",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {},
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "555": {
+   "date": "2021-09-15T11:44:59",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "description": "hhkjh kjhkjh  kh kjh  kh kkjh kjhk kjk kjhk ",
+   "file": [],
+   "events": [
+    [
+     4.151,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     4.917,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     5.794,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ],
+    [
+     6.326,
+     "No focal subject",
+     "attack",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {},
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "testID": {
+   "date": "2022-11-23T13:36:51",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "description": "demo descrizione",
+   "file": [],
+   "events": [
+    [
+     2.061,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     3.619,
+     "No focal subject",
+     "jump",
+     "",
+     ""
+    ],
+    [
+     5.239,
+     "No focal subject",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     7.909,
+     "No focal subject",
+     "defecate",
+     "",
+     ""
+    ],
+    [
+     8.639,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     12.125,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     12.694,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     14.45,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     16.465,
+     "No focal subject",
+     "approach",
+     "",
+     ""
+    ],
+    [
+     18.703,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {},
+   "media_info": {
+    "offset": {}
+   }
+  },
+  "aadadas": {
+   "date": "2023-03-08T17:04:26",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "time offset second player": 0.0,
+   "description": "",
+   "file": [],
+   "events": [],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
+  },
+  "zasasasas": {
+   "date": "2023-03-08T17:07:17",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "time offset second player": 0.0,
+   "description": "",
+   "file": [],
+   "events": [
+    [
+     11.815,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     16.088,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     18.145,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     20.599,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
+  },
+  "aaaaa": {
+   "date": "2023-03-08T17:21:29",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "time offset second player": 0.0,
+   "description": "",
+   "file": [],
+   "events": [
+    [
+     3.836,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     5.193,
+     "No focal subject",
+     "play",
+     "",
+     ""
+    ],
+    [
+     6.227,
+     "No focal subject",
+     "groom",
+     "None",
+     ""
+    ],
+    [
+     14.66,
+     "No focal subject",
+     "groom",
+     "None",
+     ""
+    ]
+   ],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
+  },
+  "ssss": {
+   "date": "2023-03-08T17:34:01",
+   "close_behaviors_between_videos": false,
+   "time offset": 0.0,
+   "scan_sampling_time": 0,
+   "time offset second player": 0.0,
+   "description": "",
+   "file": [],
+   "events": [],
+   "visualize_spectrogram": false,
+   "type": "LIVE",
+   "independent_variables": {}
+  }
+ },
+ "independent_variables": {
+  "1": {
+   "default value": "10",
+   "type": "numeric",
+   "description": "number of individu",
+   "label": "group"
+  },
+  "0": {
+   "default value": "sun",
+   "type": "text",
+   "description": "meteo conditions",
+   "label": "weather"
+  },
+  "2": {
+   "default value": "",
+   "type": "numeric",
+   "description": "number of visitors per day",
+   "label": "number of visitors"
+  }
+ },
+ "coding_map": {},
+ "subjects_conf": {
+  "1": {
+   "description": "Female 10 years",
+   "key": "b",
+   "name": "bobo"
+  },
+  "0": {
+   "description": "Male 8 years",
+   "key": "t",
+   "name": "toto"
+  }
+ }
+}
