@@ -84,8 +84,7 @@ BEHAV_CAT_COLORS = [
 FONT_MAX_SIZE_SUBJECT = 40
 FONT_MIN_SIZE_SUBJECT = 20
 
-selected_modifiers = {}
-observation_to_send = ""
+selected_modifiers: dict = {}
 
 
 if platform == "android":
