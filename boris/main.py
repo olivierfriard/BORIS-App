@@ -453,7 +453,8 @@ class StartObservationForm(BoxLayout):
             s = BorisApp.project[INDEP_VAR][idx]["label"]
             if BorisApp.project[INDEP_VAR][idx]["description"]:
                 s += "\n({})".format(BorisApp.project[INDEP_VAR][idx]["description"])
-            lb1 = Label(text=s, size_hint_x=1, font_size="20dp")
+            lb1 = Label(text=s, size_hint_x=1, font_size="18dp")  # , halign="left", valign="middle")
+            # lb1.bind(size=lb1.setter("text_size"))
             layout.add_widget(lb1)
 
             # numeric, text, timestamp
@@ -467,7 +468,7 @@ class StartObservationForm(BoxLayout):
                     text=value,
                     multiline=False,
                     size_hint_x=1,
-                    font_size="25dp",
+                    font_size="22dp",
                 )
                 self.iv[BorisApp.project[INDEP_VAR][idx]["label"]] = ti
                 layout.add_widget(ti)
@@ -481,13 +482,13 @@ class StartObservationForm(BoxLayout):
 
                 dropdown = DropDown()
                 for choice in BorisApp.project[INDEP_VAR][idx]["possible values"].split(","):
-                    btn = Button(text=choice, size_hint_y=None, size_hint_x=1, font_size="20dp")
+                    btn = Button(text=choice, size_hint_y=None, size_hint_x=1, font_size="18dp")
                     btn.bind(on_release=lambda btn: dropdown.select(btn.text))
                     dropdown.add_widget(btn)
 
-                mainbutton = Button(text=value, size_hint_x=1, font_size="25dp", background_normal="")
+                mainbutton = Button(text=value, size_hint_x=1, font_size="22dp", background_normal="")
 
-                mainbutton.background_color = WHITE  #
+                mainbutton.background_color = WHITE
                 mainbutton.color = BLACK
                 layout.add_widget(mainbutton)
                 self.iv[BorisApp.project[INDEP_VAR][idx]["label"]] = mainbutton
