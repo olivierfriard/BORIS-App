@@ -795,7 +795,7 @@
 "independent_variables": {}
 },
 "xxx": {
-"date": "2023-03-24T15:41:51",
+"date": "2023-04-24T12:53:05",
 "close_behaviors_between_videos": false,
 "time offset": 0.0,
 "scan_sampling_time": 0,
@@ -803,180 +803,51 @@
 "file": [],
 "events": [
 [
-1.029,
-"No focal subject",
-"attack",
-"",
-""
-],
-[
-2.094,
-"No focal subject",
-"attack",
-"",
-""
-],
-[
-3.669,
-"No focal subject",
-"attack",
-"",
-""
-],
-[
-4.536,
-"No focal subject",
-"attack",
-"",
-""
-],
-[
-5.516,
-"No focal subject",
-"approach",
-"",
-""
-],
-[
-6.323,
-"No focal subject",
-"approach",
-"",
-""
-],
-[
-6.757,
-"No focal subject",
-"attack",
-"",
-""
-],
-[
-7.241,
-"No focal subject",
-"attack",
-"",
-""
-],
-[
-7.637,
+4.291,
 "No focal subject",
 "play",
 "",
 ""
 ],
 [
-8.146,
+4.859,
 "No focal subject",
 "play",
 "",
 ""
 ],
 [
-8.568,
+5.379,
 "No focal subject",
-"drink",
+"play",
 "",
 ""
 ],
 [
-9.027,
+5.576,
 "No focal subject",
-"drink",
+"play",
 "",
 ""
 ],
 [
-9.399,
+5.787,
 "No focal subject",
-"urinate",
+"play",
 "",
-""
-],
-[
-9.858,
-"No focal subject",
-"urinate",
-"",
-""
-],
-[
-10.205,
-"No focal subject",
-"defecate",
-"",
-""
-],
-[
-10.639,
-"No focal subject",
-"defecate",
-"",
-""
-],
-[
-12.5,
-"No focal subject",
-"jump",
-"",
-""
-],
-[
-13.033,
-"No focal subject",
-"jump",
-"",
-""
-],
-[
-13.603,
-"No focal subject",
-"jump",
-"",
-""
-],
-[
-14.136,
-"No focal subject",
-"jump",
-"",
-""
-],
-[
-14.868,
-"No focal subject",
-"eat",
-"",
-""
-],
-[
-15.637,
-"No focal subject",
-"eat",
-"",
-""
-],
-[
-16.554,
-"No focal subject",
-"groom",
-"itself",
-""
-],
-[
-28.213,
-"No focal subject",
-"groom",
-"None",
 ""
 ]
 ],
 "visualize_spectrogram": false,
 "visualize_waveform": false,
-"start_from_current_time": false,
+"start_from_current_time": true,
 "start_from_current_epoch_time": false,
 "type": "LIVE",
-"independent_variables": {}
+"independent_variables": {
+"group": "10",
+"weather": "sun",
+"number of visitors": ""
+}
 },
 "zzz": {
 "date": "2023-03-24T15:53:41",

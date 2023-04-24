@@ -22,8 +22,8 @@ This file is part of BORIS App.
 """
 
 __app_name__ = "BORIS"
-__version__ = "0.7"
-__version_date__ = "2023-03-23"
+__version__ = "0.8"
+__version_date__ = "2023-04-24"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
 
@@ -37,6 +37,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.uix.textinput import TextInput
+from kivy.uix.dropdown import DropDown
 
 from kivy.properties import StringProperty
 from kivy.logger import Logger
@@ -72,8 +73,14 @@ RED = [1, 0, 0, 1]
 DARKRED = [0.9, 0.1, 0.1, 1]
 GRAY = [0.5, 0.5, 0.5, 1]
 GREEN = [0.1, 0.9, 0.1, 1]
+BLUE = [0.1, 0.1, 0.9, 1]
+BLACK = [0, 0, 0, 1]
+WHITE = [1, 1, 1, 1]
+
 
 BEHAV_CAT = "behavioral_categories"
+
+"""
 BEHAV_CAT_COLORS = [
     [1.0, 0.6, 0.0, 1],
     [0.1, 0.8, 0.1, 1],
@@ -82,6 +89,7 @@ BEHAV_CAT_COLORS = [
     [0.2, 0.4, 0.6, 1],
     [0.4, 0.2, 0.6, 1],
 ]
+"""
 
 FONT_MAX_SIZE_SUBJECT = 40
 FONT_MIN_SIZE_SUBJECT = 20
@@ -368,6 +376,9 @@ class StartObservationForm(BoxLayout):
         self.add_widget(StartPageForm())
 
     def show_start_observation_form(self):
+        """
+        show start observation page
+        """
         self.clear_widgets()
         w = StartObservationForm()
         w.obsid_input.text = self.mem["obsId"]
@@ -380,29 +391,29 @@ class StartObservationForm(BoxLayout):
 
     def go_back(self, obj):
         """
-        return to 'start observation' screen
+        return to 'start observation' screen from independent variables page
         """
 
         # check if numeric indep var values are numeric
-        if INDEP_VAR in BorisApp.project:
-            for idx in BorisApp.project[INDEP_VAR]:
-                if BorisApp.project[INDEP_VAR][idx]["label"] in self.iv:
-                    if (
-                        BorisApp.project[INDEP_VAR][idx]["type"] == "numeric"
-                        and self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text
-                    ):
-                        try:
-                            _ = float(self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text)
-                        except:
-                            Popup(
-                                title="Error",
-                                content=Label(
-                                    text=f"The variable '{BorisApp.project[INDEP_VAR][idx]['label']}' must be numeric",
-                                    size_hint=(None, None),
-                                    size=(400, 200),
-                                ),
-                            ).open()
-                            return
+        for idx in BorisApp.project.get(INDEP_VAR, {}):
+            if BorisApp.project[INDEP_VAR][idx]["label"] in self.iv:
+                if (
+                    BorisApp.project[INDEP_VAR][idx]["type"] == "numeric"
+                    and self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text
+                ):
+                    try:
+                        _ = float(self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text)
+                    except:
+
+                        pop = InfoPopup()
+                        pop.ids.label.text = (
+                            f"The variable '{BorisApp.project[INDEP_VAR][idx]['label']}' must be numeric."
+                        )
+                        pop.open()
+                        return
+
+        for label in self.iv:
+            self.mem["indep_var|" + label] = self.iv[label].text
 
         self.show_start_observation_form()
 
@@ -417,55 +428,89 @@ class StartObservationForm(BoxLayout):
         input independent variables
         """
 
-        self.mem = {
-            "obsId": self.obsid_input.text,
-            "obsDate": self.obsdate_input.text,
-            "obsDescription": self.obsdescription_input.text,
-        }
-        if INDEP_VAR not in BorisApp.project or not BorisApp.project[INDEP_VAR]:
-            Popup(
-                title="BORIS",
-                content=Label(text="The current project do not have independent variables"),
-                size_hint=(None, None),
-                size=("400dp", "200dp"),
-            ).open()
+        self.mem["obsId"] = self.obsid_input.text
+        self.mem["obsDate"] = self.obsdate_input.text
+        self.mem["obsDescription"] = self.obsdescription_input.text
+        self.mem["day_time"] = self.day_time_input.active
+        self.mem["epoch_time"] = self.epoch_time_input.active
+
+        if not BorisApp.project.get(INDEP_VAR, {}):
+            pop = InfoPopup()
+            pop.ids.label.text = "The current project does not define independent variables"
+            pop.open()
             self.show_start_observation_form()
             return
 
-        layout = BoxLayout(orientation="vertical")
-        lb = Label(text="Independent variables", size_hint_y=0.1)
-        layout.add_widget(lb)
+        main_layout = BoxLayout(orientation="vertical")
+        title_layout = BoxLayout(orientation="horizontal", size_hint_y=0.1)
+        title_layout.add_widget(Label(text="Independent variables", font_size="25dp"))
+        main_layout.add_widget(title_layout)
 
-        if INDEP_VAR in BorisApp.project:
-            for idx in BorisApp.project[INDEP_VAR]:
-                layout1 = BoxLayout(orientation="horizontal")
-                s = BorisApp.project[INDEP_VAR][idx]["label"]
-                if BorisApp.project[INDEP_VAR][idx]["description"]:
-                    s += "\n({})".format(BorisApp.project[INDEP_VAR][idx]["description"])
-                lb1 = Label(text=s, size_hint_x=1, font_size=20)
-                layout1.add_widget(lb1)
+        parameters_layout = BoxLayout(orientation="vertical", size_hint_y=0.8)
+
+        for idx in BorisApp.project.get(INDEP_VAR, {}):
+            layout = BoxLayout(orientation="horizontal")
+            s = BorisApp.project[INDEP_VAR][idx]["label"]
+            if BorisApp.project[INDEP_VAR][idx]["description"]:
+                s += "\n({})".format(BorisApp.project[INDEP_VAR][idx]["description"])
+            lb1 = Label(text=s, size_hint_x=1, font_size="20dp")
+            layout.add_widget(lb1)
+
+            # numeric, text, timestamp
+            if BorisApp.project[INDEP_VAR][idx]["type"] in ("numeric", "text", "timestamp"):
+                if "indep_var|" + BorisApp.project[INDEP_VAR][idx]["label"] in self.mem:
+                    value = self.mem["indep_var|" + BorisApp.project[INDEP_VAR][idx]["label"]]
+                else:
+                    value = BorisApp.project[INDEP_VAR][idx]["default value"]
 
                 ti = TextInput(
-                    text=BorisApp.project[INDEP_VAR][idx]["default value"],
+                    text=value,
                     multiline=False,
                     size_hint_x=1,
                     font_size="25dp",
                 )
                 self.iv[BorisApp.project[INDEP_VAR][idx]["label"]] = ti
-                layout1.add_widget(ti)
+                layout.add_widget(ti)
 
-                layout.add_widget(layout1)
+            # set of values
+            if BorisApp.project[INDEP_VAR][idx]["type"] == "value from set":
+                if "indep_var|" + BorisApp.project[INDEP_VAR][idx]["label"] in self.mem:
+                    value = self.mem["indep_var|" + BorisApp.project[INDEP_VAR][idx]["label"]]
+                else:
+                    value = BorisApp.project[INDEP_VAR][idx]["default value"]
 
-        layout2 = BoxLayout(orientation="vertical", height="40dp", size_hint_y=None)
-        btn = Button(text="Go back", size_hint_x=1)
+                dropdown = DropDown()
+                for choice in BorisApp.project[INDEP_VAR][idx]["possible values"].split(","):
+                    btn = Button(text=choice, size_hint_y=None, size_hint_x=1, font_size="20dp")
+                    btn.bind(on_release=lambda btn: dropdown.select(btn.text))
+                    dropdown.add_widget(btn)
+
+                mainbutton = Button(text=value, size_hint_x=1, font_size="25dp", background_normal="")
+
+                mainbutton.background_color = WHITE  #
+                mainbutton.color = BLACK
+                layout.add_widget(mainbutton)
+                self.iv[BorisApp.project[INDEP_VAR][idx]["label"]] = mainbutton
+
+                mainbutton.bind(on_release=dropdown.open)
+                dropdown.bind(on_select=lambda instance, x: setattr(mainbutton, "text", x))
+
+                # layout.add_widget(dropdown)
+
+            parameters_layout.add_widget(layout)
+
+        main_layout.add_widget(parameters_layout)
+
+        menu_layout = BoxLayout(orientation="vertical", size_hint_y=0.1)
+        btn = Button(text="Go back", size_hint_x=1, font_size="25dp")
         btn.bind(on_release=self.go_back)
-        btn.background_color = [1, 1, 1, 1]
-        layout2.add_widget(btn)
+        # btn.background_color =  GRAY
+        menu_layout.add_widget(btn)
 
-        layout.add_widget(layout2)
+        main_layout.add_widget(menu_layout)
 
         self.clear_widgets()
-        self.add_widget(layout)
+        self.add_widget(main_layout)
 
     def start(self):
         """
@@ -710,7 +755,7 @@ class StartObservationForm(BoxLayout):
                 behav_col = BorisApp.project[ETHOGRAM][idx].get("color", None)
                 btn = Button(text=behavior, size_hint_x=1, font_size=behaviors_font_size)
                 btn.background_normal = ""
-                if behav_col is not None:
+                if (behav_col is not None) and (behav_col != ""):
                     btn.background_color = behav_col
                     btn.color = contrasted_color(behav_col)
                     self.behavior_color[behavior] = behav_col
@@ -736,7 +781,7 @@ class StartObservationForm(BoxLayout):
             if BorisApp.project[SUBJECTS]:
                 self.btnSelSubj = Button(text="Select focal subject", size_hint_x=1, font_size="24dp")
                 self.btnSelSubj.background_normal = ""
-                self.btnSelSubj.background_color = [0.1, 0.1, 0.9, 1]  # blue
+                self.btnSelSubj.background_color = BLUE
                 self.btnSelSubj.bind(on_release=view_subjects_layout)
                 hlayout.add_widget(self.btnSelSubj)
 
@@ -961,6 +1006,12 @@ class StartObservationForm(BoxLayout):
             pop.open()
             return
 
+        if self.day_time_input.active and self.epoch_time_input.active:
+            pop = InfoPopup()
+            pop.ids.label.text = "You can not select to record the day time together with epoch time"
+            pop.open()
+            return
+
         if self.obsid_input.text.upper() in (x.upper() for x in BorisApp.project[OBSERVATIONS]):
             self.mem["obsId"] = self.obsid_input.text
             self.mem["obsDate"] = self.obsdate_input.text
@@ -1015,6 +1066,7 @@ class StartObservationForm(BoxLayout):
             INDEP_VAR: {},
         }
 
+        print(f"{self.iv=}")
         # independent variables
         for label in self.iv:
             BorisApp.project[OBSERVATIONS][self.obsId][INDEP_VAR][label] = self.iv[label].text
@@ -1107,6 +1159,7 @@ class BorisApp(App):
 
     project = {}
     projectFileName = ""
+    mem = {}
 
     app_primary_storage_dir = StringProperty(primary_storage_dir)
 
