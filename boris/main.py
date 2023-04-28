@@ -503,6 +503,7 @@ class StartObservationForm(BoxLayout):
         main_layout.add_widget(parameters_layout)
 
         menu_layout = BoxLayout(orientation="vertical", size_hint_y=0.1)
+        # Go back button
         btn = Button(text="Go back", size_hint_x=1, font_size="25dp")
         btn.bind(on_release=self.go_back)
         # btn.background_color =  GRAY
@@ -574,7 +575,7 @@ class StartObservationForm(BoxLayout):
 
             def on_goback_button_release(obj):
 
-                modifiers = ""
+                modifiers: str = ""
                 behavior, _, _ = self.modifier_buttons[obj]
                 for idx in sorted([int(k) for k in self.current_modifiers[behavior]]):
                     if modifiers:
@@ -588,19 +589,25 @@ class StartObservationForm(BoxLayout):
 
                 view_behaviors_layout(obj)
 
-            layout = BoxLayout(orientation="vertical")
-            font_size = 24
+            main_layout = BoxLayout(orientation="vertical")
+
+            title_layout = BoxLayout(orientation="horizontal", size_hint_y=0.1)
+            title_layout.add_widget(Label(text="Choose the modifier(s)", font_size="20dp"))
+            main_layout.add_widget(title_layout)
+
+            modifiers_layout = BoxLayout(orientation="vertical")
+            font_size = "20dp"
 
             self.current_modifiers[behavior] = {}
 
-            for iidx in sorted([int(x) for x in self.modifiers[behavior].keys()]):
+            for iidx in sorted([int(x) for x in self.modifiers[behavior]]):
                 idx = str(iidx)
 
                 self.current_modifiers[behavior][idx] = []
 
                 if self.modifiers[behavior][idx]["type"] in (SINGLE_SELECTION, MULTI_SELECTION):
 
-                    layout.add_widget(Label(text=self.modifiers[behavior][idx]["name"], size_hint=(0.2, 0.2)))
+                    modifiers_layout.add_widget(Label(text=self.modifiers[behavior][idx]["name"], size_hint=(0.2, 0.2)))
 
                     modifiers_number = len(self.modifiers[behavior][idx]["values"])
                     font_size = dynamic_font_size(modifiers_number)
@@ -620,7 +627,7 @@ class StartObservationForm(BoxLayout):
                             self.modifiers[behavior][idx]["type"],
                             modif.split(" (")[0],
                         ]
-                        layout.add_widget(btn)
+                        modifiers_layout.add_widget(btn)
 
                 if self.modifiers[behavior][idx]["type"] == NUMERIC_MODIFIER:
 
@@ -641,13 +648,18 @@ class StartObservationForm(BoxLayout):
                     self.modifier_buttons[ti] = [behavior, idx, self.modifiers[behavior][idx]["type"], ""]
                     layout.add_widget(ti)
 
-            btn = Button(text="Go back", font_size=font_size, size_hint_y=0.2)
-            btn.background_color = RED
+            main_layout.add_widget(modifiers_layout)
+
+            menu_layout = BoxLayout(orientation="vertical", size_hint_y=0.1)
+            # Go back button
+            btn = Button(text="Go back", size_hint_x=1, font_size="25dp")
             btn.bind(on_release=on_goback_button_release)
             self.modifier_buttons[btn] = [behavior, 0, ""]
-            layout.add_widget(btn)
+            menu_layout.add_widget(btn)
 
-            return layout
+            main_layout.add_widget(menu_layout)
+
+            return main_layout
 
         def create_subjects_layout():
             """
@@ -823,6 +835,19 @@ class StartObservationForm(BoxLayout):
 
         def view_modifiers_layout(behavior):
             self.clear_widgets()
+            # reset modifiers when behavior is point events
+
+            if "Point" in behaviorType(BorisApp.project[ETHOGRAM], behavior):
+                # reset all modifiers for current behavior
+                for idx in self.current_modifiers[behavior]:
+                    self.current_modifiers[behavior][idx] = []
+                for btn in self.modifier_buttons:
+                    if (
+                        self.modifier_buttons[btn][0] == behavior
+                    ):  # reset modifiers btn background color  for current behavior
+                        # print(btn.text, btn.background_color)
+                        btn.background_color = GRAY
+
             self.add_widget(self.modifiers_layout[behavior])
 
         def write_event(event):
