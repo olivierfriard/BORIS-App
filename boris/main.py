@@ -59,7 +59,6 @@ OBSERVATIONS = "observations"
 SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
 INDEP_VAR = "independent_variables"
-VERSION_URL = "https://raw.githubusercontent.com/olivierfriard/BORIS-App/master/ver.txt"
 
 # modifiers
 SINGLE_SELECTION = 0
