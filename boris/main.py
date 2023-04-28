@@ -844,7 +844,6 @@ class StartObservationForm(BoxLayout):
                     if (
                         self.modifier_buttons[btn][0] == behavior
                     ):  # reset modifiers btn background color  for current behavior
-                        # print(btn.text, btn.background_color)
                         btn.background_color = GRAY
 
             self.add_widget(self.modifiers_layout[behavior])
@@ -983,7 +982,6 @@ class StartObservationForm(BoxLayout):
                     try:
                         with open(BorisApp.projectFileName, "w") as f:
                             f.write(json.dumps(BorisApp.project, indent=0))
-
                         pop = InfoPopup()
                         pop.ids.label.text = f"Observation saved in\n{BorisApp.projectFileName}"
                         pop.open()
@@ -997,7 +995,10 @@ class StartObservationForm(BoxLayout):
 
                     self.clock_timer.cancel()
                     self.clear_widgets()
-                    self.add_widget(StartPageForm())
+
+                    w = ViewProjectForm()
+                    self.add_widget(w)
+                    w.show()
 
             pop = ConfirmStopPopup()
             pop.bind(on_dismiss=stop_obs_callback)

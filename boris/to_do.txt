@@ -3,4 +3,6 @@ BORIS App to do
 
 [ ] add possibility to change independent variables at the end of the observation
 
-[ ] check sets of modifiers
+[ ] 
+
+[X] check sets of modifiers
