@@ -52,7 +52,7 @@ import datetime as dt
 import time
 import pathlib as pl
 
-from decimal import Decimal
+"""from decimal import Decimal"""
 
 NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
