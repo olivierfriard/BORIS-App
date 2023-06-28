@@ -25,7 +25,7 @@ __app_name__ = "BORIS"
 __version__ = "0.9"
 __version_date__ = "2023-04-28"
 
-__copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba - ALPHA"
+__copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba"
 
 from kivy.app import App
 from kivy.utils import platform
