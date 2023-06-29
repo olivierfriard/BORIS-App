@@ -816,10 +816,8 @@ class StartObservationForm(BoxLayout):
             for behavior in self.btnList:
                 self.btnList[behavior].background_color = self.behavior_color[behavior]
 
-            if self.focal_subject in self.currentStates:
-
-                for cs in self.currentStates[self.focal_subject]:
-                    self.btnList[cs].background_color = [1, 0, 0, 1]  # red
+            for behavior, _ in self.currentStates.get(self.focal_subject, []):
+                self.btnList[behavior].background_color = [1, 0, 0, 1]  # red
 
             self.add_widget(self.behaviorsLayout)
 
@@ -868,61 +866,85 @@ class StartObservationForm(BoxLayout):
 
             time_, newState, modifier = event
 
+            # add event
+            if BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_time"]:
+                time_output = seconds_of_day(dt.datetime.now())
+            elif BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_epoch_time"]:
+                time_output = round(time_, 3)
+            else:
+                time_output = round(time_ - self.time0, 3)
+
+            if self.focal_subject == NO_FOCAL_SUBJECT:
+                focal_subject = ""
+            else:
+                focal_subject = self.focal_subject
+
+            print([time_output, focal_subject, newState, modifier, ""])
+
             if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
 
                 # deselect
-                if self.focal_subject in self.currentStates and newState in self.currentStates[self.focal_subject]:
+                if [newState, modifier] in self.currentStates.get(self.focal_subject, []):
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                        [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
+                        [time_output, focal_subject, newState, modifier, ""]
                     )
                     self.btnList[newState].background_color = self.behavior_color[newState]
-                    print(self.behavior_color[newState])
                     self.btnList[newState].color = contrasted_color(self.behavior_color[newState])
-                    self.currentStates[self.focal_subject].remove(newState)
+                    self.currentStates[self.focal_subject].remove([newState, modifier])
 
                 # select
                 else:
                     # test if state is exclusive
                     if behaviorExcluded(BorisApp.project[ETHOGRAM], newState) != [""]:
-                        statesToStop = []
-                        if self.focal_subject in self.currentStates:
-                            for cs in self.currentStates[self.focal_subject]:
-                                if cs in behaviorExcluded(BorisApp.project[ETHOGRAM], newState):
-                                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                                        [round(time_ - self.time0, 3), self.focal_subject, cs, "", ""]
-                                    )
-                                    statesToStop.append(cs)
-                                    self.btnList[cs].background_color = self.behavior_color[cs]
-                                    self.btnList[cs].color = contrasted_color(self.behavior_color[cs])
+                        statesToStop:list = []
 
-                            for s in statesToStop:
-                                self.currentStates[self.focal_subject].remove(s)
+                        print(self.currentStates)
+
+                        for current_behavior, current_modifier in self.currentStates.get(self.focal_subject, []):
+                            if current_behavior in behaviorExcluded(BorisApp.project[ETHOGRAM], newState):
+                                BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
+                                    [time_output, focal_subject, current_behavior, current_modifier, ""]
+                                )
+                                statesToStop.append([current_behavior, current_modifier])
+                                self.btnList[current_behavior].background_color = self.behavior_color[current_behavior]
+                                self.btnList[current_behavior].color = contrasted_color(self.behavior_color[current_behavior])
+
+                        for s in statesToStop:
+                            self.currentStates[self.focal_subject].remove(s)
 
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                        [round(time_ - self.time0, 3), self.focal_subject, newState, modifier, ""]
+                        [time_output, focal_subject, newState, modifier, ""]
                     )
 
                     self.btnList[newState].background_color = [1, 0, 0, 1]  # red
 
                     if self.focal_subject not in self.currentStates:
                         self.currentStates[self.focal_subject] = []
-                    self.currentStates[self.focal_subject].append(newState)
+                    self.currentStates[self.focal_subject].append([newState, modifier])
 
             # point event
             if "Point" in behaviorType(BorisApp.project[ETHOGRAM], newState):
-                # add event
-                if BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_time"]:
-                    time_output = seconds_of_day(dt.datetime.now())
-                    print(f"{time_output}")
-                elif BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_epoch_time"]:
-                    time_output = round(time_, 3)
-                else:
-                    time_output = round(time_ - self.time0, 3)
 
-                print([time_output, self.focal_subject, newState, modifier, ""])
+                if behaviorExcluded(BorisApp.project[ETHOGRAM], newState) != [""]:
+                    statesToStop:list = []
+
+                    print(self.currentStates)
+
+                    for current_behavior, current_modifier in self.currentStacurrent_behaviortes.get(self.focal_subject, []):
+                        if current_behavior in behaviorExcluded(BorisApp.project[ETHOGRAM], newState):
+                            BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
+                                [time_output, focal_subject, current_behavior, current_modifier, ""]
+                            )
+                            statesToStop.append([current_behavior, current_modifier])
+                            self.btnList[current_behavior].background_color = self.behavior_color[current_behavior]
+                            self.btnList[current_behavior].color = contrasted_color(self.behavior_color[current_behavior])
+
+                    for s in statesToStop:
+                        self.currentStates[self.focal_subject].remove(s)
+
 
                 BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                    [time_output, self.focal_subject, newState, modifier, ""]
+                    [time_output, focal_subject, newState, modifier, ""]
                 )
 
             with open(BorisApp.projectFileName, "w") as f:
