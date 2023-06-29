@@ -22,8 +22,8 @@ This file is part of BORIS App.
 """
 
 __app_name__ = "BORIS"
-__version__ = "0.9"
-__version_date__ = "2023-04-28"
+__version__ = "0.10"
+__version_date__ = "2023-06-29"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba"
 
