@@ -86,7 +86,7 @@
 },
 "observations": {
 "1": {
-"date": "2023-06-29T13:20:00",
+"date": "2023-06-30T10:05:16",
 "close_behaviors_between_videos": false,
 "time offset": 0.0,
 "scan_sampling_time": 0,
@@ -94,37 +94,79 @@
 "file": [],
 "events": [
 [
-2.159,
+36322.459,
+"",
+"p",
+"",
+""
+],
+[
+36322.942,
+"",
+"p",
+"",
+""
+],
+[
+36323.498,
+"",
+"b",
+"",
+""
+],
+[
+36324.228,
+"",
+"b",
+"",
+""
+],
+[
+36326.428,
+"",
+"a",
+"2",
+""
+],
+[
+36327.17,
 "",
 "x",
 "",
 ""
 ],
 [
-7.837,
+36327.751,
+"",
+"a",
+"2",
+""
+],
+[
+36327.751,
+"",
+"b",
+"",
+""
+],
+[
+36328.204,
 "",
 "x",
 "",
 ""
 ],
 [
-12.239,
+36328.575,
 "",
-"a",
-"1",
-""
-],
-[
-18.629,
+"b",
 "",
-"a",
-"1",
 ""
 ]
 ],
 "visualize_spectrogram": false,
 "visualize_waveform": false,
-"start_from_current_time": false,
+"start_from_current_time": true,
 "start_from_current_epoch_time": false,
 "type": "LIVE",
 "independent_variables": {}

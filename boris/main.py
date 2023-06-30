@@ -22,8 +22,8 @@ This file is part of BORIS App.
 """
 
 __app_name__ = "BORIS"
-__version__ = "0.10"
-__version_date__ = "2023-06-29"
+__version__ = "0.11"
+__version_date__ = "2023-06-30"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba"
 
@@ -151,7 +151,6 @@ def contrasted_color(c):
 
 class StartPageForm(BoxLayout):
     def show_SelectProjectForm(self):
-
         self.clear_widgets()
         self.add_widget(SelectProjectForm())
 
@@ -211,7 +210,6 @@ class MoreForm(BoxLayout):
 
 
 class CustomButton(Button):
-
     root_widget = ObjectProperty()
 
     def on_release(self, **kwargs):
@@ -220,7 +218,6 @@ class CustomButton(Button):
 
 
 class ViewProjectForm(BoxLayout):
-
     selected_item = StringProperty("no selection")
 
     def show(self):
@@ -357,7 +354,6 @@ def behaviorExcluded(ethogram, behavior) -> list:
 
 
 class StartObservationForm(BoxLayout):
-
     time0 = 0  # initial time
     focal_subject = NO_FOCAL_SUBJECT
     btnList, btnSubjectsList, mem, behavior_color, currentStates, modifiers = {}, {}, {}, {}, {}, {}
@@ -403,7 +399,6 @@ class StartObservationForm(BoxLayout):
                     try:
                         _ = float(self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text)
                     except:
-
                         pop = InfoPopup()
                         pop.ids.label.text = (
                             f"The variable '{BorisApp.project[INDEP_VAR][idx]['label']}' must be numeric."
@@ -526,7 +521,6 @@ class StartObservationForm(BoxLayout):
             """
 
             def on_button_release(obj):
-
                 behavior, idx, type_, modifier = self.modifier_buttons[obj]
                 if behavior not in self.current_modifiers:
                     self.current_modifiers[behavior] = {}
@@ -573,7 +567,6 @@ class StartObservationForm(BoxLayout):
                     self.current_modifiers[behavior][idx] = [obj.text]
 
             def on_goback_button_release(obj):
-
                 modifiers: str = ""
                 behavior, _, _ = self.modifier_buttons[obj]
                 for idx in sorted([int(k) for k in self.current_modifiers[behavior]]):
@@ -605,7 +598,6 @@ class StartObservationForm(BoxLayout):
                 self.current_modifiers[behavior][idx] = []
 
                 if self.modifiers[behavior][idx]["type"] in (SINGLE_SELECTION, MULTI_SELECTION):
-
                     modifiers_layout.add_widget(Label(text=self.modifiers[behavior][idx]["name"], size_hint=(0.2, 0.2)))
 
                     modifiers_number = len(self.modifiers[behavior][idx]["values"])
@@ -629,7 +621,6 @@ class StartObservationForm(BoxLayout):
                         modifiers_layout.add_widget(btn)
 
                 if self.modifiers[behavior][idx]["type"] == NUMERIC_MODIFIER:
-
                     layout.add_widget(
                         Label(
                             text=self.modifiers[behavior][idx]["name"] + " (validate with <Enter>)",
@@ -882,7 +873,6 @@ class StartObservationForm(BoxLayout):
             print([time_output, focal_subject, newState, modifier, ""])
 
             if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
-
                 # deselect
                 if [newState, modifier] in self.currentStates.get(self.focal_subject, []):
                     BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
@@ -896,7 +886,7 @@ class StartObservationForm(BoxLayout):
                 else:
                     # test if state is exclusive
                     if behaviorExcluded(BorisApp.project[ETHOGRAM], newState) != [""]:
-                        statesToStop:list = []
+                        statesToStop: list = []
 
                         print(self.currentStates)
 
@@ -907,7 +897,9 @@ class StartObservationForm(BoxLayout):
                                 )
                                 statesToStop.append([current_behavior, current_modifier])
                                 self.btnList[current_behavior].background_color = self.behavior_color[current_behavior]
-                                self.btnList[current_behavior].color = contrasted_color(self.behavior_color[current_behavior])
+                                self.btnList[current_behavior].color = contrasted_color(
+                                    self.behavior_color[current_behavior]
+                                )
 
                         for s in statesToStop:
                             self.currentStates[self.focal_subject].remove(s)
@@ -924,24 +916,24 @@ class StartObservationForm(BoxLayout):
 
             # point event
             if "Point" in behaviorType(BorisApp.project[ETHOGRAM], newState):
-
                 if behaviorExcluded(BorisApp.project[ETHOGRAM], newState) != [""]:
-                    statesToStop:list = []
+                    statesToStop: list = []
 
                     print(self.currentStates)
 
-                    for current_behavior, current_modifier in self.currentStacurrent_behaviortes.get(self.focal_subject, []):
+                    for current_behavior, current_modifier in self.currentStates.get(self.focal_subject, []):
                         if current_behavior in behaviorExcluded(BorisApp.project[ETHOGRAM], newState):
                             BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
                                 [time_output, focal_subject, current_behavior, current_modifier, ""]
                             )
                             statesToStop.append([current_behavior, current_modifier])
                             self.btnList[current_behavior].background_color = self.behavior_color[current_behavior]
-                            self.btnList[current_behavior].color = contrasted_color(self.behavior_color[current_behavior])
+                            self.btnList[current_behavior].color = contrasted_color(
+                                self.behavior_color[current_behavior]
+                            )
 
                     for s in statesToStop:
                         self.currentStates[self.focal_subject].remove(s)
-
 
                 BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
                     [time_output, focal_subject, newState, modifier, ""]
