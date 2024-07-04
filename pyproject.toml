@@ -1,0 +1,18 @@
+[project]
+name = "boris-app"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Olivier Friard", email = "olivier.friard@unito.it" }
+]
+dependencies = [
+    "kivy>=2.3.0",
+    "requests>=2.32.3",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[tool.rye]
+managed = true
+virtual = true
+dev-dependencies = []
