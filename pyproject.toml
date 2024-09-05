@@ -8,6 +8,10 @@ authors = [
 dependencies = [
     "kivy>=2.3.0",
     "requests>=2.32.3",
+    "buildozer>=1.5.0",
+    "kivymd>=1.2.0",
+    "plyer>=2.1.0",
+    "kivy-garden>=0.1.5",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

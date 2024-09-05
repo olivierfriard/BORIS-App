@@ -22,8 +22,8 @@ This file is part of BORIS App.
 """
 
 __app_name__ = "BORIS"
-__version__ = "0.11"
-__version_date__ = "2023-06-30"
+__version__ = "0.12"
+__version_date__ = "2024-09-05"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba"
 
@@ -33,6 +33,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.clock import Clock
@@ -268,7 +269,9 @@ class ViewEthogramForm(BoxLayout):
     """
 
     def show(self):
-        self.ids.lbl.text = f"The ethogram contains {len(BorisApp.project[ETHOGRAM])} behavior{'s.' if len(BorisApp.project[ETHOGRAM]) > 1 else '.'}"
+        self.ids.lbl.text = (
+            f"The ethogram contains {len(BorisApp.project[ETHOGRAM])} behavior{'s.' if len(BorisApp.project[ETHOGRAM]) > 1 else '.'}"
+        )
         rows = []
         for idx in BorisApp.project[ETHOGRAM]:
             rows.append(BorisApp.project[ETHOGRAM][idx]["code"])
@@ -392,17 +395,12 @@ class StartObservationForm(BoxLayout):
         # check if numeric indep var values are numeric
         for idx in BorisApp.project.get(INDEP_VAR, {}):
             if BorisApp.project[INDEP_VAR][idx]["label"] in self.iv:
-                if (
-                    BorisApp.project[INDEP_VAR][idx]["type"] == "numeric"
-                    and self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text
-                ):
+                if BorisApp.project[INDEP_VAR][idx]["type"] == "numeric" and self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text:
                     try:
                         _ = float(self.iv[BorisApp.project[INDEP_VAR][idx]["label"]].text)
                     except:
                         pop = InfoPopup()
-                        pop.ids.label.text = (
-                            f"The variable '{BorisApp.project[INDEP_VAR][idx]['label']}' must be numeric."
-                        )
+                        pop.ids.label.text = f"The variable '{BorisApp.project[INDEP_VAR][idx]['label']}' must be numeric."
                         pop.open()
                         return
 
@@ -528,17 +526,12 @@ class StartObservationForm(BoxLayout):
                 if type_ == SINGLE_SELECTION:
                     # all button to grey
                     for o in [
-                        o
-                        for o in self.modifier_buttons
-                        if self.modifier_buttons[o][0] == behavior and self.modifier_buttons[o][1] == idx
+                        o for o in self.modifier_buttons if self.modifier_buttons[o][0] == behavior and self.modifier_buttons[o][1] == idx
                     ]:
                         o.background_color = GRAY
 
                     if idx in self.current_modifiers[behavior]:
-                        if (
-                            self.current_modifiers[behavior][idx] == []
-                            or modifier not in self.current_modifiers[behavior][idx]
-                        ):
+                        if self.current_modifiers[behavior][idx] == [] or modifier not in self.current_modifiers[behavior][idx]:
                             self.current_modifiers[behavior][idx] = [modifier]
                             obj.background_color = DARKRED
                         else:
@@ -550,10 +543,7 @@ class StartObservationForm(BoxLayout):
 
                 if type_ == MULTI_SELECTION:
                     if idx in self.current_modifiers[behavior]:
-                        if (
-                            self.current_modifiers[behavior][idx] == []
-                            or modifier not in self.current_modifiers[behavior][idx]
-                        ):
+                        if self.current_modifiers[behavior][idx] == [] or modifier not in self.current_modifiers[behavior][idx]:
                             self.current_modifiers[behavior][idx].append(modifier)
                             obj.background_color = DARKRED
                         else:
@@ -567,6 +557,9 @@ class StartObservationForm(BoxLayout):
                     self.current_modifiers[behavior][idx] = [obj.text]
 
             def on_goback_button_release(obj):
+                """
+                write modifier and go back to observation
+                """
                 modifiers: str = ""
                 behavior, _, _ = self.modifier_buttons[obj]
                 for idx in sorted([int(k) for k in self.current_modifiers[behavior]]):
@@ -581,13 +574,41 @@ class StartObservationForm(BoxLayout):
 
                 view_behaviors_layout(obj)
 
-            main_layout = BoxLayout(orientation="vertical")
+            # check the modifier type single or multiple
+            text = "Modifier"
+            for idx in self.modifiers[behavior]:
+                if self.modifiers[behavior][idx]["type"] == SINGLE_SELECTION:
+                    text = "Select the modifier"
+                if self.modifiers[behavior][idx]["type"] == MULTI_SELECTION:
+                    text = "Select the modifier(s)"
+                if self.modifiers[behavior][idx]["type"] == NUMERIC_MODIFIER:
+                    text = "Input the numeric modifier"
 
-            title_layout = BoxLayout(orientation="horizontal", size_hint_y=0.1)
-            title_layout.add_widget(Label(text="Choose the modifier(s)", font_size="20dp"))
+            scrollwidget_layout = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
+
+            main_layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
+            main_layout.bind(minimum_height=main_layout.setter("height"))
+
+            title_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=40)
+            # Go back button
+            btn = Button(
+                text="Go back",
+                font_size="20dp",
+                size_hint_x=0.2,
+            )
+            btn.bind(on_release=on_goback_button_release)
+            self.modifier_buttons[btn] = [behavior, 0, ""]
+
+            title_layout.add_widget(btn)
+            title_layout.add_widget(
+                Label(
+                    text=text,
+                    font_size="20dp",
+                    height=40,
+                )
+            )
             main_layout.add_widget(title_layout)
 
-            modifiers_layout = BoxLayout(orientation="vertical")
             font_size = "20dp"
 
             self.current_modifiers[behavior] = {}
@@ -595,14 +616,19 @@ class StartObservationForm(BoxLayout):
             for iidx in sorted([int(x) for x in self.modifiers[behavior]]):
                 idx = str(iidx)
 
+                # add modifier name
+                main_layout.add_widget(
+                    Label(
+                        text=self.modifiers[behavior][idx]["name"],
+                        font_size="20dp",
+                        size_hint_y=None,
+                        height=30,
+                    )
+                )
+
                 self.current_modifiers[behavior][idx] = []
 
                 if self.modifiers[behavior][idx]["type"] in (SINGLE_SELECTION, MULTI_SELECTION):
-                    modifiers_layout.add_widget(Label(text=self.modifiers[behavior][idx]["name"], size_hint=(0.2, 0.2)))
-
-                    modifiers_number = len(self.modifiers[behavior][idx]["values"])
-                    font_size = dynamic_font_size(modifiers_number)
-
                     for modif in self.modifiers[behavior][idx]["values"]:
                         btn = Button(
                             text=modif.split(" (")[0],
@@ -610,7 +636,8 @@ class StartObservationForm(BoxLayout):
                             on_release=on_button_release,
                             background_normal="",
                             background_color=GRAY,
-                            size_hint_y=1,
+                            size_hint_y=None,
+                            height=40,
                         )
                         self.modifier_buttons[btn] = [
                             behavior,
@@ -618,38 +645,43 @@ class StartObservationForm(BoxLayout):
                             self.modifiers[behavior][idx]["type"],
                             modif.split(" (")[0],
                         ]
-                        modifiers_layout.add_widget(btn)
+                        main_layout.add_widget(btn)
 
                 if self.modifiers[behavior][idx]["type"] == NUMERIC_MODIFIER:
-                    layout.add_widget(
+                    main_layout.add_widget(
                         Label(
                             text=self.modifiers[behavior][idx]["name"] + " (validate with <Enter>)",
-                            size_hint=(0.2, 0.2),
+                            size_hint_y=None,
+                            height=40,
                         )
                     )
                     ti = TextInput(
                         text="",
                         multiline=False,
-                        size_hint_x=1,
+                        size_hint_y=None,
+                        height=40,
                         font_size="25dp",
                         input_type="number",
                         on_text_validate=on_button_release,
                     )
                     self.modifier_buttons[ti] = [behavior, idx, self.modifiers[behavior][idx]["type"], ""]
-                    layout.add_widget(ti)
+                    main_layout.add_widget(ti)
 
-            main_layout.add_widget(modifiers_layout)
-
-            menu_layout = BoxLayout(orientation="vertical", size_hint_y=0.1)
             # Go back button
-            btn = Button(text="Go back", size_hint_x=1, font_size="25dp")
-            btn.bind(on_release=on_goback_button_release)
-            self.modifier_buttons[btn] = [behavior, 0, ""]
-            menu_layout.add_widget(btn)
+            btn1 = Button(
+                text="Go back",
+                font_size="20dp",
+                size_hint_y=None,
+            )
+            btn1.bind(on_release=on_goback_button_release)
+            self.modifier_buttons[btn1] = [behavior, 0, ""]
 
-            main_layout.add_widget(menu_layout)
+            main_layout.add_widget(btn1)
 
-            return main_layout
+            scrollwidget_layout.add_widget(main_layout)
+
+            # return main_layout
+            return scrollwidget_layout
 
         def create_subjects_layout():
             """
@@ -663,9 +695,7 @@ class StartObservationForm(BoxLayout):
             if len(subjectsList) >= 20:
                 subjects_font_size = FONT_MIN_SIZE_SUBJECT
             else:
-                subjects_font_size = (FONT_MIN_SIZE_SUBJECT - FONT_MAX_SIZE_SUBJECT) / 20 * len(
-                    subjectsList
-                ) + FONT_MAX_SIZE_SUBJECT
+                subjects_font_size = (FONT_MIN_SIZE_SUBJECT - FONT_MAX_SIZE_SUBJECT) / 20 * len(subjectsList) + FONT_MAX_SIZE_SUBJECT
 
             subjectsLayout = GridLayout(cols=int((len(subjectsList) + 1) ** 0.5), size_hint=(1, 1), spacing=5)
 
@@ -703,12 +733,10 @@ class StartObservationForm(BoxLayout):
 
             behaviorsLayout.add_widget(obsid_time)
 
-            gdrid_layout = GridLayout(
-                cols=int((len(BorisApp.project[ETHOGRAM]) + 1) ** 0.5), size_hint=(1, 1), spacing=3
-            )
+            gdrid_layout = GridLayout(cols=int((len(BorisApp.project[ETHOGRAM]) + 1) ** 0.5), size_hint=(1, 1), spacing=3)
 
             # check modifiers
-            self.modifiers_layout: dict = {}
+            self.modifiers_layout = {}
             for idx in BorisApp.project[ETHOGRAM]:
                 self.modifiers[BorisApp.project[ETHOGRAM][idx]["code"]] = BorisApp.project[ETHOGRAM][idx]["modifiers"]
 
@@ -822,17 +850,19 @@ class StartObservationForm(BoxLayout):
             print("current focal subject:", self.focal_subject)
 
         def view_modifiers_layout(behavior):
-            self.clear_widgets()
-            # reset modifiers when behavior is point events
+            """
+            show the layout for the modifiers selection
+            """
 
+            self.clear_widgets()
+
+            # reset modifiers when behavior is point events
             if "Point" in behaviorType(BorisApp.project[ETHOGRAM], behavior):
                 # reset all modifiers for current behavior
                 for idx in self.current_modifiers[behavior]:
                     self.current_modifiers[behavior][idx] = []
                 for btn in self.modifier_buttons:
-                    if (
-                        self.modifier_buttons[btn][0] == behavior
-                    ):  # reset modifiers btn background color  for current behavior
+                    if self.modifier_buttons[btn][0] == behavior:  # reset modifiers btn background color  for current behavior
                         btn.background_color = GRAY
 
             self.add_widget(self.modifiers_layout[behavior])
@@ -875,9 +905,7 @@ class StartObservationForm(BoxLayout):
             if "State" in behaviorType(BorisApp.project[ETHOGRAM], newState):
                 # deselect
                 if [newState, modifier] in self.currentStates.get(self.focal_subject, []):
-                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                        [time_output, focal_subject, newState, modifier, ""]
-                    )
+                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([time_output, focal_subject, newState, modifier, ""])
                     self.btnList[newState].background_color = self.behavior_color[newState]
                     self.btnList[newState].color = contrasted_color(self.behavior_color[newState])
                     self.currentStates[self.focal_subject].remove([newState, modifier])
@@ -897,16 +925,12 @@ class StartObservationForm(BoxLayout):
                                 )
                                 statesToStop.append([current_behavior, current_modifier])
                                 self.btnList[current_behavior].background_color = self.behavior_color[current_behavior]
-                                self.btnList[current_behavior].color = contrasted_color(
-                                    self.behavior_color[current_behavior]
-                                )
+                                self.btnList[current_behavior].color = contrasted_color(self.behavior_color[current_behavior])
 
                         for s in statesToStop:
                             self.currentStates[self.focal_subject].remove(s)
 
-                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                        [time_output, focal_subject, newState, modifier, ""]
-                    )
+                    BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([time_output, focal_subject, newState, modifier, ""])
 
                     self.btnList[newState].background_color = [1, 0, 0, 1]  # red
 
@@ -928,16 +952,12 @@ class StartObservationForm(BoxLayout):
                             )
                             statesToStop.append([current_behavior, current_modifier])
                             self.btnList[current_behavior].background_color = self.behavior_color[current_behavior]
-                            self.btnList[current_behavior].color = contrasted_color(
-                                self.behavior_color[current_behavior]
-                            )
+                            self.btnList[current_behavior].color = contrasted_color(self.behavior_color[current_behavior])
 
                     for s in statesToStop:
                         self.currentStates[self.focal_subject].remove(s)
 
-                BorisApp.project[OBSERVATIONS][self.obsId]["events"].append(
-                    [time_output, focal_subject, newState, modifier, ""]
-                )
+                BorisApp.project[OBSERVATIONS][self.obsId]["events"].append([time_output, focal_subject, newState, modifier, ""])
 
             with open(BorisApp.projectFileName, "w") as f:
                 f.write(json.dumps(BorisApp.project, indent=0))
@@ -1028,9 +1048,7 @@ class StartObservationForm(BoxLayout):
 
             pop = AskExistingObservation()
             if nb_events:
-                pop.ids.lb_obs_exists.text = (
-                    f"An observation with the same id and {nb_events} coded events already exists"
-                )
+                pop.ids.lb_obs_exists.text = f"An observation with the same id and {nb_events} coded events already exists"
             else:
                 pop.ids.lb_obs_exists.text = f"An observation with the same id already exists. No events were coded"
 
@@ -1172,7 +1190,6 @@ class BorisRoot(BoxLayout):
 
 
 class BorisApp(App):
-
     """
     class YourApp(App):
         font_size = NumericProperty(20)
