@@ -53,7 +53,6 @@ import datetime as dt
 import time
 import pathlib as pl
 
-"""from decimal import Decimal"""
 
 NO_FOCAL_SUBJECT = "No focal subject"
 OBSERVATIONS = "observations"
@@ -519,9 +518,13 @@ class StartObservationForm(BoxLayout):
             """
 
             def on_button_release(obj):
+                """
+                manage selected modifier
+                """
+
                 behavior, idx, type_, modifier = self.modifier_buttons[obj]
-                if behavior not in self.current_modifiers:
-                    self.current_modifiers[behavior] = {}
+                if (behavior, self.focal_subject) not in self.current_modifiers:
+                    self.current_modifiers[(behavior, self.focal_subject)] = {}
 
                 if type_ == SINGLE_SELECTION:
                     # all button to grey
@@ -530,31 +533,37 @@ class StartObservationForm(BoxLayout):
                     ]:
                         o.background_color = GRAY
 
-                    if idx in self.current_modifiers[behavior]:
-                        if self.current_modifiers[behavior][idx] == [] or modifier not in self.current_modifiers[behavior][idx]:
-                            self.current_modifiers[behavior][idx] = [modifier]
+                    if idx in self.current_modifiers[(behavior, self.focal_subject)]:
+                        if (
+                            self.current_modifiers[(behavior, self.focal_subject)][idx] == []
+                            or modifier not in self.current_modifiers[(behavior, self.focal_subject)][idx]
+                        ):
+                            self.current_modifiers[(behavior, self.focal_subject)][idx] = [modifier]
                             obj.background_color = DARKRED
                         else:
-                            self.current_modifiers[behavior][idx] = []
+                            self.current_modifiers[(behavior, self.focal_subject)][idx] = []
                             obj.background_color = GRAY
                     else:
-                        self.current_modifiers[behavior][idx] = [modifier]
+                        self.current_modifiers[(behavior, self.focal_subject)][idx] = [modifier]
                         obj.background_color = DARKRED
 
                 if type_ == MULTI_SELECTION:
-                    if idx in self.current_modifiers[behavior]:
-                        if self.current_modifiers[behavior][idx] == [] or modifier not in self.current_modifiers[behavior][idx]:
-                            self.current_modifiers[behavior][idx].append(modifier)
+                    if idx in self.current_modifiers[(behavior, self.focal_subject)]:
+                        if (
+                            self.current_modifiers[(behavior, self.focal_subject)][idx] == []
+                            or modifier not in self.current_modifiers[(behavior, self.focal_subject)][idx]
+                        ):
+                            self.current_modifiers[(behavior, self.focal_subject)][idx].append(modifier)
                             obj.background_color = DARKRED
                         else:
-                            self.current_modifiers[behavior][idx].remove(modifier)
+                            self.current_modifiers[(behavior, self.focal_subject)][idx].remove(modifier)
                             obj.background_color = GRAY
                     else:
-                        self.current_modifiers[behavior][idx] = [modifier]
+                        self.current_modifiers[(behavior, self.focal_subject)][idx] = [modifier]
                         obj.background_color = DARKRED
 
                 if type_ == NUMERIC_MODIFIER:
-                    self.current_modifiers[behavior][idx] = [obj.text]
+                    self.current_modifiers[(behavior, self.focal_subject)][idx] = [obj.text]
 
             def on_goback_button_release(obj):
                 """
@@ -562,11 +571,11 @@ class StartObservationForm(BoxLayout):
                 """
                 modifiers: str = ""
                 behavior, _, _ = self.modifier_buttons[obj]
-                for idx in sorted([int(k) for k in self.current_modifiers[behavior]]):
+                for idx in sorted([int(k) for k in self.current_modifiers[(behavior, self.focal_subject)]]):
                     if modifiers:
                         modifiers += "|"
-                    if self.current_modifiers[behavior][str(idx)]:
-                        modifiers += ",".join(self.current_modifiers[behavior][str(idx)])
+                    if self.current_modifiers[(behavior, self.focal_subject)][str(idx)]:
+                        modifiers += ",".join(self.current_modifiers[(behavior, self.focal_subject)][str(idx)])
                     else:
                         modifiers += "None"
 
@@ -611,7 +620,7 @@ class StartObservationForm(BoxLayout):
 
             font_size = "20dp"
 
-            self.current_modifiers[behavior] = {}
+            # self.current_modifiers[behavior] = {}
 
             for iidx in sorted([int(x) for x in self.modifiers[behavior]]):
                 idx = str(iidx)
@@ -620,13 +629,13 @@ class StartObservationForm(BoxLayout):
                 main_layout.add_widget(
                     Label(
                         text=self.modifiers[behavior][idx]["name"],
-                        font_size="20dp",
+                        font_size=font_size,
                         size_hint_y=None,
-                        height=30,
+                        height=40,
                     )
                 )
 
-                self.current_modifiers[behavior][idx] = []
+                # self.current_modifiers[behavior][idx] = []
 
                 if self.modifiers[behavior][idx]["type"] in (SINGLE_SELECTION, MULTI_SELECTION):
                     for modif in self.modifiers[behavior][idx]["values"]:
@@ -637,7 +646,7 @@ class StartObservationForm(BoxLayout):
                             background_normal="",
                             background_color=GRAY,
                             size_hint_y=None,
-                            height=40,
+                            # height=40,
                         )
                         self.modifier_buttons[btn] = [
                             behavior,
@@ -652,14 +661,14 @@ class StartObservationForm(BoxLayout):
                         Label(
                             text=self.modifiers[behavior][idx]["name"] + " (validate with <Enter>)",
                             size_hint_y=None,
-                            height=40,
+                            # height=40,
                         )
                     )
                     ti = TextInput(
                         text="",
                         multiline=False,
                         size_hint_y=None,
-                        height=40,
+                        # height=40,
                         font_size="25dp",
                         input_type="number",
                         on_text_validate=on_button_release,
@@ -670,7 +679,7 @@ class StartObservationForm(BoxLayout):
             # Go back button
             btn1 = Button(
                 text="Go back",
-                font_size="20dp",
+                font_size=font_size,
                 size_hint_y=None,
             )
             btn1.bind(on_release=on_goback_button_release)
@@ -859,8 +868,10 @@ class StartObservationForm(BoxLayout):
             # reset modifiers when behavior is point events
             if "Point" in behaviorType(BorisApp.project[ETHOGRAM], behavior):
                 # reset all modifiers for current behavior
-                for idx in self.current_modifiers[behavior]:
-                    self.current_modifiers[behavior][idx] = []
+                if (behavior, self.focal_subject) not in self.current_modifiers:
+                    self.current_modifiers[(behavior, self.focal_subject)] = {}
+                for idx in self.current_modifiers[(behavior, self.focal_subject)]:
+                    self.current_modifiers[(behavior, self.focal_subject)][idx] = []
                 for btn in self.modifier_buttons:
                     if self.modifier_buttons[btn][0] == behavior:  # reset modifiers btn background color  for current behavior
                         btn.background_color = GRAY

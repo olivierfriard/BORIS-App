@@ -216,7 +216,7 @@
 },
 "observations": {
 "1": {
-"date": "2024-09-05T13:43:58",
+"date": "2024-09-05T17:04:58",
 "close_behaviors_between_videos": false,
 "time offset": 0.0,
 "scan_sampling_time": 0,
@@ -224,10 +224,17 @@
 "file": [],
 "events": [
 [
-5.34,
+5.443,
 "",
-"2 sets",
-"1|4",
+"a",
+"2",
+""
+],
+[
+14.308,
+"",
+"a",
+"None",
 ""
 ]
 ],
