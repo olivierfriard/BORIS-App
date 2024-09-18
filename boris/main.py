@@ -22,8 +22,8 @@ This file is part of BORIS App.
 """
 
 __app_name__ = "BORIS"
-__version__ = "0.12"
-__version_date__ = "2024-09-05"
+__version__ = "0.13"
+__version_date__ = "2024-09-18"
 
 __copyright__ = f"(c) {__version_date__[:4]} Olivier Friard - Marco Gamba"
 
@@ -61,9 +61,10 @@ ETHOGRAM = "behaviors_conf"
 INDEP_VAR = "independent_variables"
 
 EVENT_TIME_IDX = 0
-EVENT_SUBJECT_IDX = 0
-EVENT_BEHAVIOR_IDX = 0
-EVENT_MODIFIER_IDX = 0
+EVENT_SUBJECT_IDX = 1
+EVENT_BEHAVIOR_IDX = 2
+EVENT_MODIFIER_IDX = 3
+# EVENT_COMMENT_IDX = 4
 
 # modifiers
 SINGLE_SELECTION = 0
@@ -154,6 +155,54 @@ def contrasted_color(c):
         return white
 
 
+def seconds_of_day(time_) -> float:
+    """
+    return the number of seconds since start of the day
+    """
+
+    print(time_.date())
+    print(dt.time(0))
+
+    return round((time_ - dt.datetime.combine(time_.date(), dt.time(0))).total_seconds(), 3)
+
+    # return dec((dt - datetime.datetime.combine(dt.date(), datetime.time(0))).total_seconds()).quantize(dec("0.001"))
+
+
+def get_current_states_modifiers_for_subject(
+    state_behaviors_codes: list, events: list, subject: str, time_: float, include_modifiers: bool = False
+) -> dict:
+    """
+    get current states and modifiers (if requested) for a subject at given time
+
+    Args:
+        state_behaviors_codes (list): list of behavior codes defined as STATE event
+        events (list): list of events
+        subject (str): subject name
+        time (float): time
+        include_modifiers (bool): include modifier if True (default: False)
+
+    Returns:
+        dict: current states by subject. dict of list
+    """
+    current_states: list = []
+
+    for event in events:
+        if event[EVENT_TIME_IDX] > time_:
+            break
+        if event[EVENT_BEHAVIOR_IDX] not in state_behaviors_codes:
+            continue
+        if event[EVENT_SUBJECT_IDX] != subject:
+            continue
+
+        if (event[EVENT_BEHAVIOR_IDX], event[EVENT_MODIFIER_IDX]) not in current_states:
+            current_states.append((event[EVENT_BEHAVIOR_IDX], event[EVENT_MODIFIER_IDX]))
+        else:
+            current_states.remove((event[EVENT_BEHAVIOR_IDX], event[EVENT_MODIFIER_IDX]))
+
+    return current_states
+
+
+'''
 def get_current_states_modifiers_by_subject(
     state_behaviors_codes: list, events: list, subjects: dict, time_: float, include_modifiers: bool = False
 ) -> dict:
@@ -190,6 +239,7 @@ def get_current_states_modifiers_by_subject(
         r[idx] = [f"{bm[0]} ({bm[1]})" for bm in current_states[subjects[idx]["name"]] if current_states[subjects[idx]["name"]][bm]]
 
     return r
+'''
 
 
 class StartPageForm(BoxLayout):
@@ -553,7 +603,6 @@ class StartObservationForm(BoxLayout):
         start new observation
         """
         self.modifier_buttons: dict = {}
-        self.current_modifiers: dict = {}
 
         def create_modifiers_layout(behavior):
             """
@@ -566,63 +615,63 @@ class StartObservationForm(BoxLayout):
                 """
 
                 behavior, idx, type_, modifier = self.modifier_buttons[obj]
-                if (behavior, self.focal_subject) not in self.current_modifiers:
-                    self.current_modifiers[(behavior, self.focal_subject)] = {}
+
+                print(f"{modifier=} {idx=}")
 
                 if type_ == SINGLE_SELECTION:
-                    # all button to grey
-                    for o in [
-                        o for o in self.modifier_buttons if self.modifier_buttons[o][0] == behavior and self.modifier_buttons[o][1] == idx
-                    ]:
-                        o.background_color = GRAY
-
-                    if idx in self.current_modifiers[(behavior, self.focal_subject)]:
-                        if (
-                            self.current_modifiers[(behavior, self.focal_subject)][idx] == []
-                            or modifier not in self.current_modifiers[(behavior, self.focal_subject)][idx]
-                        ):
-                            self.current_modifiers[(behavior, self.focal_subject)][idx] = [modifier]
-                            obj.background_color = DARKRED
-                        else:
-                            self.current_modifiers[(behavior, self.focal_subject)][idx] = []
-                            obj.background_color = GRAY
-                    else:
-                        self.current_modifiers[(behavior, self.focal_subject)][idx] = [modifier]
+                    # switch color
+                    if obj.background_color == GRAY:
                         obj.background_color = DARKRED
+                    else:
+                        obj.background_color = GRAY
+
+                    # all other buttons to gray
+                    for btn in self.modifier_buttons:
+                        if btn == obj:
+                            continue
+                        if self.modifier_buttons[btn][0] == behavior and self.modifier_buttons[btn][1] == idx:
+                            btn.background_color = GRAY
 
                 if type_ == MULTI_SELECTION:
-                    if idx in self.current_modifiers[(behavior, self.focal_subject)]:
-                        if (
-                            self.current_modifiers[(behavior, self.focal_subject)][idx] == []
-                            or modifier not in self.current_modifiers[(behavior, self.focal_subject)][idx]
-                        ):
-                            self.current_modifiers[(behavior, self.focal_subject)][idx].append(modifier)
-                            obj.background_color = DARKRED
-                        else:
-                            self.current_modifiers[(behavior, self.focal_subject)][idx].remove(modifier)
-                            obj.background_color = GRAY
-                    else:
-                        self.current_modifiers[(behavior, self.focal_subject)][idx] = [modifier]
+                    # switch color
+                    if obj.background_color == GRAY:
                         obj.background_color = DARKRED
-
-                if type_ == NUMERIC_MODIFIER:
-                    self.current_modifiers[(behavior, self.focal_subject)][idx] = [obj.text]
+                    else:
+                        obj.background_color = GRAY
 
             def on_goback_button_release(obj):
                 """
-                write modifier and go back to observation
+                get selected modifier(s)
+                write event and go back to observation
                 """
-                modifiers: str = ""
-                behavior, _, _ = self.modifier_buttons[obj]
-                for idx in sorted([int(k) for k in self.current_modifiers[(behavior, self.focal_subject)]]):
-                    if modifiers:
-                        modifiers += "|"
-                    if self.current_modifiers[(behavior, self.focal_subject)][str(idx)]:
-                        modifiers += ",".join(self.current_modifiers[(behavior, self.focal_subject)][str(idx)])
-                    else:
-                        modifiers += "None"
 
-                write_event([self.time_, self.behav_, modifiers])
+                modifiers: dict = {}
+                for idx in sorted([int(x) for x in self.modifiers[behavior]]):
+                    idx = str(idx)
+                    modifiers[idx] = []
+                    if self.modifiers[behavior][idx]["type"] == NUMERIC_MODIFIER:
+                        for btn in self.modifier_buttons:
+                            # button correspond to selected behavior
+                            if self.modifier_buttons[btn][1] == idx and self.modifier_buttons[btn][0] == self.behav_:
+                                if btn.text:
+                                    modifiers[idx].append(btn.text)
+                                else:
+                                    modifiers[idx].append("None")
+                    else:
+                        for btn in self.modifier_buttons:
+                            # button correspond to selected behavior
+                            if (
+                                self.modifier_buttons[btn][1] == idx
+                                and self.modifier_buttons[btn][0] == self.behav_
+                                and btn.background_color == DARKRED
+                            ):
+                                modifiers[idx].append(self.modifier_buttons[btn][3])
+                        if not modifiers[idx]:
+                            modifiers[idx].append("None")
+
+                print(f"{modifiers=}")
+
+                write_event([self.time_, self.behav_, "|".join([x for x in [",".join(modifiers[idx]) for idx in modifiers]])])
 
                 view_behaviors_layout(obj)
 
@@ -649,7 +698,7 @@ class StartObservationForm(BoxLayout):
                 size_hint_x=0.2,
             )
             btn.bind(on_release=on_goback_button_release)
-            self.modifier_buttons[btn] = [behavior, 0, ""]
+            self.modifier_buttons[btn] = [behavior, -1, "", ""]
 
             title_layout.add_widget(btn)
             title_layout.add_widget(
@@ -663,12 +712,12 @@ class StartObservationForm(BoxLayout):
 
             font_size = "20dp"
 
-            # self.current_modifiers[behavior] = {}
-
             for iidx in sorted([int(x) for x in self.modifiers[behavior]]):
                 idx = str(iidx)
 
-                # add modifier name
+                print(f"{behavior=} {idx=}")
+
+                # add modifier set name
                 main_layout.add_widget(
                     Label(
                         text=self.modifiers[behavior][idx]["name"],
@@ -677,8 +726,6 @@ class StartObservationForm(BoxLayout):
                         height=40,
                     )
                 )
-
-                # self.current_modifiers[behavior][idx] = []
 
                 if self.modifiers[behavior][idx]["type"] in (SINGLE_SELECTION, MULTI_SELECTION):
                     for modif in self.modifiers[behavior][idx]["values"]:
@@ -726,7 +773,7 @@ class StartObservationForm(BoxLayout):
                 size_hint_y=None,
             )
             btn1.bind(on_release=on_goback_button_release)
-            self.modifier_buttons[btn1] = [behavior, 0, ""]
+            self.modifier_buttons[btn1] = [behavior, -1, "", ""]
 
             main_layout.add_widget(btn1)
 
@@ -908,29 +955,50 @@ class StartObservationForm(BoxLayout):
 
             self.clear_widgets()
 
-            # reset modifiers when behavior is point events
-            if "Point" in behaviorType(BorisApp.project[ETHOGRAM], behavior):
-                # reset all modifiers for current behavior
-                if (behavior, self.focal_subject) not in self.current_modifiers:
-                    self.current_modifiers[(behavior, self.focal_subject)] = {}
-                for idx in self.current_modifiers[(behavior, self.focal_subject)]:
-                    self.current_modifiers[(behavior, self.focal_subject)][idx] = []
-
-            # reset modifiers btn background color for current behavior
-            for btn in self.modifier_buttons:
-                if self.modifier_buttons[btn][0] == behavior:
-                    btn.background_color = GRAY
-
             state_behaviors = [
                 BorisApp.project[ETHOGRAM][x]["code"]
                 for x in BorisApp.project[ETHOGRAM]
-                if "State event" in BorisApp.project[ETHOGRAM][x]["type"].upper()
+                if "STATE EVENT" in BorisApp.project[ETHOGRAM][x]["type"].upper()
             ]
-            current_states_modifiers = get_current_states_modifiers_by_subject(
-                state_behaviors, BorisApp.project[OBSERVATIONS][self.obsId]["events"], BorisApp.project[SUBJECTS], self.time_
+
+            print(f'{BorisApp.project[OBSERVATIONS][self.obsId]["events"]=}')
+
+            if BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_time"]:
+                time_output = seconds_of_day(dt.datetime.now())
+            elif BorisApp.project[OBSERVATIONS][self.obsId]["start_from_current_epoch_time"]:
+                time_output = round(self.time_, 3)
+            else:
+                time_output = round(self.time_ - self.time0, 3)
+
+            print(f"{time_output=}")
+
+            if self.focal_subject == NO_FOCAL_SUBJECT:
+                focal_subject = ""
+            else:
+                focal_subject = self.focal_subject
+
+            current_states_modifiers = get_current_states_modifiers_for_subject(
+                state_behaviors, BorisApp.project[OBSERVATIONS][self.obsId]["events"], focal_subject, time_output
             )
 
             print(f"{current_states_modifiers=}")
+
+            # all modifier buttons to gray
+            for btn in self.modifier_buttons:
+                if self.modifier_buttons[btn][0] == behavior:
+                    if self.modifier_buttons[btn][2] in (SINGLE_SELECTION, MULTI_SELECTION):
+                        btn.background_color = GRAY
+                    if self.modifier_buttons[btn][2] == NUMERIC_MODIFIER:
+                        btn.text = ""
+
+            # set modifier button to red when modifier is active
+            for btn in self.modifier_buttons:
+                # check if button index != 0 and button correspond to selected behavior
+                if self.modifier_buttons[btn][1] and self.modifier_buttons[btn][0] == behavior:
+                    # search current modifier
+                    for b, m in current_states_modifiers:
+                        if b == behavior and self.modifier_buttons[btn][3] == m:
+                            btn.background_color = DARKRED
 
             self.add_widget(self.modifiers_layout[behavior])
 
@@ -939,18 +1007,6 @@ class StartObservationForm(BoxLayout):
             record event in observation
             change button color if STATE event
             """
-
-            def seconds_of_day(time_) -> float:
-                """
-                return the number of seconds since start of the day
-                """
-
-                print(time_.date())
-                print(dt.time(0))
-
-                return round((time_ - dt.datetime.combine(time_.date(), dt.time(0))).total_seconds(), 3)
-
-                # return dec((dt - datetime.datetime.combine(dt.date(), datetime.time(0))).total_seconds()).quantize(dec("0.001"))
 
             time_, newState, modifier = event
 

@@ -216,7 +216,7 @@
 },
 "observations": {
 "1": {
-"date": "2024-09-07T16:43:33",
+"date": "2024-09-18T23:53:47",
 "close_behaviors_between_videos": false,
 "time offset": 0.0,
 "scan_sampling_time": 0,
@@ -224,38 +224,31 @@
 "file": [],
 "events": [
 [
-3.85,
+1.986,
 "",
 "many modifiers",
 "3",
 ""
 ],
 [
-23.991,
+5.894,
 "",
-"many modifiers",
-"1",
+"multiple modif",
+"1,2",
 ""
 ],
 [
-49.768,
+9.673,
 "",
-"a",
-"1",
+"numeric",
+"789",
 ""
 ],
 [
-56.706,
+16.655,
 "",
-"many modifiers",
-"2",
-""
-],
-[
-61.532,
-"",
-"a",
-"2",
+"2 sets",
+"2|3",
 ""
 ]
 ],
