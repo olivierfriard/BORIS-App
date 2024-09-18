@@ -60,6 +60,11 @@ SUBJECTS = "subjects_conf"
 ETHOGRAM = "behaviors_conf"
 INDEP_VAR = "independent_variables"
 
+EVENT_TIME_IDX = 0
+EVENT_SUBJECT_IDX = 0
+EVENT_BEHAVIOR_IDX = 0
+EVENT_MODIFIER_IDX = 0
+
 # modifiers
 SINGLE_SELECTION = 0
 MULTI_SELECTION = 1
@@ -147,6 +152,44 @@ def contrasted_color(c):
         return black
     else:
         return white
+
+
+def get_current_states_modifiers_by_subject(
+    state_behaviors_codes: list, events: list, subjects: dict, time_: float, include_modifiers: bool = False
+) -> dict:
+    """
+    get current states and modifiers (if requested) for subjects at given time
+
+    Args:
+        state_behaviors_codes (list): list of behavior codes defined as STATE event
+        events (list): list of events
+        subjects (dict): dictionary of subjects
+        time (float): time or image index for an observation from images
+        include_modifiers (bool): include modifier if True (default: False)
+
+    Returns:
+        dict: current states by subject. dict of list
+    """
+    current_states: dict = {}
+
+    for idx in subjects:
+        current_states[subjects[idx]["name"]] = {}
+    for x in events:
+        if x[EVENT_TIME_IDX] > time_:
+            break
+        if x[EVENT_BEHAVIOR_IDX] in state_behaviors_codes:
+            if (x[EVENT_BEHAVIOR_IDX], x[EVENT_MODIFIER_IDX]) not in current_states[x[EVENT_SUBJECT_IDX]]:
+                current_states[x[EVENT_SUBJECT_IDX]][(x[EVENT_BEHAVIOR_IDX], x[EVENT_MODIFIER_IDX])] = False
+
+            current_states[x[EVENT_SUBJECT_IDX]][(x[EVENT_BEHAVIOR_IDX], x[EVENT_MODIFIER_IDX])] = not current_states[x[EVENT_SUBJECT_IDX]][
+                (x[EVENT_BEHAVIOR_IDX], x[EVENT_MODIFIER_IDX])
+            ]
+
+    r: dict = {}
+    for idx in subjects:
+        r[idx] = [f"{bm[0]} ({bm[1]})" for bm in current_states[subjects[idx]["name"]] if current_states[subjects[idx]["name"]][bm]]
+
+    return r
 
 
 class StartPageForm(BoxLayout):
@@ -872,9 +915,22 @@ class StartObservationForm(BoxLayout):
                     self.current_modifiers[(behavior, self.focal_subject)] = {}
                 for idx in self.current_modifiers[(behavior, self.focal_subject)]:
                     self.current_modifiers[(behavior, self.focal_subject)][idx] = []
-                for btn in self.modifier_buttons:
-                    if self.modifier_buttons[btn][0] == behavior:  # reset modifiers btn background color  for current behavior
-                        btn.background_color = GRAY
+
+            # reset modifiers btn background color for current behavior
+            for btn in self.modifier_buttons:
+                if self.modifier_buttons[btn][0] == behavior:
+                    btn.background_color = GRAY
+
+            state_behaviors = [
+                BorisApp.project[ETHOGRAM][x]["code"]
+                for x in BorisApp.project[ETHOGRAM]
+                if "State event" in BorisApp.project[ETHOGRAM][x]["type"].upper()
+            ]
+            current_states_modifiers = get_current_states_modifiers_by_subject(
+                state_behaviors, BorisApp.project[OBSERVATIONS][self.obsId]["events"], BorisApp.project[SUBJECTS], self.time_
+            )
+
+            print(f"{current_states_modifiers=}")
 
             self.add_widget(self.modifiers_layout[behavior])
 

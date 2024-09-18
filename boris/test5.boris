@@ -216,7 +216,7 @@
 },
 "observations": {
 "1": {
-"date": "2024-09-05T17:04:58",
+"date": "2024-09-07T16:43:33",
 "close_behaviors_between_videos": false,
 "time offset": 0.0,
 "scan_sampling_time": 0,
@@ -224,17 +224,38 @@
 "file": [],
 "events": [
 [
-5.443,
+3.85,
+"",
+"many modifiers",
+"3",
+""
+],
+[
+23.991,
+"",
+"many modifiers",
+"1",
+""
+],
+[
+49.768,
 "",
 "a",
+"1",
+""
+],
+[
+56.706,
+"",
+"many modifiers",
 "2",
 ""
 ],
 [
-14.308,
+61.532,
 "",
 "a",
-"None",
+"2",
 ""
 ]
 ],
@@ -334,6 +355,29 @@
 "visualize_spectrogram": false,
 "visualize_waveform": false,
 "start_from_current_time": true,
+"start_from_current_epoch_time": false,
+"type": "LIVE",
+"independent_variables": {}
+},
+"aa": {
+"date": "2024-09-18T16:54:53",
+"close_behaviors_between_videos": false,
+"time offset": 0.0,
+"scan_sampling_time": 0,
+"description": "",
+"file": [],
+"events": [
+[
+1.477,
+"",
+"many modifiers",
+"",
+""
+]
+],
+"visualize_spectrogram": false,
+"visualize_waveform": false,
+"start_from_current_time": false,
 "start_from_current_epoch_time": false,
 "type": "LIVE",
 "independent_variables": {}
