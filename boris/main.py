@@ -1,7 +1,7 @@
 """
 BORIS App
 Behavioral Observation Research Interactive Software
-Copyright 2017-2023 Olivier Friard
+Copyright 2017-2024 Olivier Friard
 
 This file is part of BORIS App.
 
