@@ -9,7 +9,7 @@ BORIS App
 
 BORIS App project is the BORIS version for mobile devices (www.boris.unito.it).
 
-This release is an alpha version. **USE IT ONLY FOR TESTING** and reporting bug and suggestions.
+This release is a BETA version. Please report bug and suggestions.
 
 It was tested on Android (v. 13).
 
@@ -20,7 +20,7 @@ It was tested on Android (v. 13).
 Legal
 =========================
 
-Copyright 2023-2024 Olivier Friard - Marco Gamba
+Copyright 2023-2026 Olivier Friard - Marco Gamba
 
 **BORIS App** is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ Installation
 
 
 
-Use
+Usee guide
 =========================
 
-The BORIS App user guide is available at http://boris-app.readthedocs.io
+The BORIS App user guide is available at https://www.boris.unito.it/app_user_guide
