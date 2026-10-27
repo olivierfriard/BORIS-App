@@ -7,14 +7,18 @@ authors = [
 ]
 dependencies = [
     "kivy>=2.3.0",
-    "requests>=2.32.3",
+    "requests==2.33.0",
     "kivymd>=1.2.0",
     "plyer>=2.1.0",
     "kivy-garden>=0.1.5",
-    "setuptools>=74.1.2",
+    "setuptools==83.0.0",
     "pip>=25.3",
     "cython==0.29.33",
     "urllib3==2.6.0",
+    "pygments==2.20.0",
+    "pillow==12.3.0",
+    "sh==2.2.4",
+    "virtualenv==21.7.11",
 ]
 readme = "README.md"
 requires-python = ">= 3.11,<3.12"
