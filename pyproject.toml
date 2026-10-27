@@ -16,7 +16,7 @@ dependencies = [
     "cython==0.29.33",
     "urllib3==2.8.0",
     "pygments==2.20.0",
-    "pillow==12.3.0",
+    "pillow==13.0.0",
     "sh==2.2.4",
     "virtualenv==21.7.11",
     "certifi==2026.10.23",
