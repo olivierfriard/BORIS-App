@@ -7,7 +7,7 @@ authors = [
 ]
 dependencies = [
     "kivy>=2.3.0",
-    "requests==2.33.0",
+    "requests==2.34.2",
     "kivymd>=1.2.0",
     "plyer>=2.1.0",
     "kivy-garden>=0.1.5",
