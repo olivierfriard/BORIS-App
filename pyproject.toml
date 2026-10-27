@@ -1,7 +1,7 @@
 [project]
 name = "boris-app"
 version = "0.13"
-description = "Add your description here"
+description = "BORIS App for Android"
 authors = [
     { name = "Olivier Friard", email = "olivier.friard@unito.it" }
 ]
@@ -14,6 +14,7 @@ dependencies = [
     "setuptools>=74.1.2",
     "pip>=25.3",
     "cython==0.29.33",
+    "urllib3==2.6.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.11,<3.12"
